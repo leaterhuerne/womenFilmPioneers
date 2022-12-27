@@ -1,13 +1,16 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { language } from "$lib/stores/language.js";
-
+    import Language from "./Language.svelte";
 
     let title: string = "";
-    
-    onMount(() => {title = $language == "de" ? "Frauen in der frühen Filmgeschichte" : "Women in early Film History"});
+
+    $: {
+        title = $language == "de" ? "Frauen in der frühen Filmgeschichte" : "Women in Early Film History"
+    }
 </script>
 
-<div class="w-full p-2 text-center text-paper-200 bg-firebrick-500 ">
+<div class="w-full p-2 text-center text-paper-200 bg-firebrick-500 flex justify-between">
+    <span></span>
     <h1 class="text-lg">{title}</h1>
+    <Language />
 </div>
