@@ -4,10 +4,10 @@ This project represents the source code of the bachelor thesises of Lea Terhürn
 ## Thesis Overview
 ### "" by Lea Terhürne
 
-### "" by Patrick Fock
+### "Visualisierung von historischen Filmdaten über Frauen auf Basis des Frameworks SvelteKit" by Patrick Fock
 
 ## Branch Structure
-This project contains of the ```master```, the ```layout``` representing the basic page layouts and developing branches. Each developing branch is labeld with ```patrick``` oder ```lea``` to indicate the contributer.
+This project contains of the ```master```, the ```layout``` representing the basic page layouts, ```api``` representing the endpoints of our database and developing branches. Each developing branch is labeld with ```patrick``` oder ```lea``` to indicate the contributer.
 
 ## SvelteKit as Framework
 The projekt ist build with SvelteKit. To learn more about this, feel free to read the documentation at [kit.svelte.dev](https://kit.svelte.dev/). More about why we use SvelteKit and how, can be found in our thesis.
