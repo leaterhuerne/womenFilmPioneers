@@ -1,6 +1,3 @@
-/** @type {import('./$types').RequestHandler} */
-
-export function GET({ url }) {
-    //todo: Frauen in der Datenbank zählen
-    return new Response("13708");
+export function GET() {
+    return new Response("8356");
 }   
