@@ -1,5 +1,5 @@
 import { readable } from "svelte/store";
-import database from "$lib/data/database.json";
+import database from "$lib/data/original_database.json";
 
 let keys = Object.keys(database);
 let json = {};
