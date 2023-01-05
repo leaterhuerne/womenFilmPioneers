@@ -1,7 +1,6 @@
 <script lang="ts">
     import { language } from "$lib/stores/language.js";
     import  api  from "$lib/api/api.json";
-    import ApiDocEntry from "$lib/components/APIDocEntry.svelte";
     type apikey = keyof typeof api;
     
 
