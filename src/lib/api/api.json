@@ -1,21 +1,26 @@
 {
     "template": {
         "endpoint" : "/api/",
-        "method" : "",
+        "method" : "GET",
         "parameters": [
             {
-                "name": "",
-                "englisch": "",
-                "german": ""
+                "name": "number",
+                "en": " natural number",
+                "de": "natürliche Zahl"
+            },
+            {
+                "name": "colour",
+                "en": " hexcode of an colour",
+                "de": "Hexcode einer Farbe"
             }
         ],
         "title": {
-            "english" : "",
-            "german": ""
+            "en" : "Template",
+            "de": "Template"
         },
         "description": {
-            "english" : "",
-            "german": ""
+            "en" : "Here has to be a description of the endpoint.",
+            "de": "Hier muss eine Beschreibung des Endpoints stehen."
         }
     },
     "amount-of-women": {
@@ -23,12 +28,12 @@
         "method" : "GET",
         "parameters": [],
         "title": {
-            "english" : "Total amount of women",
-            "german": "Gesamtanzahl der Frauen"
+            "en" : "Total amount of women",
+            "de": "Gesamtanzahl der Frauen"
         },
         "description": {
-            "english" : "Returns integer representing the total amount of women in the database.",
-            "german": "Es wird eine Ganzzahl zurückgegeben, die die Gesamtzahl aller Frauen im Datensatz angibt."
+            "en" : "Returns integer representing the total amount of women in the database.",
+            "de": "Es wird eine Ganzzahl zurückgegeben, die die Gesamtzahl aller Frauen im Datensatz angibt."
         }
     },
     "sexes": {
@@ -36,12 +41,12 @@
         "method" : "GET",
         "parameters": [],
         "title": {
-            "english" : "Gender distribution",
-            "german": "Geschlechterverteilung"
+            "en" : "Gender distribution",
+            "de": "Geschlechterverteilung"
         },
         "description": {
-            "english" : "Returns a JSON containing all genders and their frequency in the database.",
-            "german": "Es wird eine JSON zurückgegeben, die alle Geschlechter und ihre Häufigkeiten im Datensatz enthält."
+            "en" : "Returns a JSON containing all genders and their frequency in the database.",
+            "de": "Es wird eine JSON zurückgegeben, die alle Geschlechter und ihre Häufigkeiten im Datensatz enthält."
         }
     }
 }
