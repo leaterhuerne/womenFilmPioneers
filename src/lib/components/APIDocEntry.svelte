@@ -8,14 +8,29 @@
 
 </script>
 
-<div class="my-2 p-2 border border-warm-gray-400 rounded-lg shadow-lg w-full sm:w-[80%] md:w-2/3">
-    <h1 class="mb-2 text-lg font-semibold border-b-2 border-firebrick-500">
-        {$language === "de" ? api[name].title.german : api[name].title.english}
-    </h1>
-    <code>
-        {api[name].endpoint}
-    </code>    
-    <p >
-        {$language === "de" ? api[name].description.german : api[name].description.english}
-    </p>
+<div class="my-2 border border-warm-gray-200 rounded shadow-2xl w-full sm:w-[80%] md:w-2/3">
+    <div class="flex justify-between items-center p-2 rounded-t bg-firebrick-500">
+        <h1 class="text-lg text-paper-200 font-semibold">
+            {api[name].title[$language]}
+        </h1>
+        <p class="px-1 rounded font-semibold text-firebrick-500 text-sm  bg-paper-200">
+            {api[name]["method"]}
+        </p>
+    </div>
+    <div class="p-2">
+        <div>
+            <code>{api[name].endpoint}</code>
+        </div>
+        {#if api[name]["parameters"].length > 0}
+            <h2 class="italic mt-2">{$language === "de" ? "Parameter: " : "Parameters: "}</h2>
+            {#each api[name]["parameters"] as parameter}
+                <div class="flex items-center">
+                    <code class="mr-2">{parameter["name"]}</code>
+                    <p>{parameter[$language]}</p>
+                </div>
+            {/each}
+        {/if}
+        <h2 class="italic mt-2">Response:</h2>
+        <p>{api[name].description[$language]}</p>
+    </div>
 </div>
