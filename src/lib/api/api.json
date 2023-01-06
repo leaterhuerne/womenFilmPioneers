@@ -1,6 +1,27 @@
 {
+    "template": {
+        "endpoint" : "/api/",
+        "method" : "",
+        "parameters": [
+            {
+                "name": "",
+                "englisch": "",
+                "german": ""
+            }
+        ],
+        "title": {
+            "english" : "",
+            "german": ""
+        },
+        "description": {
+            "english" : "",
+            "german": ""
+        }
+    },
     "amount-of-women": {
         "endpoint": "/api/amount-of-women",
+        "method" : "GET",
+        "parameters": [],
         "title": {
             "english" : "Total amount of women",
             "german": "Gesamtanzahl der Frauen"
@@ -12,6 +33,8 @@
     },
     "sexes": {
         "endpoint": "/api/genders",
+        "method" : "GET",
+        "parameters": [],
         "title": {
             "english" : "Gender distribution",
             "german": "Geschlechterverteilung"
