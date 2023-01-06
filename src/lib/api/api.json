@@ -1,0 +1,47 @@
+{
+    "template": {
+        "endpoint" : "/api/",
+        "method" : "",
+        "parameters": [
+            {
+                "name": "",
+                "englisch": "",
+                "german": ""
+            }
+        ],
+        "title": {
+            "english" : "",
+            "german": ""
+        },
+        "description": {
+            "english" : "",
+            "german": ""
+        }
+    },
+    "amount-of-women": {
+        "endpoint": "/api/amount-of-women",
+        "method" : "GET",
+        "parameters": [],
+        "title": {
+            "english" : "Total amount of women",
+            "german": "Gesamtanzahl der Frauen"
+        },
+        "description": {
+            "english" : "Returns integer representing the total amount of women in the database.",
+            "german": "Es wird eine Ganzzahl zurückgegeben, die die Gesamtzahl aller Frauen im Datensatz angibt."
+        }
+    },
+    "sexes": {
+        "endpoint": "/api/genders",
+        "method" : "GET",
+        "parameters": [],
+        "title": {
+            "english" : "Gender distribution",
+            "german": "Geschlechterverteilung"
+        },
+        "description": {
+            "english" : "Returns a JSON containing all genders and their frequency in the database.",
+            "german": "Es wird eine JSON zurückgegeben, die alle Geschlechter und ihre Häufigkeiten im Datensatz enthält."
+        }
+    }
+}
