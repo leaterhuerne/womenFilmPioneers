@@ -1,21 +1,21 @@
 {
     "template": {
         "endpoint" : "/api/",
-        "method" : "",
+        "method" : "GET",
         "parameters": [
             {
-                "name": "",
-                "englisch": "",
-                "german": ""
+                "name": "number",
+                "englisch": "Takes a number.",
+                "german": "Nimmt eine Nummer."
             }
         ],
         "title": {
-            "english" : "",
-            "german": ""
+            "english" : "Template",
+            "german": "Template"
         },
         "description": {
-            "english" : "",
-            "german": ""
+            "english" : "No description.",
+            "german": "Keine."
         }
     },
     "amount-of-women": {
