@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="my-2 border border-warm-gray-200 rounded shadow-2xl w-full sm:w-[80%] md:w-2/3">
+<div class="my-2 border border-dark-paper-200 bg-paper-200 rounded shadow-2xl w-full">
     <div class="flex justify-between items-center p-2 rounded-t bg-firebrick-500">
         <h1 class="text-lg text-paper-200 font-semibold">
             {api[name].title[$language]}
