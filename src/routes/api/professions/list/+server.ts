@@ -3,5 +3,5 @@ type key = keyof typeof professions;
 
 export function GET() {
     let list: key[] = Object.keys(professions) as key[];
-    return new Response(list.toString());
+    return new Response(JSON.stringify(list));
 }
