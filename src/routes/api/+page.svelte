@@ -8,7 +8,7 @@
 
 </script>
 <div class="flex justify-center">
-    <div class="p-2 flex flex-col place-items-center w-full lg:w-2/3">
+    <div class="p-2 flex flex-col place-items-center w-full lg:w-2/3 2xl:w-[1200px]">
         <div class="flex items-center">
             <h1 class="my-2 text-2xl sm:text-2xl font-semibold">
                 {$language === "de" ? "API - Liste der verfügbaren Endpoints" : "API - List of Provided Endpoints"}
