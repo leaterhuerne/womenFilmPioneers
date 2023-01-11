@@ -1,6 +1,7 @@
 <script lang="ts">
     import { language } from "$lib/stores/language.js";
     import  api  from "$lib/api/api.json";
+    import ExternalLink from "$lib/components/ExternalLink.svelte";
     type apikey = keyof typeof api;
     
 
@@ -9,6 +10,7 @@
 </script>
 
 <div class="my-2 border border-dark-paper-200 bg-paper-200 rounded shadow-2xl w-full">
+    <!-- Title and method -->
     <div class="flex justify-between items-center p-2 rounded-t bg-firebrick-500">
         <h1 class="text-lg text-paper-200 font-semibold">
             {api[name].title[$language]}
@@ -18,19 +20,22 @@
         </p>
     </div>
     <div class="p-2">
-        <div>
+        <!-- Endpoint -->
+        <ExternalLink de={api[name].endpoint}>
             <code>{api[name].endpoint}</code>
-        </div>
+        </ExternalLink>
+        <!-- Url Parameter -->
         {#if api[name]["parameters"].length > 0}
             <h2 class="italic mt-2">{$language === "de" ? "Parameter: " : "Parameters: "}</h2>
             {#each api[name]["parameters"] as parameter}
                 <div class="flex items-center">
                     <code class="mr-2">{parameter["name"]}</code>
-                    <p>{parameter[$language]}</p>
+                    <p>{@html parameter[$language]}</p>
                 </div>
             {/each}
         {/if}
+        <!-- Response -->
         <h2 class="italic mt-2">Response:</h2>
-        <p>{api[name].description[$language]}</p>
+        <p>{@html api[name].description[$language]}</p>
     </div>
 </div>
