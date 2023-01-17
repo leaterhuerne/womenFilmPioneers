@@ -2,7 +2,7 @@
 This project represents the source code of the bachelor thesises of Lea Terhürne and Patrick Fock from the [Departement of Computer Science](https://www.uni-marburg.de/en/fb12) an the Philipps University Marburg. The goal is to visualize data about women in the german film industry from it'beginnings to the middle of the 20th century.  
 
 ## Thesis Overview
-### "" by Lea Terhürne
+### "Visualisierung historischer Filmdaten mit Fokus auf Frauen mithilfe von SvelteKit" by Lea Terhürne
 
 ### "Visualisierung von historischen Filmdaten über Frauen auf Basis des Frameworks SvelteKit" by Patrick Fock
 
