@@ -1,4 +1,5 @@
 import json
+import time
 
 def get_database(database):
     with open(database, "r") as file:
@@ -183,12 +184,44 @@ def regex():
     with open("databaseProfessions.json", "w") as file:
         file.write(json.dumps(database, indent=4))
 
+def isIn(current_year, start_year, end_year):
+    return start_year <= current_year <= end_year
+
+def working_years():
+    min_year = 2000
+    max_year = 0
+    print("Loading database...")
+    database = get_database("database.json")
+    print("Database loaded.")
+    for person in database:
+        min_year_string = database[person]["person"]["TaetigZeit"]["start"]
+        max_year_string = database[person]["person"]["TaetigZeit"]["end"]
+        if min_year_string.isdigit():
+            if int(min_year_string) >= 1888:
+                min_year = min(min_year, int(min_year_string))
+        if max_year_string.isdigit():
+            if int(max_year_string) <= 2023:
+                    max_year = max(max_year, int(max_year_string))
+    return {"first-year": min_year, "last-year": max_year}
+
+
+def genders_by_year():
+    print("Loading database...")
+    database = get_database("database.json")
+    print("Database loaded.")
+    print("Creating JSON representing genders year...")
+    years = {}
+    for person in database:
+        gender = database[person]["Geschlecht"]
+        # year = database[person][]
+    print("JSON created.")
+    print("Writing JSON to file...")
+    print("JSON written.")
 
 
 
 def main():
-    regex()
-    # print(countProfessions("databaseProfessions.json"))
+    print(working_years())
 
 
 if __name__ == "__main__":
