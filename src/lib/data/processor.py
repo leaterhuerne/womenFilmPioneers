@@ -211,17 +211,35 @@ def genders_by_year():
     print("Database loaded.")
     print("Creating JSON representing genders year...")
     years = {}
-    for person in database:
-        gender = database[person]["Geschlecht"]
-        # year = database[person][]
+    for current_year in range(1890, 2022):
+        for person in database:
+            start = database[person]["person"]["TaetigZeit"]["start"]
+            end = database[person]["person"]["TaetigZeit"]["end"]
+            if database[person]["person"]["Geschlecht"] == "W":
+                gender = "female"
+            elif database[person]["person"]["Geschlecht"] == "M":
+                gender = "male"
+            else:
+                gender = "unknown"
+            if start.isdigit() and end.isdigit():
+                if isIn(int(start), 1890, 2021) and isIn(int(end), 1890, 2021) and isIn(current_year, int(start), int(end)):
+                    if current_year not in years:
+                        years[current_year] = {
+                            "female": 0,
+                            "male": 0,
+                            "unknown": 0
+                        }
+                    years[current_year][gender] += 1
     print("JSON created.")
     print("Writing JSON to file...")
+    with open("genders_by_year.json", "w") as file:
+        file.write(json.dumps(years, indent=4))
     print("JSON written.")
 
 
 
 def main():
-    print(working_years())
+    genders_by_year()
 
 
 if __name__ == "__main__":
