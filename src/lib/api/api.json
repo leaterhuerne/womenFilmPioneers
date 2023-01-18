@@ -109,5 +109,29 @@
             "en": "Returns the first and last year a person worked in the filmindustry.",
             "de": "Gibt das erste und das letzte Tätigkeitsjahr in der Filmindustrie aller Personen zurück."
         }
+    },
+    "genders-by-year": {
+        "endpoint": "/api/genders-by-year",
+        "method": "GET",
+        "parameters": [
+            {
+                "name": "year",
+                "en": "number between 1890 and 2021",
+                "de": "Zahl zwischen 1890 und 2021"
+            },
+            {
+                "name": "gender",
+                "en": "female, male or unknown",
+                "de": "female, male or unknown"
+            }
+        ],
+        "title": {
+            "en": "Gender distribution per year",
+            "de": "Geschlechterverhältnisse nach Jahr"
+        },
+        "description": {
+            "en": "Returns the gender distribution by year as a JSON.<br>If you pass parameter <code>year</code>, you will get the gender distribution of this year.<br>If you pass <code>gender</code>, you will get all years with the specified gender.<br>Passing both returns only a number.<br>If you pass no argument at all, all years with all genders are returned.",
+            "de": "Gibt die Geschlechterverteilung nach Jahr als JSON zurück.<br>Wenn <code>year</code> übergeben wird, dann wird die Geschlechterverteilung dieses Jahres zurückgegeben.<br>Wird <code>gender</code> übergeben, werden all Jahre mit den Zahlen des entsprechenden Geschlechts zurückgegeben.<br>Werden beide Parameter angegeben, so wird nur eine Zahl zurückgegeben.<br>Enthält die Anfrage keine Parameter, so werden alle Jahre für alle Geschlchter zurückgegeben."
+        }
     }
 }
