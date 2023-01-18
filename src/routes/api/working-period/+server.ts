@@ -12,7 +12,7 @@ export function GET({ url }: { url:URL }) {
             status: 200,
             statusText: "Filmhistory is okay.",
             headers: {
-                'Content-Type' : 'application/json',
+                'Content-Type' : 'application/json'
             }
         }
     );
