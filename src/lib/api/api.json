@@ -1,21 +1,26 @@
 {
     "template": {
         "endpoint" : "/api/",
-        "method" : "",
+        "method" : "GET",
         "parameters": [
             {
-                "name": "",
-                "englisch": "",
-                "german": ""
+                "name": "number",
+                "en": " natural number",
+                "de": "natürliche Zahl"
+            },
+            {
+                "name": "colour",
+                "en": " hexcode of an colour",
+                "de": "Hexcode einer Farbe"
             }
         ],
         "title": {
-            "english" : "",
-            "german": ""
+            "en" : "Template",
+            "de": "Template"
         },
         "description": {
-            "english" : "",
-            "german": ""
+            "en" : "Here has to be a description of the endpoint.",
+            "de": "Hier muss eine Beschreibung des Endpoints stehen."
         }
     },
     "amount-of-women": {
@@ -23,12 +28,12 @@
         "method" : "GET",
         "parameters": [],
         "title": {
-            "english" : "Total amount of women",
-            "german": "Gesamtanzahl der Frauen"
+            "en" : "Total amount of women",
+            "de": "Gesamtanzahl der Frauen"
         },
         "description": {
-            "english" : "Returns integer representing the total amount of women in the database.",
-            "german": "Es wird eine Ganzzahl zurückgegeben, die die Gesamtzahl aller Frauen im Datensatz angibt."
+            "en" : "Returns integer representing the total amount of women in the database.",
+            "de": "Es wird eine Ganzzahl zurückgegeben, die die Gesamtzahl aller Frauen im Datensatz angibt."
         }
     },
     "sexes": {
@@ -36,12 +41,97 @@
         "method" : "GET",
         "parameters": [],
         "title": {
-            "english" : "Gender distribution",
-            "german": "Geschlechterverteilung"
+            "en" : "Gender distribution",
+            "de": "Geschlechterverteilung"
         },
         "description": {
-            "english" : "Returns a JSON containing all genders and their frequency in the database.",
-            "german": "Es wird eine JSON zurückgegeben, die alle Geschlechter und ihre Häufigkeiten im Datensatz enthält."
+            "en" : "Returns a JSON containing all genders and their frequency in the database.",
+            "de": "Es wird eine JSON zurückgegeben, die alle Geschlechter und ihre Häufigkeiten im Datensatz enthält."
+        }
+    },
+    "professionlist": {
+        "endpoint" : "/api/professions/list",
+        "method" : "GET",
+        "parameters": [],
+        "title": {
+            "en" : "Complete list of professions",
+            "de": "Vollständige Liste aller Berufe"
+        },
+        "description": {
+            "en" : "Returns a json-like list containing all professions.",
+            "de": "Es wird eine Json-Liste zurückgegeben, die alle Berufe enthält."
+        }
+    },
+    "professions": {
+        "endpoint" : "/api/professions",
+        "method" : "GET",
+        "parameters": [
+            {
+                "name": "gender",
+                "en": "Possible arguments are male, female or unknown.",
+                "de": "Mögliche Argumente sind male, female oder unknown."
+            },
+            {
+                "name": "name",
+                "en": "Profession title. You can get a list of all professions by calling <a href='/api/professions/list' target='_blank' rel='noreferrer'><code>/api/professions/list</code></a>.",
+                "de": "Berufsbezeichnung. Eine Liste aller Berufe ist verfügbar an <a href='/api/professions/list' target='_blank' rel='noreferrer'><code>/api/professions/list</code></a>."
+            }
+        ],
+        "title": {
+            "en" : "Gender distributions of professsions",
+            "de": "Geschlechterverteilung der Berufe"
+        },
+        "description": {
+            "en" : "Returns a json containing the professions as key and the frequency of genders as value. <br>If <code>gender</code> is given as a parameter, then the value of the json only contains the frequencies of the specified gender. <br>If <code>name</code> is given as a parameter, then the json contains only the specified profession with all gender frequencies. <br> If both parameters are given, then the response contains a number of the amount of persons of the specified gender that worked in the specified profession.",
+            "de": "Zurückgegeben wird eine Json, die alle Berufe als key enthält und die Geschlechterverteilung aller Geschlechter als value. <br>Wird als Parameter <code>gender</code> übergeben, dann enthält der value nur die Häufigkeit des spezifizierten Geschlechts. <br>Wird als Parameter <code>name</code> übergeben, dann wird eine Json zurückgegeben, die nur den spezifizierten Beruf und die Geschlechterverteilung enthält. <br>Werden beide Parameter angegeben, wird eine Zahl zurückgegeben, die angibt, wie viele Personen des spezifizierten Geschlechts in dem Beruf gearbeitet haben. "
+        }
+    },
+    "working-period": {
+        "endpoint": "/api/working-period",
+        "method": "GET",
+        "parameters": [
+            {
+                "name": "first",
+                "en": " first working year",
+                "de": "erstes Tätigkeitsjahr"
+            },
+            {
+                "name": "last",
+                "en": " last working year",
+                "de": "letztes Tätigkeitsjahr"
+            }
+        ],
+        "title": {
+            "en": "Working period of all persons",
+            "de": "Tätigkeitszeitraum aller Personen"
+        },
+        "description": {
+            "en": "Returns the first and last year a person worked in the filmindustry.",
+            "de": "Gibt das erste und das letzte Tätigkeitsjahr in der Filmindustrie aller Personen zurück."
+        }
+    },
+    "genders-by-year": {
+        "endpoint": "/api/genders-by-year",
+        "method": "GET",
+        "parameters": [
+            {
+                "name": "year",
+                "en": "number between 1890 and 2021",
+                "de": "Zahl zwischen 1890 und 2021"
+            },
+            {
+                "name": "gender",
+                "en": "female, male or unknown",
+                "de": "female, male or unknown"
+            }
+        ],
+        "title": {
+            "en": "Gender distribution per year",
+            "de": "Geschlechterverhältnisse nach Jahr"
+        },
+        "description": {
+            "en": "Returns the gender distribution by year as a JSON.<br>If you pass parameter <code>year</code>, you will get the gender distribution of this year.<br>If you pass <code>gender</code>, you will get all years with the specified gender.<br>Passing both returns only a number.<br>If you pass no argument at all, all years with all genders are returned.",
+            "de": "Gibt die Geschlechterverteilung nach Jahr als JSON zurück.<br>Wenn <code>year</code> übergeben wird, dann wird die Geschlechterverteilung dieses Jahres zurückgegeben.<br>Wird <code>gender</code> übergeben, werden all Jahre mit den Zahlen des entsprechenden Geschlechts zurückgegeben.<br>Werden beide Parameter angegeben, so wird nur eine Zahl zurückgegeben.<br>Enthält die Anfrage keine Parameter, so werden alle Jahre für alle Geschlchter zurückgegeben."
         }
     }
 }
