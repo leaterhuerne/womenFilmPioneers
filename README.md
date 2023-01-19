@@ -4,7 +4,7 @@ This project represents the source code of the bachelor thesises of Lea Terhürn
 ## Thesis Overview
 ### "Visualisierung historischer Filmdaten mit Fokus auf Frauen mithilfe von SvelteKit" by Lea Terhürne
 
-### "Visualisierung von historischen Filmdaten über Frauen auf Basis des Frameworks SvelteKit" by Patrick Fock
+### "Datenvisualisierung von Frauen in der Filmgeschichte mit SvelteKit" by Patrick Fock
 
 ## Branch Structure
 This project contains of the ```master```, the ```layout``` representing the basic page layouts, ```api``` representing the endpoints of our database and developing branches. Each developing branch is labeld with ```patrick``` oder ```lea``` to indicate the contributer.
