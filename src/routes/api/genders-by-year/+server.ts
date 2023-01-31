@@ -21,8 +21,6 @@ export function GET({ url }: { url:URL }) {
     } else {
         content = data;
     }
-
-    //return Response with type json
     return new Response(
         JSON.stringify(content),
         {
