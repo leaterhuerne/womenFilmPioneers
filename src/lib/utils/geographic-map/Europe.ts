@@ -1,6 +1,9 @@
-export { Europe }
-class Europe {
-    // default color for each country is blue
+export class Europe {
+    /**
+     * This class describes the continent Europe by having a field
+     * with a color for each country.
+     * Default color is blue.
+     */
     russia: string = "blue";
     germany: string = "blue";
     unitedKingdom: string = "blue";
@@ -46,5 +49,4 @@ class Europe {
     liechtenstein: string = "blue";
     sanMarino: string = "blue";
     turkey: string = "blue";
-
 }

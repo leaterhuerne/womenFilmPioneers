@@ -1,4 +1,5 @@
 <script lang="ts">
+    //object for the default color of every country of europe
     export let countries = {
         // default color for each country is blue
         russia: "blue",
@@ -46,17 +47,20 @@
         liechtenstein: "blue",
         sanMarino: "blue",
         turkey: "blue"
-    }
+    };
+    export let opacity: number = 1.0;
 
 </script>
 
+<!-- SVG for all countries of europe -->
 <svg xmlns="http://www.w3.org/2000/svg"
      width="1110.000000pt" height="1280.000000pt" viewBox="0 0 1110.000000 1280.000000"
      preserveAspectRatio="xMidYMid meet">
     <metadata>
         Created by potrace 1.15, written by Peter Selinger 2001-2017
     </metadata>
-    <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)">
+    <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
+    fill-opacity={opacity}>
         <path d="M7603 12793 c-35 -7 -27 -29 17 -50 22 -10 40 -21 40 -25 0 -4 -12
 -16 -27 -28 -40 -32 -53 -54 -64 -117 -6 -32 -17 -68 -25 -80 -12 -20 -81 -63
 -100 -63 -4 0 -3 31 0 70 6 62 5 70 -13 82 -19 12 -19 12 1 41 26 36 37 117
