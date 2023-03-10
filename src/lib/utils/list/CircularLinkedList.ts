@@ -27,6 +27,7 @@ export class CircularLinkedList<T>{
             tmp.next = current;
         } 
         current.next = this.head;
+        this.size++;
     }
 
     public add(...elements: T[]) {
@@ -37,5 +38,17 @@ export class CircularLinkedList<T>{
 
     public iterator(): CircularIterator<T> {
         return new CircularIterator<T>(this);
+    }
+
+    public toArray(): Array<T> {
+        const array = new Array(this.size);
+        let current = this.head;
+        for(let i = 0; i < this.size; i++) {
+            array[i] = current?.content;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            current = current.next;
+        }
+        return array;
     }
 }
