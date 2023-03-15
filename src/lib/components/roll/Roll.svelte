@@ -1,14 +1,21 @@
 <script lang="ts">
     
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
+    type label = {left: number, middle: number, right: number}
+    type rgb = {red: number, green: number, blue: number};
 
-    export let labels = new  CircularLinkedList<never>;
+    export let leftColour: rgb = {red: 255, green: 0, blue: 0};
+    export let rightColour: rgb = {red: 0, green: 0, blue: 255};
+    
+    export let max = 100;
+    export let labels = new CircularLinkedList<label>;
     let content = labels.toArray();
 
     // define how many sides the roll has.
     const SIDES_ON_ROLL = 20;
-    let items = new Array(SIDES_ON_ROLL);
+    let items: label[] = new Array(SIDES_ON_ROLL).fill({left: {}, middle: 0, right:{}});
 
+    // define constants
     const UP = true;
     const DOWN = false;
 
@@ -17,6 +24,7 @@
         items[i] = content[i];
         items[items.length - 1  - i] = content[content.length - 1 - i];
     }
+    console.log(items);
 
     // calculate the inner radius of the regular n-polygon
     const innerRadiusofRoll = (50 / 2) * (1 / Math.tan(Math.PI / items.length));
@@ -88,16 +96,26 @@
 </script>
 
 <svelte:window on:keydown|preventDefault={rollByKey}/>
-<div class="border-4 h-112 flex justify-center" on:wheel={handleWheel}>
+<div class="h-112 flex justify-center" on:wheel={handleWheel}>
     <!-- Container -->
     <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-48 perspective-1000">
         <!-- Roll -->
         <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
             <!-- Items on the roll -->
-            {#each items as item, itemIndex}
+            {#each items as {left, middle, right}, itemIndex}
                 <div
-                        class="preserve-3d block absolute w-full border-2 border-paper-900 bg-paper-500 h-[50px] text-center text-firebrick-500 rounded-xl opacity-[0.99]"
-                        style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)">{item}
+                        class="preserve-3d block absolute w-full p-2 border-2 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
+                        style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
+                >
+                    <div
+                            class="h-full grow"
+                            style="background: linear-gradient(270deg, rgba({leftColour.red},{leftColour.green},{leftColour.blue},1) {(left / max) * 100}%, rgba(255,255,255,0) {(left / max) * 100}%);"
+                    ></div>
+                    <div>{middle}</div>
+                    <div
+                            class="h-full grow"
+                            style="background: linear-gradient(90deg, rgba({rightColour.red},{rightColour.green},{rightColour.blue},1) {(right / max) * 100}%, rgba(255,255,255,0) {(right / max) * 100}%);"
+                    ></div>
                 </div>
             {/each}
         </div>

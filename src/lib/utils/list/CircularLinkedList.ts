@@ -40,7 +40,7 @@ export class CircularLinkedList<T>{
         return new CircularIterator<T>(this);
     }
 
-    public toArray(): Array<T> {
+    public toArray(): T[] {
         const array = new Array(this.size);
         let current = this.head;
         for(let i = 0; i < this.size; i++) {
