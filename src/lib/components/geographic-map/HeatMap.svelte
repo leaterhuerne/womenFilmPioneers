@@ -1,20 +1,34 @@
 <script lang="ts">
     import SVGEurope from "$lib/components/geographic-map/SVGEurope.svelte";
     import {Europe} from "$lib/utils/geographic-map/Europe";
+    import ColorPicker from "$lib/components/ColorPicker.svelte";
     type rgb = {red: number, green: number, blue: number};
 
-    // bounds are necessary for the mapping of colors
-    export let upperBound: number = 100;
-    export let lowerBound: number = 0;
-    // In this variable can be specified how much a country should be colored.
-    // The value field specifies the strength of the coloration between start and end color of the heatmap
-    export let countryHeatValues: {name: string; value: number}[] = [];
+    export let upperBound: number = 100;            // The upper bound for interpolating between start and end color
+    export let lowerBound: number = 0;              // The lower bound for interpolating between start and end color
 
-    // start and end color of the heatmap
-    let colorFrom: rgb = {red: 0, green: 0, blue: 139};
-    let colorTo: rgb = {red: 238, green: 77, blue: 43};
-
-    let testColorDiv: string;
+    // Specify the color of the countries between the start-color and the end-color.
+    // The 'value' should be between upperBound and lowerBound.
+    export let countryHeatValues: {name: string; value: number}[];
+    let europe: Europe;                     // europe SVG that is to be rendered
+    let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
+            {
+                title: "start color",
+                rgb: {
+                    red: 0,
+                    green: 0,
+                    blue: 139
+                }
+            },
+            {
+                title: "end color",
+                rgb: {
+                    red: 238,
+                    green: 77,
+                    blue: 43
+                }
+            },
+        ]
 
     /**
      * The function calculates a rgb color that lays between the colorFrom and the colorTo variable.
@@ -30,24 +44,20 @@
             upperBound = temp;
         }
         if (value < lowerBound) {
-            return "rgb(" + colorFrom.red + ", " + colorFrom.green + ", " + colorFrom.blue + ")";
+            return "rgb(" + heatMapBoundColors[0].rgb.red + ", " + heatMapBoundColors[0].rgb.green + ", " + heatMapBoundColors[0].rgb.blue + ")";
         } else if (value > upperBound) {
-            return "rgb(" + colorTo.red + ", " + colorTo.green + ", " + colorTo.blue + ")";
+            return "rgb(" + heatMapBoundColors[1].rgb.red + ", " + heatMapBoundColors[1].rgb.green + ", " + heatMapBoundColors[1].rgb.blue + ")";
         } else {
             let mappingFactor: number = (value - lowerBound) / (upperBound - lowerBound);
-            colorResult.red = Math.floor((1 - mappingFactor) * colorFrom.red + mappingFactor * colorTo.red);
-            colorResult.green = Math.floor((1 - mappingFactor) * colorFrom.green + mappingFactor * colorTo.green);
-            colorResult.blue = Math.floor((1 - mappingFactor) * colorFrom.blue + mappingFactor * colorTo.blue);
+            colorResult.red = Math.floor((1 - mappingFactor) * heatMapBoundColors[0].rgb.red + mappingFactor * heatMapBoundColors[1].rgb.red);
+            colorResult.green = Math.floor((1 - mappingFactor) * heatMapBoundColors[0].rgb.green + mappingFactor * heatMapBoundColors[1].rgb.green);
+            colorResult.blue = Math.floor((1 - mappingFactor) * heatMapBoundColors[0].rgb.blue + mappingFactor * heatMapBoundColors[1].rgb.blue);
         }
         return "rgb(" + colorResult.red + ", " + colorResult.green + ", " + colorResult.blue + ")";
     }
 
-    // initialize divBack with color to the middle of colorFrom and colorTo
-    testColorDiv = mapColor(50);
-    let range = 50;
-
     /**
-     * The function colors each country of europe that is specified in the export variable countryHeatValues.
+     * Returns a colored HeatMap of Europe. Each country is colored as defined in the countryHeatValues.
      */
     function colorHeatMap(): Europe {
         let europeRes = new Europe();
@@ -56,11 +66,21 @@
         }
         return europeRes;
     }
+
+    europe = colorHeatMap();
+
 </script>
 
 <div>
-    <input type="range" bind:value={range} on:change={() => testColorDiv = mapColor(range, 0, 100)}>
-    <div class="w-48 h-8" style="background-color: {testColorDiv}"></div>
-    {range}
-    <SVGEurope countries={colorHeatMap()}/>
+    <div>
+        <ColorPicker
+                className=""
+                bind:colors={heatMapBoundColors}
+                onInput={() => europe = colorHeatMap()}
+        />
+        <SVGEurope
+                countries={europe}
+                className="bg-slate-300 max-w-full"
+        />
+    </div>
 </div>

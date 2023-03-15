@@ -10,6 +10,8 @@
             }
         }
     ];
+    export let onInput: () => void;                                     // listener for changed colors
+    export let className: string = "";                                  // css styling attributes can be placed here
 
     let activeColorField = 0;                                           // index of active colour field
     let hex: string;                                                    // hex representation of active colour
@@ -34,6 +36,7 @@
         colors[activeColorField].rgb.green = parseInt(hex.slice(3, 5), 16);
         colors[activeColorField].rgb.blue = parseInt(hex.slice(5, 7), 16);
         setColour(activeColorField);
+        onInput();
     }
 
     /**
@@ -43,6 +46,7 @@
     function setColour(colourFieldIndex: number) {
         backgroundColorStyle[colourFieldIndex] = "background: rgb(" + colors[colourFieldIndex].rgb.red + ", " + colors[colourFieldIndex].rgb.green + ", " +colors[colourFieldIndex].rgb.blue + ");";
         setHex();
+        onInput();
     }
 
     /**
@@ -153,7 +157,7 @@
 
 </style>
 
-<div class="p-2 grid grid-cols-1 gap-2 w-full max-w-[30rem]">
+<div class="p-2 grid grid-cols-1 gap-2 w-full max-w-[30rem] {className}">
     <div class="grid grid-cols-{colors.length} gap-2">
         {#each colors as color, colorIndex}
             <div class="flex flex-col justify-between place-items-center">

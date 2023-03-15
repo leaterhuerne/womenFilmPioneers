@@ -25,11 +25,6 @@
 </script>
 
 <div>
-    <button class="h-20 w-40 bg-slate-300"
-            on:click={() => {
-                color === "blue" ? color = "green" : color = "blue";
-                console.log(color);
-            }}>Klick mich</button>
     <!--<SVGEurope  countries={countryColors} /> -->
     <HeatMap countryHeatValues={heatMapExample} upperBound=100 lowerBound=0 />
     <!-- <DuoEurop onClick={(id) => {return id}} /> -->

@@ -48,7 +48,8 @@
         sanMarino: "blue",
         turkey: "blue"
     };
-    export let opacity: number = 1.0;
+    export let opacity: number = 1.0;           // opacity of all countries
+    export let className: string = "";          // css styling attributes can be placed here
     export let listeners: {
         onClick,
         onMouseOver,
@@ -58,9 +59,10 @@
 </script>
 
 <!-- SVG for all countries of europe -->
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="1110.000000pt" height="1280.000000pt" viewBox="0 0 1110.000000 1280.000000"
-     preserveAspectRatio="xMidYMid meet"
+<svg class="{className}"
+        xmlns="http://www.w3.org/2000/svg"
+     width="w-full" height="h-full" viewBox="0 0 1110.000000 1280.000000"
+     preserveAspectRatio="xMidYMin meet"
 >
     <metadata>
         Created by potrace 1.15, written by Peter Selinger 2001-2017
