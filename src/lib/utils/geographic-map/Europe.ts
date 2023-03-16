@@ -4,7 +4,6 @@ export class Europe {
      * with a color for each country.
      * Default color is blue.
      */
-    russia: string = "blue";
     germany: string = "blue";
     unitedKingdom: string = "blue";
     france: string = "blue";
@@ -22,7 +21,6 @@ export class Europe {
     hungary: string = "blue";
     belarus: string = "blue";
     austria: string = "blue";
-    serbia: string = "blue";
     switzerland: string = "blue";
     bulgaria: string = "blue";
     denmark: string = "blue";
@@ -38,15 +36,7 @@ export class Europe {
     northMacedonia: string = "blue";
     slovenia: string = "blue";
     latvia: string = "blue";
-    kosovo: string = "blue";
     estonia: string = "blue";
-    montenegro: string = "blue";
     luxembourg: string = "blue";
-    malta: string = "blue";
-    iceland: string = "blue";
-    andorra: string = "blue";
-    monaco: string = "blue";
-    liechtenstein: string = "blue";
-    sanMarino: string = "blue";
     turkey: string = "blue";
 }
