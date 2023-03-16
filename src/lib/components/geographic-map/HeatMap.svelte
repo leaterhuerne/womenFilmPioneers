@@ -1,8 +1,10 @@
 <script lang="ts">
     import SVGEurope from "$lib/components/geographic-map/SVGEurope.svelte";
     import {Europe} from "$lib/utils/geographic-map/Europe";
-    import ColorPicker from "$lib/components/ColorPicker.svelte";
     type rgb = {red: number, green: number, blue: number};
+
+    export let colorFrom: rgb = {red: 0, green: 0, blue: 139};  // start color that specifies the minimum heat color
+    export let colorTo: rgb = {red: 238, green: 30, blue: 29};  // end color that specifies the maximum heat color
 
     export let upperBound: number = 100;            // The upper bound for interpolating between start and end color
     export let lowerBound: number = 0;              // The lower bound for interpolating between start and end color
@@ -10,25 +12,9 @@
     // Specify the color of the countries between the start-color and the end-color.
     // The 'value' should be between upperBound and lowerBound.
     export let countryHeatValues: {name: string; value: number}[];
+    export let state = false;               // for responsive behavior, if state changes, then europe SVG is rerendered
+
     let europe: Europe;                     // europe SVG that is to be rendered
-    let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
-            {
-                title: "start color",
-                rgb: {
-                    red: 0,
-                    green: 0,
-                    blue: 139
-                }
-            },
-            {
-                title: "end color",
-                rgb: {
-                    red: 238,
-                    green: 77,
-                    blue: 43
-                }
-            },
-        ]
 
     /**
      * The function calculates a rgb color that lays between the colorFrom and the colorTo variable.
@@ -44,14 +30,14 @@
             upperBound = temp;
         }
         if (value < lowerBound) {
-            return "rgb(" + heatMapBoundColors[0].rgb.red + ", " + heatMapBoundColors[0].rgb.green + ", " + heatMapBoundColors[0].rgb.blue + ")";
+            return "rgb(" + colorFrom.red + ", " + colorFrom.green + ", " + colorFrom.blue + ")";
         } else if (value > upperBound) {
-            return "rgb(" + heatMapBoundColors[1].rgb.red + ", " + heatMapBoundColors[1].rgb.green + ", " + heatMapBoundColors[1].rgb.blue + ")";
+            return "rgb(" + colorTo.red + ", " + colorTo.green + ", " + colorTo.blue + ")";
         } else {
             let mappingFactor: number = (value - lowerBound) / (upperBound - lowerBound);
-            colorResult.red = Math.floor((1 - mappingFactor) * heatMapBoundColors[0].rgb.red + mappingFactor * heatMapBoundColors[1].rgb.red);
-            colorResult.green = Math.floor((1 - mappingFactor) * heatMapBoundColors[0].rgb.green + mappingFactor * heatMapBoundColors[1].rgb.green);
-            colorResult.blue = Math.floor((1 - mappingFactor) * heatMapBoundColors[0].rgb.blue + mappingFactor * heatMapBoundColors[1].rgb.blue);
+            colorResult.red = Math.floor((1 - mappingFactor) * colorFrom.red + mappingFactor * colorTo.red);
+            colorResult.green = Math.floor((1 - mappingFactor) * colorFrom.green + mappingFactor * colorTo.green);
+            colorResult.blue = Math.floor((1 - mappingFactor) * colorFrom.blue + mappingFactor * colorTo.blue);
         }
         return "rgb(" + colorResult.red + ", " + colorResult.green + ", " + colorResult.blue + ")";
     }
@@ -67,17 +53,16 @@
         return europeRes;
     }
 
-    europe = colorHeatMap();
+    // if the colorFrom and colorTo change, then the europe SVG is rendered new
+    $: {
+        state = state;
+        europe = colorHeatMap();
+    }
 
 </script>
 
 <div>
     <div>
-        <ColorPicker
-                className=""
-                bind:colors={heatMapBoundColors}
-                onInput={() => europe = colorHeatMap()}
-        />
         <SVGEurope
                 countries={europe}
                 className="bg-slate-300 max-w-full"

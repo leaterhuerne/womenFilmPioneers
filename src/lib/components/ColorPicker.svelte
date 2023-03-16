@@ -10,7 +10,10 @@
             }
         }
     ];
-    export let onInput: () => void;                                     // listener for changed colors
+
+    //const gridCols = "grid-cols-" + colors.length;
+
+    export let onInput: () => void = () => console.log("ColorPicker registered input.");                                     // listener for changed colors
     export let className: string = "";                                  // css styling attributes can be placed here
 
     let activeColorField = 0;                                           // index of active colour field
@@ -158,7 +161,8 @@
 </style>
 
 <div class="p-2 grid grid-cols-1 gap-2 w-full max-w-[30rem] {className}">
-    <div class="grid grid-cols-{colors.length} gap-2">
+    <!-- colour fields -->
+    <div class="grid {'grid-cols-' + colors.length} gap-2">
         {#each colors as color, colorIndex}
             <div class="flex flex-col justify-between place-items-center">
                 <h1>{color.title}</h1>
@@ -170,6 +174,7 @@
             </div>
         {/each}
     </div>
+    <!-- input and sliders -->
     <div class="w-full flex flex-col justify-between">
         <div class="flex justify-between gap-2">
             <h1>HEX</h1>
