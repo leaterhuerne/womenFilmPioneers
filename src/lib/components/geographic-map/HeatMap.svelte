@@ -3,6 +3,7 @@
     import {Europe} from "$lib/utils/geographic-map/Europe";
     type rgb = {red: number, green: number, blue: number};
 
+    export let className: string = "";                          // styling variable
     export let colorFrom: rgb = {red: 0, green: 0, blue: 139};  // start color that specifies the minimum heat color
     export let colorTo: rgb = {red: 238, green: 30, blue: 29};  // end color that specifies the maximum heat color
 
@@ -61,11 +62,9 @@
 
 </script>
 
-<div>
-    <div>
-        <SVGEurope
-                countries={europe}
-                className="bg-slate-300 max-w-full"
-        />
-    </div>
+<div class="{className} min-w-full">
+    <SVGEurope
+            countries={europe}
+            className="bg-slate-300"
+    />
 </div>

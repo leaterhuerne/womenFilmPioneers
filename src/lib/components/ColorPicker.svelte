@@ -19,7 +19,7 @@
     let activeColorField = 0;                                           // index of active colour field
     let hex: string;                                                    // hex representation of active colour
     let backgroundColorStyle = new Array(colors.length);                // backGroundColors of all fields
-    let highlightColorField: string[] = new Array(colors.length);       // highlighting of active field
+    let highlightColorField: string[] = new Array(colors.length).fill("scale-75");       // highlighting of active field
 
     /**
      * Sets the hex value based on the active colour.
@@ -58,8 +58,8 @@
      */
     function activateColorField(colorFieldIndex: number): void {
         activeColorField = colorFieldIndex;
-        highlightColorField = new Array(colors.length).fill("");
-        highlightColorField[activeColorField] = "border-2 border-black";
+        highlightColorField = new Array(colors.length).fill("scale-75");
+        highlightColorField[activeColorField] = "scale-100";
         setHex();
     }
 
@@ -68,7 +68,7 @@
     for(let i = 0; i < colors.length; i++) {
         setColour(i);
     }
-    highlightColorField[activeColorField] = colors.length > 1 ? "border-2 border-black" : "";
+    highlightColorField[activeColorField] = "scale-100";
 </script>
 
 <style>

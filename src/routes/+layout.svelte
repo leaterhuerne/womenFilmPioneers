@@ -6,7 +6,7 @@
 
 <div class="flex flex-col bg-paper-100 min-h-screen">
     <Header />
-    <div class="grow">
+    <div class="grow w-full">
         <slot />
     </div>
     <Footer />
