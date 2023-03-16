@@ -14,6 +14,7 @@
     }
 </script>
 
-<div>
-    <Roll labels={content} max=1/>
+<div class="grid grid-cols-1 lg:grid-cols-2 grow">
+    <Roll labels={content} max=1 />
+    <div class="bg-dark-paper-100"></div>
 </div>

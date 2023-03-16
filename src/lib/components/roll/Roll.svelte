@@ -1,6 +1,7 @@
 <script lang="ts">
     
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
+    import {language} from "$lib/stores/language.js";
     type label = {left: number, middle: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -96,30 +97,64 @@
 </script>
 
 <svelte:window on:keydown|preventDefault={rollByKey}/>
-<div class="h-112 flex justify-center" on:wheel={handleWheel}>
-    <!-- Container -->
-    <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-48 perspective-1000">
-        <!-- Roll -->
-        <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
-            <!-- Items on the roll -->
-            {#each items as {left, middle, right}, itemIndex}
-                <div
-                        class="preserve-3d block absolute w-full p-2 border-2 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
-                        style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
-                >
+<div class="p-2">
+    <div class="h-112 flex justify-center" on:wheel={handleWheel}>
+        <!-- Container -->
+        <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-48 perspective-1000">
+            <!-- Roll -->
+            <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
+                <!-- Items on the roll -->
+                {#each items as {left, middle, right}, itemIndex}
                     <div
-                            class="h-full grow"
-                            style="background: linear-gradient(270deg, rgba({leftColour.red},{leftColour.green},{leftColour.blue},1) {(left / max) * 100}%, rgba(255,255,255,0) {(left / max) * 100}%);"
-                    ></div>
-                    <div>{middle}</div>
-                    <div
-                            class="h-full grow"
-                            style="background: linear-gradient(90deg, rgba({rightColour.red},{rightColour.green},{rightColour.blue},1) {(right / max) * 100}%, rgba(255,255,255,0) {(right / max) * 100}%);"
-                    ></div>
-                </div>
-            {/each}
+                            class="preserve-3d block absolute w-full p-2 border-2 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
+                            style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
+                    >
+                        <!-- left bar -->
+                        <div
+                                class="h-full grow"
+                                style="background: linear-gradient(
+                                    270deg,
+                                    rgba({leftColour.red},{leftColour.green},{leftColour.blue}, 1){(left / max) * 100}%,
+                                    rgba(255,255,255,0) {(left / max) * 100}%);"
+                        >
+                        </div>
+                        <!-- bar label -->
+                        <h1 class="text-firebrick-1000">{middle}</h1>
+                        <!-- right bar -->
+                        <div
+                                class="h-full grow"
+                                style="background: linear-gradient(
+                                    90deg,
+                                    rgba({rightColour.red},{rightColour.green},{rightColour.blue}, 1) {(right / max) * 100}%,
+                                    rgba(255,255,255,0) {(right / max) * 100}%);"
+                        ></div>
+                    </div>
+                {/each}
+            </div>
         </div>
     </div>
+    <!-- Buttons -->
+    <div class="grid grid-cols-2 gap-2">
+        <button
+                class="rounded bg-firebrick-300 text-center text-white select-none w-full h-10"
+                on:click={() => rotate(UP)}
+        >
+            ∧
+        </button>
+        <button
+                class="rounded bg-firebrick-300 text-center text-white select-none w-full h-10"
+                on:click={() => rotate(DOWN)}
+        >
+            ∨
+        </button>
+    </div>
+    <!-- Control Description -->
+    <div class="mt-4">
+        <h1 class="font-semibold italic">{$language === "de" ? "Steuerung der Rolle:" : "Roll Control Options:"}</h1>
+        <p>
+            {$language === "de" ?
+            "Um die Rolle zu drehen, können die Buttons, die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
+            : "You can use the buttons, the cursor key up and down and the mousewheel to rotate the roll."}
+        </p>
+    </div>
 </div>
-<div class="rounded bg-firebrick-300 text-center text-white select-none w-10 h-10 ml-2 mb-2" on:click={() => rotate(UP)}>∧</div>
-<div class="rounded bg-firebrick-300 text-center text-white select-none w-10 h-10 ml-2" on:click={() => rotate(DOWN)}>∨</div>
