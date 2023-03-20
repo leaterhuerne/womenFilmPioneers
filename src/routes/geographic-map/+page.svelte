@@ -51,6 +51,7 @@
             lowerBound=0
             state={colorInput}
     />
+    <!-- ColorPicker and Button -->
     <div
             class="mt-2 absolute flex {colorPickerVisibility} bg-paper-100 opacity-90 rounded-r-md duration-500"
             on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%]"}
@@ -66,5 +67,9 @@
         >
             <CheveronRight size=4 />
         </button>
+    </div>
+    <!-- Year numbers -->
+    <div class="mt-2 absolut right-0">
+        <!-- TODO component for choosing year -->
     </div>
 </div>
