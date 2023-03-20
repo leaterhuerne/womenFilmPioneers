@@ -1,8 +1,6 @@
 <script lang="ts">
 
     import CheveronOutlineUp from "$lib/icons/components/CheveronOutlineUp.svelte";
-    import CheveronUp from "$lib/icons/components/CheveronUp.svelte";
-    import CheveronDown from "$lib/icons/components/CheveronDown.svelte";
     import CheveronOutlineDown from "$lib/icons/components/CheveronOutlineDown.svelte";
 
     export let year: string = "1892";           // default year for rendering
@@ -17,7 +15,7 @@
             yearNumber += 1;
             year = yearNumber.toString();
         } else {
-            setInvalidInput();
+            handleInvalidInput();
         }
     }
 
@@ -27,34 +25,43 @@
             yearNumber -= 1;
             year = yearNumber.toString();
         } else {
-            setInvalidInput();
+            handleInvalidInput();
         }
     }
 
-    function setInvalidInput() {
+    function handleInvalidInput() {
         invalidInput = true;
-        setTimeout(() => invalidInput = false, 2000)
+        setTimeout(() => invalidInput = false, 2000);
     }
 
-    function checkCorrectInput() {
+    function checkInput() {
         const checker = year.match("[A-Za-z.:,;]");
         if (checker != null) {
-            setInvalidInput();
+            handleInvalidInput();
         }
     }
 
-    function handleKey(event: KeyboardEvent) {
-        console.log(event.key);
-        if (event.key == "ArrowUp") {
+    function handleKey(keyboard: KeyboardEvent) {
+        if (keyboard.key == "ArrowUp") {
             incrementYear();
-        } else if (event.key == "ArrowDown") {
+        } else if (keyboard.key == "ArrowDown") {
+            decrementYear();
+        }
+    }
+
+    function handleWheel(wheel: WheelEvent) {
+        if (wheel.deltaY > 2) {
+            incrementYear();
+        } else if (wheel.deltaY < -2) {
             decrementYear();
         }
     }
 </script>
 
-<svelte:window on:keypress={handleKey} />
-<div class="{className} border-2 border-black p-0.5 w-min">
+<svelte:window on:keydown|preventDefault={handleKey} />
+<div class="{className} border-2 border-black p-0.5 w-min"
+     on:wheel={handleWheel}
+>
     <!-- Year number with buttons -->
     <div class="flex">
         <!-- Year number -->
@@ -62,49 +69,23 @@
                 type="text" bind:value={year} maxlength="4" size="4"
                 class="bg-inherit w-min max-w-min font-bold"
                 style="border:none; background: transparent; outline: 0; text-align: center; font-size: x-large"
-                on:input={() => checkCorrectInput()}
+                on:input={() => checkInput()}
         />
         <!-- Up and Down Buttons -->
         <div class="grid grid-col-1 gap-y-0.5">
-            <button
-                    on:click={() => incrementYear()}
-
-            >
+            <button on:click={() => incrementYear()}>
                 <CheveronOutlineUp size="1.5" hover="firebrick"/>
             </button>
-            <button
-                    on:click={() => decrementYear()}
-            >
+            <button on:click={() => decrementYear()}>
                 <CheveronOutlineDown size="1.5" hover="firebrick"/>
             </button>
         </div>
     </div>
     <!-- Error popup for wrong input -->
-    <div>
-        {#if invalidInput}
-            <div class="bg-red-300 opacity-75 rounded-md text-xs w-fit">
-                Input takes only digits. The number must be between {minYear} and {maxYear}.
-            </div>
-        {/if}
-    </div>
-
+    {#if invalidInput}
+        <div class="bg-red-300 opacity-75 text-xs w-fit">
+            Input takes only digits. The number must be between {minYear} and {maxYear}.
+        </div>
+    {/if}
 </div>
 
-<style>
-    input:invalid {
-        animation: shake 300ms;
-        color: firebrick;
-    }
-
-    @keyframes shake {
-        25% {
-            transform: translateX(4px);
-        }
-        50% {
-            transform: translateX(-4px);
-        }
-        75% {
-            transform: translateX(4px);
-        }
-    }
-</style>
