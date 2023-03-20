@@ -2,12 +2,13 @@
     
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
     import {language} from "$lib/stores/language.js";
-    type label = {left: number, middle: number, right: number}
+    import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
+    type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
+    export let className: string;
     export let leftColour: rgb = {red: 255, green: 0, blue: 0};
     export let rightColour: rgb = {red: 0, green: 0, blue: 255};
-    
     export let max = 100;
     export let labels = new CircularLinkedList<label>;
     let content = labels.toArray();
@@ -39,6 +40,8 @@
     let contentDown = content.length - 5;   // index of next value when rotating down
     let contentUp = 5;                      // index of next value when rotating up
 
+    export let frontLabel = items[frontItemIndex];
+
     /**
      * Handles one-step rotation of the roll.
      * @param direction of rotation
@@ -67,7 +70,7 @@
             frontContentIndex = (frontContentIndex - 1 + content.length) % content.length;
         }
         rotation = "transform: rotateX(" + currdeg +"deg)"; // now rotate the roll
-
+        frontLabel = items[frontItemIndex];
     }
 
     /**
@@ -94,19 +97,23 @@
             rotate(DOWN);
         }
     }
+
+    let controlVisibility = "-translate-x-[90%]";
+    let direction = "";
 </script>
 
 <svelte:window on:keydown|preventDefault={rollByKey}/>
-<div class="p-2">
-    <div class="h-112 flex justify-center" on:wheel={handleWheel}>
+<div class="{className} relative p-2 grid grid-cols-1 grow min-h-[12rem]">
+    <!-- Roll -->
+    <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
         <!-- Container -->
-        <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-48 perspective-1000">
+        <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-40 perspective-1000">
             <!-- Roll -->
             <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
                 <!-- Items on the roll -->
-                {#each items as {left, middle, right}, itemIndex}
+                {#each items as {left, middle: year, right}, itemIndex}
                     <div
-                            class="preserve-3d block absolute w-full p-2 border-2 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
+                            class="preserve-3d block absolute w-full border-2 p-1 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
                             style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
                     >
                         <!-- left bar -->
@@ -119,7 +126,7 @@
                         >
                         </div>
                         <!-- bar label -->
-                        <h1 class="text-firebrick-1000">{middle}</h1>
+                        <h1>{year}</h1>
                         <!-- right bar -->
                         <div
                                 class="h-full grow"
@@ -133,28 +140,44 @@
             </div>
         </div>
     </div>
-    <!-- Buttons -->
-    <div class="grid grid-cols-2 gap-2">
-        <button
-                class="rounded bg-firebrick-300 text-center text-white select-none w-full h-10"
-                on:click={() => rotate(UP)}
+    <!-- Controls and Descriptions -->
+    <div
+            class="
+                mt-2
+                absolute lg:relative
+                w-full max-w-[500px] lg:w-full lg: max-w-full
+                lg:h-full
+                flex
+                {controlVisibility} duration-500 lg:translate-x-0
+            "
+            on:mouseleave={() => {controlVisibility = "-translate-x-[90%]"; direction = ""}}
+    >
+        <div class="
+                p-2
+                flex flex-col
+                w-[90%]
+                bg-paper-200
+                opacity-90
+            "
         >
-            ∧
-        </button>
-        <button
-                class="rounded bg-firebrick-300 text-center text-white select-none w-full h-10"
-                on:click={() => rotate(DOWN)}
-        >
-            ∨
-        </button>
-    </div>
-    <!-- Control Description -->
-    <div class="mt-4">
-        <h1 class="font-semibold italic">{$language === "de" ? "Steuerung der Rolle:" : "Roll Control Options:"}</h1>
-        <p>
-            {$language === "de" ?
-            "Um die Rolle zu drehen, können die Buttons, die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
-            : "You can use the buttons, the cursor key up and down and the mousewheel to rotate the roll."}
-        </p>
+
+            <!-- Control Description -->
+            <div class="h-min">
+                <h1 class="font-semibold italic">{$language === "de" ? "Steuerung der Rolle:" : "Roll Control Options:"}</h1>
+                <p>
+                    {$language === "de" ?
+                        "Um die Rolle zu drehen, können die Buttons, die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
+                        : "You can use the buttons, the cursor key up and down and the mousewheel to rotate the roll."}
+                </p>
+            </div>
+        </div>
+        <div class="bg-firebrick-500 w-[10%] grid place-items-center lg:hidden rounded-r-xl">
+            <button
+                    class="duration-500 {direction}"
+                    on:mouseenter={() => {controlVisibility = ""; direction = "rotate-180"}}
+            >
+                <CheveronRight size=2/>
+            </button>
+        </div>
     </div>
 </div>
