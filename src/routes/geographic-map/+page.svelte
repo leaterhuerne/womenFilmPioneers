@@ -3,6 +3,7 @@
     import HeatMap from "$lib/components/geographic-map/HeatMap.svelte";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
+    import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
 
     // create Random values between lower bound and upper bound for coloring the HeatMap
     let countryWithColors = new Europe();
@@ -37,9 +38,12 @@
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
     let colorPickerVisibility: string = "-translate-x-[84%]";
+    let windowWidth = 0;
 
 </script>
 
+<svelte:window bind:innerWidth={windowWidth} />
+<h1 class="grid place-items-center">{windowWidth}</h1>
 <div class="relative w-full">
     <!-- Map -->
     <HeatMap
@@ -53,23 +57,31 @@
     />
     <!-- ColorPicker and Button -->
     <div
-            class="mt-2 absolute flex {colorPickerVisibility} bg-paper-100 opacity-90 rounded-r-md duration-500"
+            class="mt-2 absolute flex {colorPickerVisibility}  rounded-r-md duration-500"
             on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%]"}
     >
         <ColorPicker
+                className="bg-paper-100 opacity-90"
                 bind:colors={heatMapBoundColors}
                 onInput={() => colorInput = !colorInput}
         />
         <button
-                class="bg-firebrick-400 rounded-r-md w-[20%]"
+                class="grid place-items-center bg-firebrick-400 rounded-r-md w-[20%] h-10 md:h-20"
                 on:mouseover={() => colorPickerVisibility = ""}
-                style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%, rgba(0,255,0,0.9) 50%, rgba(0,0,255,0.9) 90%);"
+                style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%,
+                                                         rgba(0,255,0,0.9) 50%,
+                                                         rgba(0,0,255,0.9) 90%);
+                "
         >
-            <CheveronRight size=4 />
+            <CheveronRight size={windowWidth < 768 ? 2 : 4} />
         </button>
     </div>
     <!-- Year numbers -->
-    <div class="mt-2 absolut right-0">
+    <div class="mt-2 mr-2 absolute right-0 top-0
+        md:scale-100
+        "
+    >
         <!-- TODO component for choosing year -->
+        <YearNumbers />
     </div>
 </div>

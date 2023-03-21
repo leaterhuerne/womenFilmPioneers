@@ -44,8 +44,10 @@
     function handleKey(keyboard: KeyboardEvent) {
         if (keyboard.key == "ArrowUp") {
             incrementYear();
+            keyboard.preventDefault();
         } else if (keyboard.key == "ArrowDown") {
             decrementYear();
+            keyboard.preventDefault();
         }
     }
 
@@ -58,17 +60,19 @@
     }
 </script>
 
-<svelte:window on:keydown|preventDefault={handleKey} />
+<svelte:window on:keydown={handleKey} />
 <div class="{className} border-2 border-black p-0.5 w-min"
-     on:wheel={handleWheel}
+     on:wheel|preventDefault={handleWheel}
 >
     <!-- Year number with buttons -->
     <div class="flex">
         <!-- Year number -->
         <input
                 type="text" bind:value={year} maxlength="4" size="4"
-                class="bg-inherit w-min max-w-min font-bold"
-                style="border:none; background: transparent; outline: 0; text-align: center; font-size: x-large"
+                class="bg-inherit
+                    font-bold text-center text-xl
+                    border-none
+                    outline-none"
                 on:input={() => checkInput()}
         />
         <!-- Up and Down Buttons -->
