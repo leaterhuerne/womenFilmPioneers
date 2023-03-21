@@ -6,9 +6,13 @@
     export let year: string = "1892";           // default year for rendering
     export let minYear: number = 1890;          // oldest data in database is from 1890
     export let maxYear: number = 2021;          // youngest data in database is from 2021
-    export let className: string = "";
+    export let className: string = "";          // styling of the outer div
 
     let invalidInput: boolean = false;
+
+    /**
+     * year number is incremented by 1 if year number is still between min- and maxYear.
+     */
     function incrementYear(): void {
         let yearNumber: number = parseInt(year);
         if (yearNumber < maxYear) {
@@ -19,6 +23,9 @@
         }
     }
 
+    /**
+     * year number is decremented by 1 if year number is still between min- and maxYear.
+     */
     function decrementYear(): void {
         let yearNumber: number = parseInt(year);
         if (yearNumber > minYear) {
@@ -29,11 +36,20 @@
         }
     }
 
+    //////////////// handle events (keyboard, mousewheel, input) \\\\\\\\\\\\\\\\
+
+    /**
+     * Sets the boolean variable 'invalidInput' to true and 2 seconds later to false.
+     * An error message can be shown for this two seconds.
+     */
     function handleInvalidInput() {
         invalidInput = true;
         setTimeout(() => invalidInput = false, 2000);
     }
 
+    /**
+     * The function handles an invalid input for characters that are no digits.
+     */
     function checkInput() {
         const checker = year.match("[A-Za-z.:,;]");
         if (checker != null) {
@@ -41,6 +57,10 @@
         }
     }
 
+    /**
+     * Handles the key-up and key-down keys for incrementing and decrementing the year.
+     * @param keyboard the pressed key
+     */
     function handleKey(keyboard: KeyboardEvent) {
         if (keyboard.key == "ArrowUp") {
             incrementYear();
@@ -51,6 +71,10 @@
         }
     }
 
+    /**
+     * Handles the mousewheel event for incrementing and decrementing the the year.
+     * @param wheel the wheel event
+     */
     function handleWheel(wheel: WheelEvent) {
         if (wheel.deltaY > 2) {
             incrementYear();
@@ -58,6 +82,9 @@
             decrementYear();
         }
     }
+
+    //////////////// styling functionality \\\\\\\\\\\\\\\\
+
 </script>
 
 <svelte:window on:keydown={handleKey} />
