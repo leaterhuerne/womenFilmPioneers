@@ -6,6 +6,7 @@
     import {language} from "$lib/stores/language.js";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
+    import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
 
     // Calculate the maximum on the roll
     let maxRoll = 0;
@@ -20,6 +21,25 @@
         maxUnknown = max(maxUnknown);
     }
 
+    // Genders visible on roll
+    const genderPairs = [
+        {left: "male", right: "female"},
+        {left: "male", right: "unknown"},
+        {left: "female", right: "unknown"},
+        {left: "female", right: "male"},
+        {left: "unknown", right: "male"},
+        {left: "unknown", right: "female"}
+    ];
+    let leftGender = genderPairs[0].left;
+    let rightGender = genderPairs[0].right;
+    let genderPairPosition = 0;
+
+    const handleGenderChangeButton = (direction: string) => {
+        genderPairPosition = (genderPairPosition + (direction === "left" ? -1 : 1) + genderPairs.length) % genderPairs.length;
+        leftGender = genderPairs[genderPairPosition].left;
+        rightGender = genderPairs[genderPairPosition].right;
+        fillRoll();
+    }
     /**
      * Creates a rgb object with random values.
      */
@@ -33,21 +53,31 @@
     let rightRollBarColor = randomRgb();
 
     let coloursOnRoll = [
-            {title: "Left", rgb: leftRollBarColor},
-            {title: "Right", rgb: rightRollBarColor}
+            {title: "", rgb: leftRollBarColor},
+            {title: "", rgb: rightRollBarColor}
     ]
 
     type label = {left: number, middle: number, right: number}
     const visibilyEnsurance = 10;
-    let content = new CircularLinkedList<label>();
-    for(const year of Object.keys(genders_by_year)) {
-        content.add({
-            left: genders_by_year[year].male == 0 ? 0 : Math.max(genders_by_year[year].male, visibilyEnsurance),
-            middle: Number(year),
-            right: genders_by_year[year].female == 0 ? 0 : Math.max(genders_by_year[year].female, visibilyEnsurance)
-        });
+    let content: CircularLinkedList<label>;
+    let frontLabelOnRoll: label;
+    const fillRoll = () => {
+        console.log("Filling roll with " + leftGender + " - " + rightGender);
+        content = new CircularLinkedList<label>();
+        for (const year of Object.keys(genders_by_year)) {
+            content.add({
+                left: genders_by_year[year][leftGender] == 0 ? 0 : Math.max(genders_by_year[year][leftGender], visibilyEnsurance),
+                middle: Number(year),
+                right: genders_by_year[year][rightGender] == 0 ? 0 : Math.max(genders_by_year[year][rightGender], visibilyEnsurance)
+            });
+        }
+        frontLabelOnRoll = {
+            left: genders_by_year["1890"][leftGender],
+            middle: 1890,
+            right: genders_by_year["1890"][rightGender]
+        };
     }
-    let frontLabelOnRoll: label = {left: genders_by_year["1890"].male, middle: 1890, right: genders_by_year["1890"].female};
+    fillRoll();
 
     let optionsVisible = "-translate-x-[95%]";
     let buttonRotation: string;
@@ -67,7 +97,7 @@
                 border-4 border-green-300
                 lg:w-2/3
             "
-            labels={content}
+            bind:labels={content}
             max={Math.max(maxFemale, maxMale)}
             bind:frontLabel={frontLabelOnRoll}
             bind:leftColour={coloursOnRoll[0].rgb}
@@ -85,13 +115,34 @@
             "
             on:mouseleave={() => optionsVisible = "-translate-x-[95%]"}
     >
-        <div></div>
-        <ColorPicker
-                className="bg-paper-100 opactity-90 rounded-br-xl"
-                bind:colors={coloursOnRoll}
-        />
+        <div class="bg-paper-100 opactity-90 rounded-br-xl shadow-lg w-[95%]">
+            <div class="grid grid-cols-6 pl-2 pr-2">
+                <button on:click={() => handleGenderChangeButton("left")} >
+                    <CheveronLeft />
+                </button>
+                <h1 class="font-semibold col-span-2 text-start">{leftGender}</h1>
+                <h1 class="font-semibold col-span-2 text-end">{rightGender}</h1>
+                <button on:click={() => handleGenderChangeButton("right")}>
+                    <CheveronRight />
+                </button>
+            </div>
+            <ColorPicker
+                    className=""
+                    bind:colors={coloursOnRoll}
+            />
+            <div class="p-2">
+
+            </div>
+        </div>
         <button
-                class="duration-500 w-[5%] h-10 bg-firebrick-500 grid place-items-center {buttonRotation} rounded-r-xl"
+                class="
+                    duration-500
+                    w-[5%] h-10
+                    bg-firebrick-500
+                    grid place-items-center
+                    {buttonRotation}
+                    rounded-r-xl
+                "
                 on:mouseenter={() => optionsVisible = "translate-x-0"}
         >
             <CheveronRight size=1 />

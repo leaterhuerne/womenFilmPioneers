@@ -14,10 +14,10 @@
         "Um die Rolle zu drehen, können die Buttons, die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
         : "You can use the buttons, the cursor key up and down and the mousewheel to rotate the roll.";
     export let labels = new CircularLinkedList<label>;
-    let content = labels.toArray();
-
     // define how many sides the roll has.
+
     const SIDES_ON_ROLL = 20;
+    let content = labels.toArray();
     let items: label[] = new Array(SIDES_ON_ROLL).fill({left: {}, middle: 0, right:{}});
 
     // define constants
@@ -82,8 +82,10 @@
     const rollByKey = (event: KeyboardEvent) => {
         if(event.key == "ArrowUp") {
             rotate(DOWN);
+            event.preventDefault();
         } else if(event.key == "ArrowDown") {
             rotate(UP);
+            event.preventDefault();
         }
     }
 
@@ -101,7 +103,7 @@
     }
 </script>
 
-<svelte:window on:keydown|preventDefault={rollByKey}/>
+<svelte:window on:keydown={rollByKey}/>
 <div class="{className} relative p-2 grid grid-cols-1 min-h-[24rem]">
     <!-- Roll -->
     <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
