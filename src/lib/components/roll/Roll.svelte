@@ -2,7 +2,6 @@
     
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
     import {language} from "$lib/stores/language.js";
-    import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -10,6 +9,10 @@
     export let leftColour: rgb = {red: 255, green: 0, blue: 0};
     export let rightColour: rgb = {red: 0, green: 0, blue: 255};
     export let max = 100;
+
+    export let rollControlInformation = $language === "de" ?
+        "Um die Rolle zu drehen, können die Buttons, die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
+        : "You can use the buttons, the cursor key up and down and the mousewheel to rotate the roll.";
     export let labels = new CircularLinkedList<label>;
     let content = labels.toArray();
 
@@ -26,7 +29,6 @@
         items[i] = content[i];
         items[items.length - 1  - i] = content[content.length - 1 - i];
     }
-    console.log(items);
 
     // calculate the inner radius of the regular n-polygon
     const innerRadiusofRoll = (50 / 2) * (1 / Math.tan(Math.PI / items.length));
@@ -46,7 +48,7 @@
      * Handles one-step rotation of the roll.
      * @param direction of rotation
      */
-    function rotate(direction){
+    const rotate = (direction) => {
         if(direction == UP){
             //calculate up rotation
             currdeg = currdeg - rotationAngle;
@@ -77,7 +79,7 @@
      * Rotates the roll up or down with the cursor key
      * @param event KeyboardEvent detecting whether cursor up oder down is pressed.
      */
-    function rollByKey(event: KeyboardEvent) {
+    const rollByKey = (event: KeyboardEvent) => {
         if(event.key == "ArrowUp") {
             rotate(DOWN);
         } else if(event.key == "ArrowDown") {
@@ -89,7 +91,7 @@
      * Rotates the roll when mouse wheel ist rotated.
      * @param mousewheel WheelEvent detecting whether mousewheel is rotated up or dowm.
      */
-    function handleWheel(mousewheel: WheelEvent) {
+    const handleWheel = (mousewheel: WheelEvent) => {
         let pos = 0;
         if(mousewheel.deltaY > pos) {
             rotate(UP);
@@ -97,13 +99,10 @@
             rotate(DOWN);
         }
     }
-
-    let controlVisibility = "-translate-x-[90%]";
-    let direction = "";
 </script>
 
 <svelte:window on:keydown|preventDefault={rollByKey}/>
-<div class="{className} relative p-2 grid grid-cols-1 grow min-h-[12rem]">
+<div class="{className} relative p-2 grid grid-cols-1 min-h-[24rem]">
     <!-- Roll -->
     <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
         <!-- Container -->
@@ -138,46 +137,6 @@
                     </div>
                 {/each}
             </div>
-        </div>
-    </div>
-    <!-- Controls and Descriptions -->
-    <div
-            class="
-                mt-2
-                absolute lg:relative
-                w-full max-w-[500px] lg:w-full lg: max-w-full
-                lg:h-full
-                flex
-                {controlVisibility} duration-500 lg:translate-x-0
-            "
-            on:mouseleave={() => {controlVisibility = "-translate-x-[90%]"; direction = ""}}
-    >
-        <div class="
-                p-2
-                flex flex-col
-                w-[90%]
-                bg-paper-200
-                opacity-90
-            "
-        >
-
-            <!-- Control Description -->
-            <div class="h-min">
-                <h1 class="font-semibold italic">{$language === "de" ? "Steuerung der Rolle:" : "Roll Control Options:"}</h1>
-                <p>
-                    {$language === "de" ?
-                        "Um die Rolle zu drehen, können die Buttons, die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
-                        : "You can use the buttons, the cursor key up and down and the mousewheel to rotate the roll."}
-                </p>
-            </div>
-        </div>
-        <div class="bg-firebrick-500 w-[10%] grid place-items-center lg:hidden rounded-r-xl">
-            <button
-                    class="duration-500 {direction}"
-                    on:mouseenter={() => {controlVisibility = ""; direction = "rotate-180"}}
-            >
-                <CheveronRight size=2/>
-            </button>
         </div>
     </div>
 </div>
