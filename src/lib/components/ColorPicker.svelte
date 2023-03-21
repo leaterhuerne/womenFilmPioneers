@@ -1,6 +1,6 @@
 <script lang="ts">
     type rgb = {red: number, green: number, blue: number};
-    export let colors: {title:string, rgb: rgb}[] = [
+    export let colors: {title:string, rgb: rgb}[] = [       // representing color fields
         {
             title: "Color",
             rgb: {
@@ -11,9 +11,7 @@
         }
     ];
 
-    //const gridCols = "grid-cols-" + colors.length;
-
-    export let onInput: () => void = () => console.log("ColorPicker registered input.");                                     // listener for changed colors
+    export let onInput: () => void = () => console.log("ColorPicker registered input.");  // listener for changed colors
     export let className: string = "";                                  // css styling attributes can be placed here
 
     let activeColorField = 0;                                           // index of active colour field
@@ -47,7 +45,8 @@
      * @param colourFieldIndex index of color field
      */
     function setColour(colourFieldIndex: number) {
-        backgroundColorStyle[colourFieldIndex] = "background: rgb(" + colors[colourFieldIndex].rgb.red + ", " + colors[colourFieldIndex].rgb.green + ", " +colors[colourFieldIndex].rgb.blue + ");";
+        backgroundColorStyle[colourFieldIndex] = "background: rgb(" + colors[colourFieldIndex].rgb.red + ", "
+            + colors[colourFieldIndex].rgb.green + ", " + colors[colourFieldIndex].rgb.blue + ");";
         setHex();
         onInput();
     }
@@ -72,6 +71,7 @@
 </script>
 
 <style>
+    /* Customization of sliders */
     :root {
         --trackColor: red;
         --thumbColor: rgb(100, 100, 100);
@@ -162,7 +162,7 @@
 
 <div class="p-2 grid grid-cols-1 gap-2 w-full max-w-[30rem] {className}">
     <!-- colour fields -->
-    <div class="grid {'grid-cols-' + colors.length} gap-2">
+    <div class="grid grid-cols-1 {'grid-cols-' + colors.length} gap-2">
         {#each colors as color, colorIndex}
             <div class="flex flex-col justify-between place-items-center">
                 <h1>{color.title}</h1>
@@ -178,8 +178,9 @@
     <div class="w-full flex flex-col justify-between">
         <div class="flex justify-between gap-2">
             <h1>HEX</h1>
-            <input class="w-full" type="text" bind:value={hex} on:change={setRgb}>
+            <input class="w-full bg-inherit border-2 border-firebrick-1000 focus:outline-none pl-1" type="text" bind:value={hex} on:change={setRgb}>
         </div>
+        <!-- Slider RED -->
         <div class="flex justify-between">
             <input
                     style="--trackColor: red"
@@ -190,6 +191,7 @@
                     on:input={() => setColour(activeColorField)}
             />
         </div>
+        <!-- Slider GREEN -->
         <div class="flex justify-between">
             <input
                     style="--trackColor: #00ff00"
@@ -200,6 +202,7 @@
                     on:input={() => setColour(activeColorField)}
             />
         </div>
+        <!-- Slider BLUE -->
         <div class="flex justify-between">
             <input
                     style="--trackColor: blue"
