@@ -40,18 +40,18 @@
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
     let colorPickerVisibility: string = "-translate-x-[84%]";
-    let windowWidth = 0;
+    let windowWidth = 0;    // current width of the window
+    const MD = 768;         // constant for windowWidth of tailwind md: property
 
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
-<h1 class="grid place-items-center">{windowWidth}</h1>
-<div class="grid grid-cols-1 md:grid-cols-3">
+<div class="grid grid-cols-1 md:grid-cols-3 border-4 border-green-400">
     <!-- Map with ColorPicker and YearNumbers -->
-    <div class="relative w-full col-span-2">
+    <div class="relative w-full md:col-span-2">
         <!-- Map -->
         <HeatMap
-                className="absolute"
+                className="absolute bg-slate-100"
                 countryHeatValues={heatMapRandomColors}
                 colorFrom={heatMapBoundColors[0].rgb}
                 colorTo={heatMapBoundColors[1].rgb}
@@ -81,17 +81,25 @@
             </button>
         </div>
         <!-- Year numbers -->
-        <div class="mt-2 mr-2
-                    absolute right-0 top-0
-                    scale-90 translate-x-[5%] -translate-y-[5%]
-                    sm:scale-100
-            "
-        >
-            <YearNumbers bind:year={year} responsive="md"/>
-        </div>
+        {#if windowWidth >= MD}
+            <!-- Year numbers on top right side in the map -->
+            <div class="mt-2 mr-2
+                        absolute right-0 top-0
+                        sm:scale-100
+                "
+            >
+                <YearNumbers bind:year={year} responsive="md"/>
+            </div>
+        {/if}
     </div>
+    <!-- Year number on bottom of the map -->
+    {#if windowWidth < MD}
+        <div class="m-2">
+            <YearNumbers bind:year={year} className="bg-freshonion-200" />
+        </div>
+    {/if}
     <!-- Detailed Information to Women -->
-    <div>
-
+    <div class="border-4 border-freshonion-900 h-screen">
+        Detallierte Informationen
     </div>
 </div>

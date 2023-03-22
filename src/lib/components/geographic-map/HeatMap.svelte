@@ -62,9 +62,8 @@
 
 </script>
 
-<div class="{className} min-w-full">
+<div class="{className} w-full">
     <SVGEurope
             countries={europe}
-            className="bg-slate-300"
     />
 </div>
