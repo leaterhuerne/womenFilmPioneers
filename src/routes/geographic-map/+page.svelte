@@ -46,12 +46,12 @@
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
-<div class="grid grid-cols-1 md:grid-cols-3 border-4 border-green-400">
+<div class="grid grid-cols-1 md:grid-cols-3">
     <!-- Map with ColorPicker and YearNumbers -->
     <div class="relative w-full md:col-span-2">
         <!-- Map -->
         <HeatMap
-                className="absolute bg-slate-100"
+                className="relative p-2"
                 countryHeatValues={heatMapRandomColors}
                 colorFrom={heatMapBoundColors[0].rgb}
                 colorTo={heatMapBoundColors[1].rgb}
@@ -61,7 +61,7 @@
         />
         <!-- ColorPicker and Button -->
         <div
-                class="mt-2 absolute flex {colorPickerVisibility}  rounded-r-md duration-500"
+                class="mt-2 absolute left-0 top-0 flex {colorPickerVisibility}  rounded-r-md duration-500"
                 on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%]"}
         >
             <ColorPicker
@@ -99,7 +99,7 @@
         </div>
     {/if}
     <!-- Detailed Information to Women -->
-    <div class="border-4 border-freshonion-900 h-screen">
+    <div class="md:border-l-4 p-2 border-black h-full">
         Detallierte Informationen
     </div>
 </div>

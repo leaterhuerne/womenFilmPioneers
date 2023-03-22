@@ -42,26 +42,14 @@
      * year number is incremented by 1 if year number is still between min- and maxYear.
      */
     function incrementYear(): void {
-        let yearNumber: number = parseInt(year);
-        if (yearNumber < maxYear) {
-            yearNumber += 1;
-            year = yearNumber.toString();
-        } else {
-            handleInvalidInput();
-        }
+        year = Math.min(parseInt(year) + 1, maxYear).toString();
     }
 
     /**
      * year number is decremented by 1 if year number is still between min- and maxYear.
      */
     function decrementYear(): void {
-        let yearNumber: number = parseInt(year);
-        if (yearNumber > minYear) {
-            yearNumber -= 1;
-            year = yearNumber.toString();
-        } else {
-            handleInvalidInput();
-        }
+        year = Math.max(parseInt(year) - 1, minYear).toString();
     }
 
     //////////////// handle events (keyboard, mousewheel, input) \\\\\\\\\\\\\\\\
@@ -162,13 +150,14 @@
                     </button>
                 </div>
             </div>
+            <!-- Error popup for wrong input -->
+            {#if invalidInput}
+                <div class="bg-red-300 opacity-75 text-xs w-full rounded">
+                    Input takes only digits. The number must be between {minYear} and {maxYear}.
+                </div>
+            {/if}
         </div>
     {/if}
-    <!-- Error popup for wrong input -->
-    {#if invalidInput}
-        <div class="bg-red-300 opacity-75 text-xs w-fit rounded">
-            Input takes only digits. The number must be between {minYear} and {maxYear}.
-        </div>
-    {/if}
+
 </div>
 
