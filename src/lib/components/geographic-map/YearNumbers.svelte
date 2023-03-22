@@ -2,13 +2,41 @@
 
     import CheveronOutlineUp from "$lib/icons/components/CheveronOutlineUp.svelte";
     import CheveronOutlineDown from "$lib/icons/components/CheveronOutlineDown.svelte";
+    import CheveronOutlineLeft from "$lib/icons/components/CheveronOutlineLeft.svelte";
+    import CheveronOutlineRight from "$lib/icons/components/CheveronOutlineRight.svelte";
 
     export let year: string = "1892";           // default year for rendering
     export let minYear: number = 1890;          // oldest data in database is from 1890
     export let maxYear: number = 2021;          // youngest data in database is from 2021
     export let className: string = "";          // styling of the outer div
+    export let responsive: string = "";         // for responsive behavior
 
-    let invalidInput: boolean = false;
+    let invalidInput: boolean = false;  // toggle boolean to show an error message
+
+    let wideSize: number;               // treshold for wide or small component
+    let windowWidth: number;            // current width of the window
+
+    // initializes wideSize to the pixelsWidths of sm, md, lg, xl and 2xl
+    switch (responsive) {
+        case "sm":
+            wideSize = 640;
+            break;
+        case "md":
+            wideSize = 768;
+            break;
+        case "lg":
+            wideSize = 1024;
+            break;
+        case "xl":
+            wideSize = 1280;
+            break;
+        case "2xl":
+            wideSize = 1536;
+            break;
+        default:
+            wideSize = 10000;
+            break;
+    }
 
     /**
      * year number is incremented by 1 if year number is still between min- and maxYear.
@@ -87,34 +115,58 @@
 
 </script>
 
-<svelte:window on:keydown={handleKey} />
-<div class="{className} border-2 border-black p-0.5 w-min"
+<svelte:window bind:innerWidth={windowWidth} on:keydown={handleKey} />
+<div class="{responsive}:w-min"
      on:wheel|preventDefault={handleWheel}
 >
-    <!-- Year number with buttons -->
-    <div class="flex">
-        <!-- Year number -->
-        <input
-                type="text" bind:value={year} maxlength="4" size="4"
-                class="bg-inherit
-                    font-bold text-center text-xl
-                    border-none
-                    outline-none"
-                on:input={() => checkInput()}
-        />
-        <!-- Up and Down Buttons -->
-        <div class="grid grid-col-1 gap-y-0.5">
-            <button on:click={() => incrementYear()}>
-                <CheveronOutlineUp size="1.5" hover="firebrick"/>
+    <!-- field in full wideness of Year numbers with left and right buttons -->
+    {#if windowWidth < wideSize}
+        <div class="{className}
+                    flex justify-around place-items-center
+                    p-0.5
+                    w-full
+                    rounded
+                   "
+        >
+            <button on:click={decrementYear}>
+                <CheveronOutlineLeft size="2" hover="firebrick"/>
             </button>
-            <button on:click={() => decrementYear()}>
-                <CheveronOutlineDown size="1.5" hover="firebrick"/>
+            <h1 class="text-2xl font-bold">
+                {year}
+            </h1>
+            <button on:click={incrementYear}>
+                <CheveronOutlineRight size="2" hover="firebrick"/>
             </button>
         </div>
-    </div>
+
+    {:else}
+        <!-- small field of Year number with up and down buttons -->
+        <div class="{className} border-2 border-black p-0.5 w-min rounded">
+            <div class="flex">
+                <!-- Year number -->
+                <input
+                        type="text" bind:value={year} maxlength="4" size="4"
+                        class="bg-inherit
+                            font-bold text-center text-xl
+                            border-none
+                            outline-none"
+                        on:input={() => checkInput()}
+                />
+                <!-- Up and Down Buttons -->
+                <div class="grid grid-col-1 gap-y-0.5">
+                    <button on:click={incrementYear}>
+                        <CheveronOutlineUp size="1.5" hover="firebrick"/>
+                    </button>
+                    <button on:click={decrementYear}>
+                        <CheveronOutlineDown size="1.5" hover="firebrick"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    {/if}
     <!-- Error popup for wrong input -->
     {#if invalidInput}
-        <div class="bg-red-300 opacity-75 text-xs w-fit">
+        <div class="bg-red-300 opacity-75 text-xs w-fit rounded">
             Input takes only digits. The number must be between {minYear} and {maxYear}.
         </div>
     {/if}

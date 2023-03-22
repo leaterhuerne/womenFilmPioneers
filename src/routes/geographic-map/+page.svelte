@@ -35,6 +35,8 @@
 
     let colorInput = false;
 
+    let year: string = "1890";
+
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
     let colorPickerVisibility: string = "-translate-x-[84%]";
@@ -44,44 +46,52 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 <h1 class="grid place-items-center">{windowWidth}</h1>
-<div class="relative w-full">
-    <!-- Map -->
-    <HeatMap
-            className="absolute"
-            countryHeatValues={heatMapRandomColors}
-            colorFrom={heatMapBoundColors[0].rgb}
-            colorTo={heatMapBoundColors[1].rgb}
-            upperBound=100
-            lowerBound=0
-            state={colorInput}
-    />
-    <!-- ColorPicker and Button -->
-    <div
-            class="mt-2 absolute flex {colorPickerVisibility}  rounded-r-md duration-500"
-            on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%]"}
-    >
-        <ColorPicker
-                className="bg-paper-100 opacity-90"
-                bind:colors={heatMapBoundColors}
-                onInput={() => colorInput = !colorInput}
+<div class="grid grid-cols-1 md:grid-cols-3">
+    <!-- Map with ColorPicker and YearNumbers -->
+    <div class="relative w-full col-span-2">
+        <!-- Map -->
+        <HeatMap
+                className="absolute"
+                countryHeatValues={heatMapRandomColors}
+                colorFrom={heatMapBoundColors[0].rgb}
+                colorTo={heatMapBoundColors[1].rgb}
+                upperBound=100
+                lowerBound=0
+                state={colorInput}
         />
-        <button
-                class="grid place-items-center bg-firebrick-400 rounded-r-md w-[20%] h-10 md:h-20"
-                on:mouseover={() => colorPickerVisibility = ""}
-                style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%,
-                                                         rgba(0,255,0,0.9) 50%,
-                                                         rgba(0,0,255,0.9) 90%);
-                "
+        <!-- ColorPicker and Button -->
+        <div
+                class="mt-2 absolute flex {colorPickerVisibility}  rounded-r-md duration-500"
+                on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%]"}
         >
-            <CheveronRight size={windowWidth < 768 ? 2 : 4} />
-        </button>
+            <ColorPicker
+                    className="bg-paper-100 opacity-90"
+                    bind:colors={heatMapBoundColors}
+                    onInput={() => colorInput = !colorInput}
+            />
+            <button
+                    class="grid place-items-center bg-firebrick-400 rounded-r-md w-[20%] h-10 md:h-20"
+                    on:mouseover={() => colorPickerVisibility = ""}
+                    style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%,
+                                                             rgba(0,255,0,0.9) 50%,
+                                                             rgba(0,0,255,0.9) 90%);
+                    "
+            >
+                <CheveronRight size={windowWidth < 768 ? 2 : 4} />
+            </button>
+        </div>
+        <!-- Year numbers -->
+        <div class="mt-2 mr-2
+                    absolute right-0 top-0
+                    scale-90 translate-x-[5%] -translate-y-[5%]
+                    sm:scale-100
+            "
+        >
+            <YearNumbers bind:year={year} responsive="md"/>
+        </div>
     </div>
-    <!-- Year numbers -->
-    <div class="mt-2 mr-2 absolute right-0 top-0
-        md:scale-100
-        "
-    >
-        <!-- TODO component for choosing year -->
-        <YearNumbers />
+    <!-- Detailed Information to Women -->
+    <div>
+
     </div>
 </div>

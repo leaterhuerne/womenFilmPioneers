@@ -6,6 +6,6 @@ Hello women's world!
 
 <div>
     <div>
-        <YearNumbers />
+        <YearNumbers responsive="md"/>
     </div>
 </div>
