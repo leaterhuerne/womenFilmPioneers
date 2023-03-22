@@ -62,15 +62,18 @@
     let content: CircularLinkedList<label>;
     let frontLabelOnRoll: label;
     const fillRoll = () => {
-        console.log("Filling roll with " + leftGender + " - " + rightGender);
         content = new CircularLinkedList<label>();
+        let itemString = "+page: ";
         for (const year of Object.keys(genders_by_year)) {
-            content.add({
+            const item = {
                 left: genders_by_year[year][leftGender] == 0 ? 0 : Math.max(genders_by_year[year][leftGender], visibilyEnsurance),
                 middle: Number(year),
                 right: genders_by_year[year][rightGender] == 0 ? 0 : Math.max(genders_by_year[year][rightGender], visibilyEnsurance)
-            });
+            };
+            itemString += item.left + " ";
+            content.add(item);
         }
+        console.log(itemString);
         frontLabelOnRoll = {
             left: genders_by_year["1890"][leftGender],
             middle: 1890,
@@ -98,6 +101,7 @@
                 lg:w-2/3
             "
             bind:labels={content}
+            barNames={genderPairs[genderPairPosition]}
             max={Math.max(maxFemale, maxMale)}
             bind:frontLabel={frontLabelOnRoll}
             bind:leftColour={coloursOnRoll[0].rgb}

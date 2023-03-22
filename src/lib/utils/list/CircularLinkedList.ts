@@ -12,9 +12,8 @@ export class CircularLinkedList<T>{
         this.size = 0;
     }
 
-
     private addSingle(element: T): void {
-        const current = new ListElement<T>(element);
+        const current = new ListElement<T>(element, this.size);
         if(this.head == null) {
             this.head = current;
             this.head.previous = current;

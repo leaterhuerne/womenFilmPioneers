@@ -1,7 +1,6 @@
 <script lang="ts">
     
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
-    import {language} from "$lib/stores/language.js";
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -10,37 +9,50 @@
     export let rightColour: rgb = {red: 0, green: 0, blue: 255};
     export let max = 100;
 
-    export let rollControlInformation = $language === "de" ?
-        "Um die Rolle zu drehen, können die Buttons, die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
-        : "You can use the buttons, the cursor key up and down and the mousewheel to rotate the roll.";
+    export let barNames= {left: "left", right: "right"};
+
+    export const rollControlInformation = {
+        de: "Um die Rolle zu drehen die Cursortasten hoch und runter, sowie das Mausrad verwendet werden.",
+        en: "You can use the cursor keys up and down and the mousewheel to rotate the roll."
+    };
     export let labels = new CircularLinkedList<label>;
     // define how many sides the roll has.
 
     const SIDES_ON_ROLL = 20;
-    let content = labels.toArray();
-    let items: label[] = new Array(SIDES_ON_ROLL).fill({left: {}, middle: 0, right:{}});
+    let items: label[] = new Array(SIDES_ON_ROLL).fill({left: 50, middle: 0, right: 50});
 
     // define constants
     const UP = true;
     const DOWN = false;
 
-    // fill the sides which are visible at mount
-    for(let i = 0; i < 5; i++) {
-        items[i] = content[i];
-        items[items.length - 1  - i] = content[content.length - 1 - i];
+    let currentLabel = labels.iterator();
+    let labelIndex = 0;
+    let frontItemIndex = 0;               // index of the front facing side of the roll
+
+    /**
+     * Fills the sides which are visible at mount.
+     */
+    const fillRoll = () => {
+        for (let i = 0; i < 5; i++) {
+            items[frontItemIndex + i] = currentLabel.peekNext(i).content;
+            items[(frontItemIndex - i - 1 + items.length) % items.length] = currentLabel.peekPrevious(i + 1).content;
+        }
+    }
+    $: {
+        labels = labels;
+        currentLabel = labels.iterator();
+        //TODO
+        //currentLabel.jumpTo(labelIndex);
+        fillRoll();
     }
 
     // calculate the inner radius of the regular n-polygon
     const innerRadiusofRoll = (50 / 2) * (1 / Math.tan(Math.PI / items.length));
-    const rotationAngle = 360 / SIDES_ON_ROLL;
 
+    const rotationAngle = 360 / SIDES_ON_ROLL;
     // roll state
     let currdeg  = 0;                       // rotation degree
     let rotation = "";                      // rotation style string
-    let frontItemIndex = 0;               // index of the front facing side of the roll
-    let frontContentIndex = 0;            // index of the value displayed on the front-side of the roll
-    let contentDown = content.length - 5;   // index of next value when rotating down
-    let contentUp = 5;                      // index of next value when rotating up
 
     export let frontLabel = items[frontItemIndex];
 
@@ -54,22 +66,21 @@
             currdeg = currdeg - rotationAngle;
 
             // calculate displayed values when rotating up
-            items[(frontItemIndex + 5) % items.length] = content[contentUp]; // set item becoming visible
-            contentUp = (contentUp + 1) % content.length;   // increasing indexes
-            contentDown = (contentDown + 1) % content.length;
+            items[(frontItemIndex + 5) % items.length] = currentLabel.peekNext(5).content;
+            currentLabel.next();
             frontItemIndex = (frontItemIndex + 1) % items.length;
-            frontContentIndex = (frontContentIndex + 1) % content.length;
         }
         else {
             //calculate down rotation
             currdeg = currdeg + rotationAngle;
 
             //calculate displayed values when rotating down
-            items[(frontItemIndex - 5 + items.length) % items.length] = content[contentDown]; // set item becoming visible
-            contentUp = (contentUp - 1 + content.length) % content.length; // decreasing indexes
-            contentDown = (contentDown - 1 + content.length) % content.length;
+            items[(frontItemIndex - 5 + items.length) % items.length] = currentLabel.peekPrevious(5).content;
+            currentLabel.previous();
             frontItemIndex = (frontItemIndex - 1 + items.length) % items.length;
-            frontContentIndex = (frontContentIndex - 1 + content.length) % content.length;
+        }
+        if (currentLabel.current) {
+            labelIndex = currentLabel.current.index;
         }
         rotation = "transform: rotateX(" + currdeg +"deg)"; // now rotate the roll
         frontLabel = items[frontItemIndex];
@@ -104,6 +115,11 @@
 </script>
 
 <svelte:window on:keydown={rollByKey}/>
+<div class="grid grid-cols-2 place-items-center">
+    <p>{barNames.left}</p>
+    <p>{barNames.right}</p>
+</div>
+<p class="text-center">{currentLabel.current.content.middle}</p>
 <div class="{className} relative p-2 grid grid-cols-1 min-h-[24rem]">
     <!-- Roll -->
     <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
@@ -142,3 +158,4 @@
         </div>
     </div>
 </div>
+

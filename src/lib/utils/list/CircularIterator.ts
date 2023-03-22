@@ -34,7 +34,7 @@ export class CircularIterator<T> {
 
     peekNext(n: number): ListElement<T> {
         let peek = this.current;
-        for(let i = 0; i < n - 1; i++) {
+        for(let i = 0; i < n; i++) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             peek = peek.next;
@@ -44,9 +44,19 @@ export class CircularIterator<T> {
 
     peekPrevious(n: number): ListElement<T> {
         let peek: Pointer<T> | undefined = this.current;
-        for(let i = 0; i < n + 1; i++) {
+        for(let i = 0; i < n; i++) {
             peek = peek?.previous;
         }
         return peek as ListElement<T>;
+    }
+
+    jumpTo(index: number): void {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        while(this.current.index != index) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            this.current = this.current.next;
+        }
     }
 }
