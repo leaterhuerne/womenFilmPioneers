@@ -3,13 +3,12 @@
 
     import Roll from "$lib/components/roll/Roll.svelte";
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
-    import {language} from "$lib/stores/language.js";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
+    import T from "$lib/components/T.svelte";
 
     // Calculate the maximum on the roll
-    let maxRoll = 0;
     let maxFemale = 0;
     let maxMale = 0;
     let maxUnknown = 0;
@@ -120,14 +119,29 @@
             on:mouseleave={() => optionsVisible = "-translate-x-[95%]"}
     >
         <div class="bg-paper-100 opactity-90 rounded-br-xl shadow-lg w-[95%]">
-            <div class="grid grid-cols-6 pl-2 pr-2">
-                <button on:click={() => handleGenderChangeButton("left")} >
-                    <CheveronLeft />
+            <div class="relative flex justify-between p-2 pr-2 border-t-2">
+                <button class="flex grow w-1/2" on:click={() => handleGenderChangeButton("left")}>
+                    <div class="absolute left-2 ">
+                        <CheveronLeft size=2 />
+                    </div>
+                    <div class="font-semibold w-full text-end">
+                        <T
+                                de={leftGender === "male" ? "Männlich" : (leftGender === "female" ? "Weiblich" : "Divers/Unbekannt")}
+                                en={leftGender === "male" ? "Male" : (leftGender === "female" ? "Female" : "Queer/Unknown")}
+                        />
+                    </div>
                 </button>
-                <h1 class="font-semibold col-span-2 text-start">{leftGender}</h1>
-                <h1 class="font-semibold col-span-2 text-end">{rightGender}</h1>
-                <button on:click={() => handleGenderChangeButton("right")}>
-                    <CheveronRight />
+                <p class="font-semibold text-xl mx-2">|</p>
+                <button class="flex grow w-1/2" on:click={() => handleGenderChangeButton("right")}>
+                    <div class="font-semibold w-full text-start">
+                        <T
+                                de={rightGender === "male" ? "Männlich" : (rightGender === "female" ? "Weiblich" : "Divers/Unbekannt")}
+                                en={rightGender === "male" ? "Male" : (rightGender === "female" ? "Female" : "Queer/Unknown")}
+                        />
+                    </div>
+                    <div class="absolute right-2">
+                        <CheveronRight size=2 />
+                    </div>
                 </button>
             </div>
             <ColorPicker
@@ -163,11 +177,10 @@
             "
     >
         <h1 class="text-3xl font-semibold">
-            {$language === "de" ? "Die Filmindustrie im Jahr " : "The film industry in the year"}
-            {frontLabelOnRoll.middle}
+            <T de="Die Filmindustrie im Jahr" en="The film industry in the year"/> {frontLabelOnRoll.middle}
         </h1>
-        <p>Anzahl Frauen: {genders_by_year[frontLabelOnRoll.middle].female}</p>
-        <p>Anzahl Männer: {genders_by_year[frontLabelOnRoll.middle].male}</p>
-        <p>Anzahl Divers/Unbekannt: {genders_by_year[frontLabelOnRoll.middle].unknown}</p>
+        <p><T de="Anzahl Frauen:" en="Amount of women:"/> {genders_by_year[frontLabelOnRoll.middle].female}</p>
+        <p><T de="Anzahl Männer:" en="Amount of men:" /> {genders_by_year[frontLabelOnRoll.middle].male}</p>
+        <p><T de="Anzahl Divers/Unbekannt:" en="Queer/Unknown:" /> {genders_by_year[frontLabelOnRoll.middle].unknown}</p>
     </div>
 </div>

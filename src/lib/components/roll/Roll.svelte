@@ -1,6 +1,8 @@
 <script lang="ts">
     
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
+    import {language} from "$lib/stores/language.js";
+    import T from "$lib/components/T.svelte";
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -115,11 +117,23 @@
 </script>
 
 <svelte:window on:keydown={rollByKey}/>
-<div class="grid grid-cols-2 place-items-center">
-    <p>{barNames.left}</p>
-    <p>{barNames.right}</p>
+<div class="grid grid-cols-2 place-items-center gap-2 p-2 text-xl font-semibold">
+    <!-- TODO -->
+    <p>
+        {
+            $language === "de" ?
+            (barNames.left  === "male" ? "Männlich" : (barNames.left  === "female" ? "Weiblich" : "Divers/Unbekannt"))
+            : barNames.left
+        }
+    </p>
+    <p>
+    {
+        $language === "de" ?
+        (barNames.right  === "male" ? "Männlich" : (barNames.right  === "female" ? "Weiblich" : "Divers/Unbekannt"))
+        : barNames.right
+    }
+</p>
 </div>
-<p class="text-center">{currentLabel.current.content.middle}</p>
 <div class="{className} relative p-2 grid grid-cols-1 min-h-[24rem]">
     <!-- Roll -->
     <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
