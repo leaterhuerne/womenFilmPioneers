@@ -4,6 +4,7 @@
     import CheveronOutlineDown from "$lib/icons/components/CheveronOutlineDown.svelte";
     import CheveronOutlineLeft from "$lib/icons/components/CheveronOutlineLeft.svelte";
     import CheveronOutlineRight from "$lib/icons/components/CheveronOutlineRight.svelte";
+    import T from "$lib/components/T.svelte";
 
     export let year: string = "1892";           // default year for rendering
     export let minYear: number = 1890;          // oldest data in database is from 1890
@@ -42,14 +43,16 @@
      * year number is incremented by 1 if year number is still between min- and maxYear.
      */
     function incrementYear(): void {
-        year = Math.min(parseInt(year) + 1, maxYear).toString();
+        // check that year is between min- and maxYear. Otherwise one of the bounds.
+        year = Math.min(Math.max(parseInt(year) + 1, minYear), maxYear).toString();
     }
 
     /**
      * year number is decremented by 1 if year number is still between min- and maxYear.
      */
     function decrementYear(): void {
-        year = Math.max(parseInt(year) - 1, minYear).toString();
+        // check that year is between min- and maxYear. Otherwise one of the bounds.
+        year = Math.max(Math.min(parseInt(year) - 1, maxYear), minYear).toString();
     }
 
     //////////////// handle events (keyboard, mousewheel, input) \\\\\\\\\\\\\\\\
@@ -107,7 +110,7 @@
 <div class="{responsive}:w-min"
      on:wheel|preventDefault={handleWheel}
 >
-    <!-- field in full wideness of Year numbers with left and right buttons -->
+    <!-- MOBILE: field in full wideness of Year numbers with left and right buttons -->
     {#if windowWidth < wideSize}
         <div class="{className}
                     flex justify-around place-items-center
@@ -128,7 +131,7 @@
         </div>
 
     {:else}
-        <!-- small field of Year number with up and down buttons -->
+        <!-- SCREEN: small field of Year number with up and down buttons -->
         <div class="{className} border-2 border-black p-0.5 w-min rounded">
             <div class="flex">
                 <!-- Year number -->
@@ -152,9 +155,11 @@
             </div>
             <!-- Error popup for wrong input -->
             {#if invalidInput}
-                <div class="bg-red-300 opacity-75 text-xs w-full rounded">
-                    Input takes only digits. The number must be between {minYear} and {maxYear}.
-                </div>
+                <p class="bg-red-300 opacity-75 text-xs w-full rounded">
+                    <T de="Es sind nur Zahlen von {minYear} - {maxYear} erlaubt."
+                       en="Input takes only number from {minYear} to {maxYear}"
+                    />
+                </p>
             {/if}
         </div>
     {/if}

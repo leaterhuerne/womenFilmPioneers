@@ -4,6 +4,7 @@
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
+    import {language} from "$lib/stores/language";
 
     // create Random values between lower bound and upper bound for coloring the HeatMap
     let countryWithColors = new Europe();
@@ -16,7 +17,7 @@
 
     let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
         {
-            title: "start color",
+            title: "",
             rgb: {
                 red: 0,
                 green: 0,
@@ -24,7 +25,7 @@
             }
         },
         {
-            title: "end color",
+            title: "",
             rgb: {
                 red: 238,
                 green: 30,
@@ -33,16 +34,26 @@
         },
     ]
 
-    let colorInput = false;
+    // Sets the names for the Color Picker in the correct language
+    const colorPickerNamesDE = ["Wenig Aktivität", "Viel Aktivität"];   // german names
+    const colorPickerNamesEN = ["Little activity", "Much activity"];    // english names
+    let currentLanguage: string[];                                      // names in the current language
+    $: {
+        currentLanguage = $language === "de" ? colorPickerNamesDE : colorPickerNamesEN;
+        heatMapBoundColors[0].title = currentLanguage[0];
+        for (let i = 0; i < heatMapBoundColors.length; i++) {
+            heatMapBoundColors[i].title = currentLanguage[i];
+        }
+    }
 
-    let year: string = "1890";
+    let colorInput = false;         // for recognizing a change og the color input
+    let year: string = "1890";      // current year
 
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
     let colorPickerVisibility: string = "-translate-x-[84%]";
     let windowWidth = 0;    // current width of the window
     const MD = 768;         // constant for windowWidth of tailwind md: property
-
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -80,9 +91,8 @@
                 <CheveronRight size={windowWidth < 768 ? 2 : 4} />
             </button>
         </div>
-        <!-- Year numbers -->
+        <!-- SCREEN: Year numbers on top right side in the map -->
         {#if windowWidth >= MD}
-            <!-- Year numbers on top right side in the map -->
             <div class="mt-2 mr-2
                         absolute right-0 top-0
                         sm:scale-100
@@ -92,7 +102,7 @@
             </div>
         {/if}
     </div>
-    <!-- Year number on bottom of the map -->
+    <!-- MOBILE: Year number on bottom of the map -->
     {#if windowWidth < MD}
         <div class="m-2">
             <YearNumbers bind:year={year} className="bg-freshonion-200" />
@@ -100,6 +110,6 @@
     {/if}
     <!-- Detailed Information to Women -->
     <div class="md:border-l-4 p-2 border-black h-full">
-        Detallierte Informationen
+        Detaillierte Informationen
     </div>
 </div>
