@@ -8,17 +8,20 @@
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
     import T from "$lib/components/T.svelte";
 
+    // =================================================================================================================
+    //                                              Type definitions
+    // =================================================================================================================
+    type label = {left: number, middle: number, right: number}
+    type rgb = {red: number, grenn: number, blue: number}
+
+    // =================================================================================================================
+    //                                                 Variables
+    // =================================================================================================================
+
     // Calculate the maximum on the roll
     let maxFemale = 0;
     let maxMale = 0;
     let maxUnknown = 0;
-
-    for(const year of Object.keys(genders_by_year)) {
-        const max = (maxValue: number) => genders_by_year[year].male > maxValue ? genders_by_year[year].male : maxValue;
-        maxMale = max(maxMale);
-        maxFemale = max(maxFemale);
-        maxUnknown = max(maxUnknown);
-    }
 
     // Genders visible on roll
     const genderPairs = [
@@ -33,12 +36,29 @@
     let rightGender = genderPairs[0].right;
     let genderPairPosition = 0;
 
-    const handleGenderChangeButton = (direction: string) => {
-        genderPairPosition = (genderPairPosition + (direction === "left" ? -1 : 1) + genderPairs.length) % genderPairs.length;
-        leftGender = genderPairs[genderPairPosition].left;
-        rightGender = genderPairs[genderPairPosition].right;
-        fillRoll();
-    }
+    // option visibility
+    let optionsVisible = "-translate-x-[95%]";
+    let buttonRotation: string;
+
+    // colours on the roll
+    let coloursOnRoll: {title: string, rgb: {red: number, green: number, blue: number}}[]
+
+    // =================================================================================================================
+    //                                                  Functions
+    // =================================================================================================================
+
+    /**
+     * Calculates the max amounts of genders
+     */
+    const calculateMaxima = () => {
+        for (const year of Object.keys(genders_by_year)) {
+            const max = (maxValue: number) => genders_by_year[year].male > maxValue ? genders_by_year[year].male : maxValue;
+            maxMale = max(maxMale);
+            maxFemale = max(maxFemale);
+            maxUnknown = max(maxUnknown);
+        }
+    };
+
     /**
      * Creates a rgb object with random values.
      */
@@ -47,20 +67,27 @@
         return {red: random(), green: random(), blue: random()}
     }
 
-    //Set colours on the roll
-    let leftRollBarColor = randomRgb();
-    let rightRollBarColor = randomRgb();
+    /**
+     * Shifts the gender labels on the coloour picker anf the roll.
+     * @param direction
+     */
+    const handleGenderChangeButton = (direction: string) => {
+        genderPairPosition = (genderPairPosition + (direction === "left" ? -1 : 1) + genderPairs.length) % genderPairs.length;
+        leftGender = genderPairs[genderPairPosition].left;
+        rightGender = genderPairs[genderPairPosition].right;
+        coloursOnRoll[0].rgb = randomRgb();
+        coloursOnRoll[1].rgb = randomRgb();
+        fillRoll();
+    }
 
-    let coloursOnRoll = [
-            {title: "", rgb: leftRollBarColor},
-            {title: "", rgb: rightRollBarColor}
-    ]
-
-    type label = {left: number, middle: number, right: number}
-    const visibilyEnsurance = 10;
     let content: CircularLinkedList<label>;
     let frontLabelOnRoll: label;
-    const fillRoll = () => {
+
+    /**
+     * Fills the circular list with data for the roll.
+     */
+     const fillRoll = () => {
+        const visibilyEnsurance = 15;
         content = new CircularLinkedList<label>();
         let itemString = "+page: ";
         for (const year of Object.keys(genders_by_year)) {
@@ -70,7 +97,9 @@
                 right: genders_by_year[year][rightGender] == 0 ? 0 : Math.max(genders_by_year[year][rightGender], visibilyEnsurance)
             };
             itemString += item.left + " ";
-            content.add(item);
+            if(item.middle < 1946) {
+                content.add(item);
+            }
         }
         console.log(itemString);
         frontLabelOnRoll = {
@@ -79,10 +108,23 @@
             right: genders_by_year["1890"][rightGender]
         };
     }
-    fillRoll();
 
-    let optionsVisible = "-translate-x-[95%]";
-    let buttonRotation: string;
+    // =================================================================================================================
+    //                                      Initialization of component
+    // =================================================================================================================
+    fillRoll();
+    calculateMaxima();
+    //Set colours on the roll
+    coloursOnRoll = [
+        {
+            title: "",
+            rgb: randomRgb()
+        },
+        {
+            title: "",
+            rgb: randomRgb()
+        }
+    ]
 </script>
 
 <div
@@ -92,20 +134,28 @@
             grow
         "
 >
-    <!-- Roll -->
-    <Roll
-            className="
-                absolute
-                border-4 border-green-300
-                lg:w-2/3
-            "
-            bind:labels={content}
-            barNames={genderPairs[genderPairPosition]}
-            max={Math.max(maxFemale, maxMale)}
-            bind:frontLabel={frontLabelOnRoll}
-            bind:leftColour={coloursOnRoll[0].rgb}
-            bind:rightColour={coloursOnRoll[1].rgb}
-    />
+    <div class="flex flex-col lg:w-2/3">
+        <!-- Roll -->
+        <Roll
+                className="border-4 border-green-300"
+                bind:labels={content}
+                barNames={genderPairs[genderPairPosition]}
+                max={Math.max(maxFemale, maxMale)}
+                bind:frontLabel={frontLabelOnRoll}
+                bind:leftColour={coloursOnRoll[0].rgb}
+                bind:rightColour={coloursOnRoll[1].rgb}
+        />
+        <!-- Customization of the roll -->
+        <div class="grow p-2 border-4 border-pink-500">
+            <h1 class="text-center text-lg font-semibold">
+                <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
+            </h1>
+            <p class="italic">
+                <T de="Um die Rolle zu drehen die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
+                   en="You can use the cursor keys up and down and the mousewheel to rotate the roll." />
+            </p>
+        </div>
+    </div>
     <!-- Options -->
     <div
             class="

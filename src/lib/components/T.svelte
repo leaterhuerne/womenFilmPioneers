@@ -5,11 +5,7 @@
     export let en: string;
 
     let display: string;
-
-    $: {
-        $language = $language;
-        display = $language === "de" ? de : en;
-    }
+    $: display = $language === "de" ? de : en;
 </script>
 
 {display}

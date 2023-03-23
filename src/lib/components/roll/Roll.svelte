@@ -3,6 +3,7 @@
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
     import {language} from "$lib/stores/language.js";
     import T from "$lib/components/T.svelte";
+    import {responsive} from "$lib/stores/responsive.js";
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -40,6 +41,8 @@
             items[(frontItemIndex - i - 1 + items.length) % items.length] = currentLabel.peekPrevious(i + 1).content;
         }
     }
+
+    // if data for the roll changed, rerender roll
     $: {
         labels = labels;
         currentLabel = labels.iterator();
@@ -114,60 +117,63 @@
             rotate(DOWN);
         }
     }
+
+    let windowWidth: number;
 </script>
 
-<svelte:window on:keydown={rollByKey}/>
-<div class="grid grid-cols-2 place-items-center gap-2 p-2 text-xl font-semibold">
-    <!-- TODO -->
-    <p>
-        {
-            $language === "de" ?
-            (barNames.left  === "male" ? "Männlich" : (barNames.left  === "female" ? "Weiblich" : "Divers/Unbekannt"))
-            : barNames.left
-        }
-    </p>
-    <p>
-    {
-        $language === "de" ?
-        (barNames.right  === "male" ? "Männlich" : (barNames.right  === "female" ? "Weiblich" : "Divers/Unbekannt"))
-        : barNames.right
-    }
-</p>
-</div>
-<div class="{className} relative p-2 grid grid-cols-1 min-h-[24rem]">
+<svelte:window bind:innerWidth={windowWidth} on:keydown={rollByKey}/>
+<div class="{className} flex flex-col w-full">
+    <!-- Bar names -->
+    <div class="grid grid-cols-2 place-items-center gap-2 p-2 text-xl font-semibold">
+        <!-- TODO -->
+        <p>
+            <T
+                    de={barNames.left  === "male" ? "Männlich" : (barNames.left  === "female" ? "Weiblich" : "Divers/Unbekannt")}
+                    en={barNames.left  === "male" ? "Male" : (barNames.left  === "female" ? "Female" : "Queer/Unknown")}
+            />
+        </p>
+        <p>
+            <T
+                    de={barNames.right  === "male" ? "Männlich" : (barNames.right  === "female" ? "Weiblich" : "Divers/Unbekannt")}
+                    en={barNames.right  === "male" ? "Male" : (barNames.right  === "female" ? "Female" : "Queer/Unknown")}
+            />
+        </p>
+    </div>
     <!-- Roll -->
-    <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
-        <!-- Container -->
-        <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-40 perspective-1000">
-            <!-- Roll -->
-            <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
-                <!-- Items on the roll -->
-                {#each items as {left, middle: year, right}, itemIndex}
-                    <div
-                            class="preserve-3d block absolute w-full border-2 p-1 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
-                            style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
-                    >
-                        <!-- left bar -->
+    <div class="relative p-2 grid grid-cols-1 min-h-[24rem]">
+        <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
+            <!-- Container -->
+            <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-40 perspective-1000">
+                <!-- Roll -->
+                <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
+                    <!-- Items on the roll -->
+                    {#each items as {left, middle: year, right}, itemIndex}
                         <div
-                                class="h-full grow"
-                                style="background: linear-gradient(
+                                class="preserve-3d block absolute w-full border-2 p-1 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
+                                style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
+                        >
+                            <!-- left bar -->
+                            <div
+                                    class="h-full grow"
+                                    style="background: linear-gradient(
                                     270deg,
                                     rgba({leftColour.red},{leftColour.green},{leftColour.blue}, 1){(left / max) * 100}%,
                                     rgba(255,255,255,0) {(left / max) * 100}%);"
-                        >
-                        </div>
-                        <!-- bar label -->
-                        <h1>{year}</h1>
-                        <!-- right bar -->
-                        <div
-                                class="h-full grow"
-                                style="background: linear-gradient(
+                            >
+                            </div>
+                            <!-- bar label -->
+                            <h1>{year}</h1>
+                            <!-- right bar -->
+                            <div
+                                    class="h-full grow"
+                                    style="background: linear-gradient(
                                     90deg,
                                     rgba({rightColour.red},{rightColour.green},{rightColour.blue}, 1) {(right / max) * 100}%,
                                     rgba(255,255,255,0) {(right / max) * 100}%);"
-                        ></div>
-                    </div>
-                {/each}
+                            ></div>
+                        </div>
+                    {/each}
+                </div>
             </div>
         </div>
     </div>
