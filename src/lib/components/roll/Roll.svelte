@@ -149,7 +149,17 @@
                     <!-- Items on the roll -->
                     {#each items as {left, middle: year, right}, itemIndex}
                         <div
-                                class="preserve-3d block absolute w-full border-2 p-1 border-paper-900 bg-paper-500 h-[50px] rounded-xl opacity-[0.99] flex justify-center place-items-center gap-2"
+                                class="
+                                    preserve-3d block absolute
+                                    w-full
+                                    h-[50px]
+                                    border-2 border-paper-900 dark:border-warm-gray-800
+                                    bg-paper-500 dark:bg-warm-gray-600
+                                    p-1
+                                    rounded-xl
+                                    opacity-[0.99] f
+                                    flex justify-center place-items-center gap-2
+                                "
                                 style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
                         >
                             <!-- left bar -->

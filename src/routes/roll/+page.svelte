@@ -206,14 +206,14 @@
                 class="
                     duration-500
                     w-[5%] h-10
-                    bg-firebrick-500
+                    bg-firebrick-500 dark:bg-firebrick-1000
                     grid place-items-center
                     {buttonRotation}
                     rounded-r-xl
                 "
                 on:mouseenter={() => optionsVisible = "translate-x-0"}
         >
-            <CheveronRight size=1 />
+            <CheveronRight color="#D2CAB3" />
         </button>
     </div>
     <!-- Information -->
