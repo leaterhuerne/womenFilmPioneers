@@ -1,18 +1,19 @@
 <script lang="ts">
+    import data from "$lib/data/genders_by_year_profession_location.json";
     import genders_by_year from "$lib/data/genders_by_year.json";
-
     import Roll from "$lib/components/roll/Roll.svelte";
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
     import T from "$lib/components/T.svelte";
+    import RollOptions from "$lib/components/roll/RollOptions.svelte";
 
     // =================================================================================================================
     //                                              Type definitions
     // =================================================================================================================
     type label = {left: number, middle: number, right: number}
-    type rgb = {red: number, grenn: number, blue: number}
+    type rgb = {red: number, green: number, blue: number}
 
     // =================================================================================================================
     //                                                 Variables
@@ -43,6 +44,10 @@
     // colours on the roll
     let coloursOnRoll: {title: string, rgb: {red: number, green: number, blue: number}}[]
 
+    // content list and front side for the roll
+    let content: CircularLinkedList<label>;
+    let frontLabelOnRoll: label;
+
     // =================================================================================================================
     //                                                  Functions
     // =================================================================================================================
@@ -52,17 +57,18 @@
      */
     const calculateMaxima = () => {
         for (const year of Object.keys(genders_by_year)) {
-            const max = (maxValue: number) => genders_by_year[year].male > maxValue ? genders_by_year[year].male : maxValue;
-            maxMale = max(maxMale);
-            maxFemale = max(maxFemale);
-            maxUnknown = max(maxUnknown);
+            const max = (maxValue: number, gender: string) => genders_by_year[year][gender] > maxValue ? genders_by_year[year][gender] : maxValue;
+            maxMale = max(maxMale, "male");
+            maxFemale = max(maxFemale, "female");
+            maxUnknown = max(maxUnknown, "unknown");
+            console.log(maxMale, maxFemale, maxUnknown);
         }
     };
 
     /**
      * Creates a rgb object with random values.
      */
-    const randomRgb: () => {red: number, green: number, blue: number} = () => {
+    const randomRgb: () => rgb = () => {
         const random = () => Math.round(Math.random() * 255);
         return {red: random(), green: random(), blue: random()}
     }
@@ -80,28 +86,22 @@
         fillRoll();
     }
 
-    let content: CircularLinkedList<label>;
-    let frontLabelOnRoll: label;
-
     /**
      * Fills the circular list with data for the roll.
      */
      const fillRoll = () => {
         const visibilyEnsurance = 15;
         content = new CircularLinkedList<label>();
-        let itemString = "+page: ";
         for (const year of Object.keys(genders_by_year)) {
             const item = {
                 left: genders_by_year[year][leftGender] == 0 ? 0 : Math.max(genders_by_year[year][leftGender], visibilyEnsurance),
                 middle: Number(year),
                 right: genders_by_year[year][rightGender] == 0 ? 0 : Math.max(genders_by_year[year][rightGender], visibilyEnsurance)
             };
-            itemString += item.left + " ";
             if(item.middle < 1946) {
                 content.add(item);
             }
         }
-        console.log(itemString);
         frontLabelOnRoll = {
             left: genders_by_year["1890"][leftGender],
             middle: 1890,
@@ -115,16 +115,7 @@
     fillRoll();
     calculateMaxima();
     //Set colours on the roll
-    coloursOnRoll = [
-        {
-            title: "",
-            rgb: randomRgb()
-        },
-        {
-            title: "",
-            rgb: randomRgb()
-        }
-    ]
+    coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}]
 </script>
 
 <div
@@ -146,14 +137,11 @@
                 bind:rightColour={coloursOnRoll[1].rgb}
         />
         <!-- Customization of the roll -->
-        <div class="grow p-2 border-4 border-pink-500">
+        <div class="flex flex-col grow p-2 border-4 border-pink-500">
             <h1 class="text-center text-lg font-semibold">
                 <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
             </h1>
-            <p class="italic">
-                <T de="Um die Rolle zu drehen die Cursortasten hoch und runter, sowie das Mausrad verwendet werden."
-                   en="You can use the cursor keys up and down and the mousewheel to rotate the roll." />
-            </p>
+            <RollOptions className="border-4 border-orange-500 grow"/>
         </div>
     </div>
     <!-- Options -->
@@ -168,11 +156,20 @@
             "
             on:mouseleave={() => optionsVisible = "-translate-x-[95%]"}
     >
-        <div class="bg-paper-100 opactity-90 rounded-br-xl shadow-lg w-[95%]">
-            <div class="relative flex justify-between p-2 pr-2 border-t-2">
+        <div
+                class="
+                    bg-paper-100 dark:bg-warm-gray-900
+                    opactity-90
+                    rounded-br-xl
+                    dark:border dark:border-warm-gray-700
+                    shadow-lg dark:shadow-none
+                    w-[95%]
+                "
+        >
+            <div class="relative flex justify-between px-2">
                 <button class="flex grow w-1/2" on:click={() => handleGenderChangeButton("left")}>
                     <div class="absolute left-2 ">
-                        <CheveronLeft size=2 />
+                        <CheveronLeft size=2 darkColor="#D2CAB3" />
                     </div>
                     <div class="font-semibold w-full text-end">
                         <T
@@ -190,7 +187,7 @@
                         />
                     </div>
                     <div class="absolute right-2">
-                        <CheveronRight size=2 />
+                        <CheveronRight size=2 darkColor="#D2CAB3" />
                     </div>
                 </button>
             </div>

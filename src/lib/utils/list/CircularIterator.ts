@@ -16,6 +16,9 @@ export class CircularIterator<T> {
         return true;
     }
 
+    /**
+     * Returns current element and the rotates the Iterator to the next element.
+     */
     next(): ListElement<T> {
         const tmp = this.current;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -24,12 +27,30 @@ export class CircularIterator<T> {
         return tmp as ListElement<T>;
     }
 
+
+    /**
+     * Returns next element.
+     */
+    getNext(): ListElement<T> {
+        return this.next().next as ListElement<T>;
+    }
+
+    /**
+     * Returns current element and the rotates the Iterator to the previous element.
+     */
     previous(): ListElement<T> {
         const tmp = this.current;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         this.current = this.current.previous;
         return tmp as ListElement<T>;
+    }
+
+    /**
+     * Returns previous element.
+     */
+    getPrevious(): ListElement<T> {
+        return this.previous().previous as ListElement<T>
     }
 
     peekNext(n: number): ListElement<T> {
