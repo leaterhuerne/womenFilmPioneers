@@ -2,8 +2,8 @@
     import { language } from "$lib/stores/language";
     import {onMount} from "svelte";
 
-    export let en: string = "/";
-    export let de: string = "/";
+    export let en = "/";
+    export let de = "/";
     export let className: string;
     export let style: string;
 
