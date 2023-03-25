@@ -66,13 +66,13 @@
 
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
-    let colorPickerVisibility: string = "-translate-x-[84%]";
+    let colorPickerVisibility: string = "-translate-x-[84%] 2xl:translate-x-0";
     let windowWidth = 0;    // current width of the window
     const MD = 768;         // constant for windowWidth of tailwind md: property
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
-<div class="grid grid-cols-1 md:grid-cols-3">
+<div class="grid grid-cols-1 grow md:grid-cols-3">
     <!-- Map with ColorPicker and YearNumbers -->
     <div class="relative w-full md:col-span-2">
         <!-- Map -->
@@ -88,7 +88,7 @@
         <!-- ColorPicker and Button -->
         <div
                 class="mt-2 absolute left-0 top-0 flex {colorPickerVisibility}  rounded-r-md duration-500"
-                on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%]"}
+                on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%] 2xl:translate-x-0"}
         >
             <ColorPicker
                     className="bg-paper-100 dark:bg-warm-gray-800 opacity-90"
@@ -96,7 +96,11 @@
                     onInput={() => colorInput = !colorInput}
             />
             <button
-                    class="grid place-items-center bg-firebrick-400 rounded-r-md w-[20%] h-10 md:h-20"
+                    class="
+                        grid place-items-center
+                        rounded-r-md
+                        w-[20%]
+                        h-10 md:h-20 2xl:hidden"
                     on:mouseover={() => colorPickerVisibility = ""}
                     style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%,
                                                              rgba(0,255,0,0.9) 50%,
@@ -124,7 +128,7 @@
         </div>
     {/if}
     <!-- Detailed Information to Women -->
-    <div class="md:border-l-4 p-2 border-black h-full">
+    <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
         Detaillierte Informationen
     </div>
 </div>
