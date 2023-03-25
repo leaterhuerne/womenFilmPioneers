@@ -120,19 +120,26 @@
                    "
         >
             <button on:click={decrementYear}>
-                <CheveronOutlineLeft size="2" hover="firebrick"/>
+                <CheveronOutlineLeft size="2" darkColor="#D2CAB3" hover="firebrick"/>
             </button>
             <h1 class="text-2xl font-bold">
                 {year}
             </h1>
             <button on:click={incrementYear}>
-                <CheveronOutlineRight size="2" hover="firebrick"/>
+                <CheveronOutlineRight size="2" darkColor="#D2CAB3" hover="firebrick"/>
             </button>
         </div>
 
     {:else}
         <!-- SCREEN: small field of Year number with up and down buttons -->
-        <div class="{className} border-2 border-black p-0.5 w-min rounded">
+        <div class="{className}
+                    border border-black dark:border-warm-gray-600
+                    bg-dark-paper-200 dark:bg-warm-gray-700
+                    p-0.5
+                    w-min
+                    rounded
+                   "
+        >
             <div class="flex">
                 <!-- Year number -->
                 <input
@@ -146,10 +153,10 @@
                 <!-- Up and Down Buttons -->
                 <div class="grid grid-col-1 gap-y-0.5">
                     <button on:click={incrementYear}>
-                        <CheveronOutlineUp size="1.5" hover="firebrick"/>
+                        <CheveronOutlineUp size="1.5" darkColor="#D2CAB3" hover="firebrick"/>
                     </button>
                     <button on:click={decrementYear}>
-                        <CheveronOutlineDown size="1.5" hover="firebrick"/>
+                        <CheveronOutlineDown size="1.5" darkColor="#D2CAB3" hover="firebrick"/>
                     </button>
                 </div>
             </div>

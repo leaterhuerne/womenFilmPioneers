@@ -5,6 +5,7 @@
     export let direction: string = "0";
     export let className: string = "";
     export let color: string = "black";
+    export let darkColor: string = "white";
     export let hover: string = "";
     export let rotationSpeed: string = "0";
     export let backgroundColor: string = "inherit";
@@ -18,6 +19,7 @@
         direction={direction}
         className={className}
         color={color}
+	darkColor={darkColor}
         hover={hover}
         rotationSpeed={rotationSpeed}
         backgroundColor={backgroundColor}

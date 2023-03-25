@@ -5,6 +5,7 @@
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
     import {language} from "$lib/stores/language";
+    import data from "$lib/data/genders_by_year_profession_location.json";
 
     // create Random values between lower bound and upper bound for coloring the HeatMap
     let countryWithColors = new Europe();
@@ -15,6 +16,7 @@
         heatMapRandomColors.push(randomColor);
     }
 
+    // initial color of the HeatMap
     let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
         {
             title: "",
@@ -49,6 +51,19 @@
     let colorInput = false;         // for recognizing a change og the color input
     let year: string = "1890";      // current year
 
+    function fillMap(): void {
+        /* TODO: Komponente für Einstellmöglichkeiten an der HEatMap schreiben,
+            dann hierher die Einstellungen bringen und entsprechende Werte aus der Database herausholen.
+        */
+
+        let countries: string[] = Object.entries(new Europe()).map(country => country.at(0));
+        let heatMapValues: {name: string; value: number}[] = [];
+        for (const country of countries) {
+
+        }
+
+    }
+
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
     let colorPickerVisibility: string = "-translate-x-[84%]";
@@ -76,7 +91,7 @@
                 on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%]"}
         >
             <ColorPicker
-                    className="bg-paper-100 opacity-90"
+                    className="bg-paper-100 dark:bg-warm-gray-800 opacity-90"
                     bind:colors={heatMapBoundColors}
                     onInput={() => colorInput = !colorInput}
             />
@@ -88,7 +103,7 @@
                                                              rgba(0,0,255,0.9) 90%);
                     "
             >
-                <CheveronRight size={windowWidth < 768 ? 2 : 4} />
+                <CheveronRight size={windowWidth < 768 ? 2 : 4} darkColor="black"/>
             </button>
         </div>
         <!-- SCREEN: Year numbers on top right side in the map -->
@@ -105,7 +120,7 @@
     <!-- MOBILE: Year number on bottom of the map -->
     {#if windowWidth < MD}
         <div class="m-2">
-            <YearNumbers bind:year={year} className="bg-freshonion-200" />
+            <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-indigo-900" />
         </div>
     {/if}
     <!-- Detailed Information to Women -->
