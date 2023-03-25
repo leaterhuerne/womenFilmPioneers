@@ -1,6 +1,7 @@
 import {ListElement} from "$lib/utils/list/ListElement";
 import type { Pointer} from "$lib/utils/list/ListElement";
 import {CircularIterator} from "$lib/utils/list/CircularIterator";
+import {element} from "svelte/internal";
 
 export class CircularLinkedList<T>{
 
@@ -49,5 +50,19 @@ export class CircularLinkedList<T>{
             current = current.next;
         }
         return array;
+    }
+
+    public forEach(lambda: (element: ListElement<T>) => void):  void {
+        let current = this.head;
+        while(current?.next?.next !== this.head?.next) {
+            lambda(current as ListElement<T>);
+            current = current?.next as ListElement<T>;
+        }
+    }
+
+    public toString() {
+        let list = "[";
+        this.forEach((e) => list += e.content + ", ");
+        return list.slice(0, list.length - 2) + "]";
     }
 }

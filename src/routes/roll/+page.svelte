@@ -116,6 +116,14 @@
     calculateMaxima();
     //Set colours on the roll
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}]
+
+    let professionList = new CircularLinkedList()<string>;
+    professionList.add("Darsteller", "Regisseur", "Tänzer");
+    let professionIterator = professionList.iterator();
+    let countryList= new CircularLinkedList<string>();
+    countryList.add("DE", "AT", "F", "CH");
+    let countryIterator = countryList.iterator();
+
 </script>
 
 <div
@@ -141,7 +149,23 @@
             <h1 class="text-center text-lg font-semibold">
                 <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
             </h1>
-            <RollOptions className="border-4 border-orange-500 grow"/>
+            <p class="text-sm italic">
+                <T
+                    de="Hinweis: Werden alle Berufe und Länder ausgewählt, so werden hier die alle Personen gezählt, die
+                        laut Datenbank in diesem Zeitraum tätig waren. Hier tritt eine Abweichung von den Daten zu
+                        speziellen Berufen bei den Filmen auf (Data Bias): In manchen Jahren sind Personen tätig gewesen,
+                        obwohl sie in diesem Jahr laut Datenbank an keinem Film beteiligt waren."
+                    en="Notice: If all professions and countries are selected, all persons are counted, which were -
+                        according to the database - working in this year. Here we see a deviation from the data for
+                        single professions and countries (so called data bias): According to the database, in some years
+                        people were working in the film industry without being associated to a film."
+                />
+            </p>
+            <RollOptions
+                    className="w-full py-2"
+                    bind:professions={professionIterator}
+                    bind:countries={countryIterator}
+            />
         </div>
     </div>
     <!-- Options -->
