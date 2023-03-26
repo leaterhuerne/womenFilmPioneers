@@ -124,7 +124,7 @@
     <!-- MOBILE: Year number on bottom of the map -->
     {#if windowWidth < MD}
         <div class="m-2">
-            <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-indigo-900" />
+            <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-firebrick-800" />
         </div>
     {/if}
     <!-- Detailed Information to Women -->
