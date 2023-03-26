@@ -6,6 +6,7 @@
     import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
     import {language} from "$lib/stores/language";
     import data from "$lib/data/genders_by_year_profession_location.json";
+    import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
 
     // create Random values between lower bound and upper bound for coloring the HeatMap
     let countryWithColors = new Europe();
@@ -120,13 +121,21 @@
                 <YearNumbers bind:year={year} responsive="md"/>
             </div>
         {/if}
-    </div>
-    <!-- MOBILE: Year number on bottom of the map -->
-    {#if windowWidth < MD}
-        <div class="m-2">
-            <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-firebrick-800" />
+        <!-- MOBILE: Year number on bottom of the map -->
+        {#if windowWidth < MD}
+            <div class="m-2">
+                <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-firebrick-800" />
+            </div>
+        {/if}
+        <!-- Settings for HeatMap -->
+        <div class="mb-0.5">
+            <HeatMapSettings />
         </div>
-    {/if}
+    </div>
+
+
+
+
     <!-- Detailed Information to Women -->
     <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
         Detaillierte Informationen

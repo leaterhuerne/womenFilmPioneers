@@ -92,7 +92,7 @@
         </button>
     </div>
     <!-- Professions -->
-    <div class="flex place-items-center justify-center mt-2 border-y border-black dark:border-y-dark-paper-200">
+    <div class="flex place-items-center justify-center mt-2">
         <h1 class="text-lg">
             <T en="Profession:" de="Beruf:" />
         </h1>
@@ -117,7 +117,7 @@
     <!-- Profession list -->
     <div
             class="
-                grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
+                grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl-grid-cols-5
                 p-2
                 duration-1000
                 {professionVisibility}
