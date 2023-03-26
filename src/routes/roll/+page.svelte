@@ -8,6 +8,7 @@
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
     import T from "$lib/components/T.svelte";
     import RollOptions from "$lib/components/roll/RollOptions.svelte";
+    import {CircularIterator} from "$lib/utils/list/CircularIterator";
 
     // =================================================================================================================
     //                                              Type definitions
@@ -48,6 +49,17 @@
     let content: CircularLinkedList<label>;
     let frontLabelOnRoll: label;
 
+    // roll options
+    let professionList = new CircularLinkedList()<string>;
+    professionList.add("Darsteller", "Regisseur", "Tänzer", "alle");
+    let professionIterator = professionList.iterator() as CircularIterator<string>;
+    let countryList= new CircularLinkedList<string>();
+    countryList.add("DE", "AT", "F", "CH", "alle");
+    let countryIterator = countryList.iterator();
+
+    let profession: string;
+    let country: string;
+
     // =================================================================================================================
     //                                                  Functions
     // =================================================================================================================
@@ -61,7 +73,6 @@
             maxMale = max(maxMale, "male");
             maxFemale = max(maxFemale, "female");
             maxUnknown = max(maxUnknown, "unknown");
-            console.log(maxMale, maxFemale, maxUnknown);
         }
     };
 
@@ -90,39 +101,85 @@
      * Fills the circular list with data for the roll.
      */
      const fillRoll = () => {
-        const visibilyEnsurance = 15;
+        const visibilyEnsurance = 25;
+        const displayValue = (value: number) => {
+            return value == 0 ? 0 : Math.max(value, 25);
+        }
         content = new CircularLinkedList<label>();
-        for (const year of Object.keys(genders_by_year)) {
-            const item = {
-                left: genders_by_year[year][leftGender] == 0 ? 0 : Math.max(genders_by_year[year][leftGender], visibilyEnsurance),
-                middle: Number(year),
-                right: genders_by_year[year][rightGender] == 0 ? 0 : Math.max(genders_by_year[year][rightGender], visibilyEnsurance)
+        if((profession == "alle" | profession == undefined) && (country == "alle" | country == undefined)) {
+            console.log("filling default: " + profession + ", " + country)
+            for (const year of Object.keys(genders_by_year)) {
+                const item = {
+                    left: genders_by_year[year][leftGender] == 0 ? 0 : Math.max(genders_by_year[year][leftGender], visibilyEnsurance),
+                    middle: Number(year),
+                    right: genders_by_year[year][rightGender] == 0 ? 0 : Math.max(genders_by_year[year][rightGender], visibilyEnsurance)
+                };
+                if (item.middle < 1946) {
+                    content.add(item);
+                }
+            }
+            frontLabelOnRoll = {
+                left: genders_by_year["1890"][leftGender],
+                middle: 1890,
+                right: genders_by_year["1890"][rightGender]
             };
-            if(item.middle < 1946) {
-                content.add(item);
+        } else if(profession == "alle" && country != "alle") {
+            for (const year of Object.keys(data)) {
+                let leftLocations = data[year][leftGender]["locations"];
+                let leftValue = 0;
+                if(leftLocations != undefined && leftLocations[country] != undefined) {
+                    leftValue = leftLocations[country]["occurences"];
+                }
+                let rightLocations = data[year][rightGender]["locations"];
+                let rightValue = 0;
+                if(rightLocations != undefined && rightLocations[country] != undefined) {
+                    rightValue = rightLocations[country]["occurences"];
+                }
+                const item = {
+                    left: displayValue(leftValue),
+                    middle: Number(year),
+                    right: displayValue(rightValue)
+                };
+                if (item.middle < 1946) {
+                    content.add(item);
+                }
+            }
+        } else if (profession != "alle" && country == "alle") {
+            for (const year of Object.keys(data)) {
+                const item = {
+                    left: 500,
+                    middle: Number(year),
+                    right: 500
+                };
+                if (item.middle < 1946) {
+                    content.add(item);
+                }
+            }
+        } else {
+            for (const year of Object.keys(data)) {
+                const item = {
+                    left: 750,
+                    middle: Number(year),
+                    right: 750
+                };
+                if (item.middle < 1946) {
+                    content.add(item);
+                }
             }
         }
-        frontLabelOnRoll = {
-            left: genders_by_year["1890"][leftGender],
-            middle: 1890,
-            right: genders_by_year["1890"][rightGender]
-        };
     }
 
     // =================================================================================================================
     //                                      Initialization of component
     // =================================================================================================================
-    fillRoll();
+    $: {
+        country = country;
+        profession = profession;
+        fillRoll();
+    }
     calculateMaxima();
     //Set colours on the roll
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}]
-
-    let professionList = new CircularLinkedList()<string>;
-    professionList.add("Darsteller", "Regisseur", "Tänzer");
-    let professionIterator = professionList.iterator();
-    let countryList= new CircularLinkedList<string>();
-    countryList.add("DE", "AT", "F", "CH");
-    let countryIterator = countryList.iterator();
 
 </script>
 
@@ -163,8 +220,10 @@
             </p>
             <RollOptions
                     className="w-full py-2"
-                    bind:professions={professionIterator}
-                    bind:countries={countryIterator}
+                    professions={professionIterator}
+                    bind:professionLabel={profession}
+                    countries={countryIterator}
+                    bind:countryLabel={country}
             />
         </div>
     </div>

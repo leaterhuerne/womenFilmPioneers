@@ -9,12 +9,8 @@
     export let professions: CircularIterator<string> = new CircularIterator<string>(new CircularLinkedList<string>());
     export let countries: CircularIterator<string> = new CircularIterator<string>(new CircularLinkedList<string>());
 
-    professions.circle.add("alle");
-    countries.circle.add("alle");
-
-    let professionLabel = professions.getPrevious();
-    let countryLabel = countries.getPrevious();
-    console.log("professions: " + professions.circle.toString());
+    export let professionLabel = professions.getPrevious();
+    export let countryLabel = countries.getPrevious();
 
     const boxStyle = "w-full flex place-items-center gap-2 p-2 rounded dark:bg-warm-gray-800";
     const selectorStyle = "grow flex place-items-center rounded px-2 dark:bg-warm-gray-900";

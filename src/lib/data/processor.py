@@ -305,7 +305,7 @@ def professions_by_gender_year_location():
 
 
 def main():
-    professions_by_gender_year_location()
+    extract_locations()
 
 if __name__ == "__main__":
     main()
