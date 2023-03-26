@@ -1,8 +1,7 @@
 <script lang="ts">
-    import professions from "$lib/data/professions.json";
     import data from "$lib/data/genders_by_year_profession_location.json"
     import T from "$lib/components/T.svelte";
-    import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
+    import CheveronDown from "$lib/icons/components/CheveronDown.svelte";
 
     export let genders: {female: boolean, male: boolean, unknown: boolean} = {female: false, male: false, unknown: false};
     export let profession: string = "";
@@ -10,6 +9,9 @@
 
     let professionList: string[];
 
+    /**
+     * Creates an array containing all profession names.
+     */
     function createProfessionList(): string[] {
         let professionList: string[] = [];
         for (const year of Object.keys(data)) {
@@ -25,7 +27,12 @@
         return professionList;
     }
 
-    professionList = createProfessionList();// Object.keys(professions); // createProfessionList();
+    professionList = createProfessionList();
+
+    //////////////// styling functionality \\\\\\\\\\\\\\\\
+
+    let chevronButton: string = "";     // rotation styling of button that expands a list of all professions
+    let professionVisibility: string = "hidden"; // styling for a hidden or visible list of professions
 
     // initial styling of all gender buttons
     let initialGenderButtonStyle: string = "text-md font-bold" +
@@ -52,17 +59,23 @@
             " p-2 h-12";
         genderButtonStyles[gender] = genders[gender] ? initialGenderButtonStyle : activatedButtonStyle;
         genders[gender] = !genders[gender];
+
     }
 
-    let professionVisibility: string = "";
+    /**
+     * Shows and hides the list with all professions
+     */
+    function showProfessions(): void {
+        professionVisibility = professionVisibility === "" ? "hidden" : "";
+        chevronButton = chevronButton === "" ? "rotate-180" : "";
 
-
+    }
 </script>
 
 <div class={className}>
     <!-- Gender Buttons -->
     <div class="grid grid-cols-3 gap-2 px-2">
-        <button class="{genderButtonStyles.female}  dark:bg-firebrick-800"
+        <button class="{genderButtonStyles.female}"
                 on:click={() => activateGenderButton("female")}
         >
             <T en="female" de="weiblich" />
@@ -79,17 +92,41 @@
         </button>
     </div>
     <!-- Professions -->
-    <div class="flex place-items-center justify-center mt-2">
-        <label><T en="Profession:" de="Beruf:"/></label>
-        <input class="mx-2" type="text" value={profession}>
-        <button on:click={() => professionVisibility = professionVisibility === "hidden" ? "" : "hidden"}>
-            <InformationOutline darkColor="#D2CAB3" />
+    <div class="flex place-items-center justify-center mt-2 border-y border-black dark:border-y-dark-paper-200">
+        <h1 class="text-lg">
+            <T en="Profession:" de="Beruf:" />
+        </h1>
+        <h1 class="text-lg mx-2">
+            {#if profession === ""}
+                alle
+            {:else}
+                {profession}
+            {/if}
+        </h1>
+        <button
+                class="
+                    rounded-[50%]
+                    hover:bg-amber-400 dark:hover:bg-firebrick-700
+                    duration-500 {chevronButton}
+                "
+                on:click={showProfessions}
+        >
+            <CheveronDown size=1.2 darkColor="#D2CAB3" />
         </button>
     </div>
     <!-- Profession list -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 p-2 duration-1000 {professionVisibility}">
-        <button class="text-sm text-start italic hover:text-firebrick-300" on:click={() => profession = ""}>
-            <T en="-- none --" de="-- nichts --" />
+    <div
+            class="
+                grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
+                p-2
+                duration-1000
+                {professionVisibility}
+            "
+    >
+        <button class="text-sm text-start italic hover:text-firebrick-400"
+                on:click={() => profession = ""}
+        >
+            <T en="-- all --" de="-- alle --" />
         </button>
         {#each professionList as prof}
             <button class="text-sm text-start hover:text-firebrick-300"
