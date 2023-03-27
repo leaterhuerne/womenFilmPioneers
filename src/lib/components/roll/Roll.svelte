@@ -161,10 +161,10 @@
                                     preserve-3d block absolute
                                     w-full
                                     h-[50px]
-                                    border-2 border-paper-900 dark:border-warm-gray-800
-                                    bg-paper-500 dark:bg-warm-gray-600
+                                    border-2 border-paper-200 dark:border-warm-gray-800
+                                    bg-paper-400 dark:bg-warm-gray-600
                                     p-1
-                                    rounded-xl
+                                    rounded-lg
                                     opacity-[0.99] f
                                     flex justify-center place-items-center gap-2
                                 "
@@ -196,7 +196,7 @@
             </div>
         </div>
     </div>
-    <div class="flex items-center gap-2 text-sm">
+    <div class="flex items-center gap-2 text-sm pl-2">
         <InformationOutline darkColor="#D2CAB3" />
         <p><T de="100% auf der Rolle entsprechen {max} Personen." en="100% on roll equals {max} people." /></p>
     </div>

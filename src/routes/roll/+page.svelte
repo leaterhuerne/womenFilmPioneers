@@ -20,6 +20,22 @@
     //                                                 Variables
     // =================================================================================================================
 
+    //gender string map
+    const genderMap = {
+        male: {
+            de: "Männlich",
+            en: "Male"
+        },
+        female: {
+            de: "Weiblich",
+            en: "Female"
+        },
+        unknown: {
+            de: "Divers/Unbekannt",
+            en: "Queer/Unknown"
+        }
+    }
+
     // Calculate the maximum on the roll
     let max = 0;
 
@@ -152,7 +168,7 @@
                 for(const profession of Object.keys(data[year][gender]["professions"])) {
                     professionSet.add(profession);
                 }
-                for(const location of Object.keys(data[year][gender]["locations"])) {
+                for(let location of Object.keys(data[year][gender]["locations"])) {
                     countrySet.add(location);
                 }
             }
@@ -193,10 +209,11 @@
             grow
         "
 >
+    <!-- Roll and Customizations -->
     <div class="flex flex-col lg:w-2/3">
         <!-- Roll -->
         <Roll
-                className="border-4 border-green-300"
+                className="pb-2"
                 bind:labels={content}
                 barNames={genderPairs[genderPairPosition]}
                 bind:max={max}
@@ -205,10 +222,19 @@
                 bind:rightColour={coloursOnRoll[1].rgb}
         />
         <!-- Customization of the roll -->
-        <div class="flex flex-col grow p-2 border-4 border-pink-500">
-            <h1 class="text-center text-xl font-semibold">
-                <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
-            </h1>
+        <div class="flex flex-col justify-between grow p-2 border-t border-firebrick-500 dark:border-firebrick-1000">
+            <div>
+                <h1 class="text-center text-xl font-semibold">
+                    <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
+                </h1>
+                <RollOptions
+                        className="w-full py-2"
+                        professions={professionIterator}
+                        bind:professionLabel={profession}
+                        countries={countryIterator}
+                        bind:countryLabel={country}
+                />
+            </div>
             <p class="text-sm italic">
                 <T
                     de="Hinweis: Werden alle Berufe und Länder ausgewählt, so werden hier die alle Personen gezählt, die
@@ -221,16 +247,9 @@
                         people were working in the film industry without being associated to a film."
                 />
             </p>
-            <RollOptions
-                    className="w-full py-2"
-                    professions={professionIterator}
-                    bind:professionLabel={profession}
-                    countries={countryIterator}
-                    bind:countryLabel={country}
-            />
         </div>
     </div>
-    <!-- Options -->
+    <!-- Option Slider -->
     <div
             class="
                 absolute
@@ -304,16 +323,26 @@
             class="
                 grow
                 lg:w-1/3
-                lg:border-l-4  border-paper-400 p-2
-                flex flex-col items-center
-                border-4 border-yellow-300
+                border-t lg:border-t-0 lg:border-l  border-firebrick-500 dark:border-firebrick-1000
+                p-2
+                flex flex-col gap-2
             "
     >
-        <h1 class="text-3xl font-semibold">
+        <h1 class="text-3xl font-semibold text-center">
             <T de="Die Filmindustrie im Jahr" en="The film industry in the year"/> {frontLabelOnRoll.middle}
         </h1>
-        <p><T de="Anzahl Frauen:" en="Amount of women:"/> {genders_by_year[frontLabelOnRoll.middle].female}</p>
-        <p><T de="Anzahl Männer:" en="Amount of men:" /> {genders_by_year[frontLabelOnRoll.middle].male}</p>
-        <p><T de="Anzahl Divers/Unbekannt:" en="Queer/Unknown:" /> {genders_by_year[frontLabelOnRoll.middle].unknown}</p>
+        <div>
+            <h2 class="text-lg font-semibold"><T de="Geschlechterverteilung" en="Gender distribution" /></h2>
+            <p><T de={genderMap[leftGender].de} en={genderMap[leftGender].en} />: {frontLabelOnRoll.left}</p>
+            <p><T de={genderMap[rightGender].de} en={genderMap[rightGender].en} />: {frontLabelOnRoll.right}</p>
+        </div>
+        <div>
+            <h2 class="text-lg font-semibold"><T de="Berufe" en="Professions" /></h2>
+            {"TODO: Hier ausgeübte Berufe einfügen"}
+        </div>
+        <div>
+            <h2 class="text-lg font-semibold"><T de="Filme des Jahres" en="Professions" /></h2>
+            {"TODO: Hier Filme einfügen"}
+        </div>
     </div>
 </div>
