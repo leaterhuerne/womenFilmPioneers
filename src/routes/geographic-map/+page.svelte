@@ -8,6 +8,52 @@
     import data from "$lib/data/genders_by_year_profession_location.json";
     import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
 
+    // a map of country codes as key and name of the country as value
+    const countryCodesMap = {
+        DE: "germany",
+        UK: "unitedKingdom",
+        FR: "france",
+        IT: "italy",
+        ES: "spain",
+        UA: "ukraine",
+        PL: "poland",
+        RO: "romania",
+        NL: "netherlands",
+        BE: "belgium",
+        CZ: "czechia",
+        EL: "greece",
+        PT: "portugal",
+        SE: "sweden",
+        HU: "hungary",
+        BY: "belarus",
+        AT: "austria",
+        CH: "switzerland",
+        BG: "bulgaria",
+        DK: "denmark",
+        FI: "finland",
+        SK: "slovakia",
+        NO: "norway",
+        IE: "ireland",
+        HR: "croatia",
+        MD: "moldova",
+        BA: "bosniaAndHerzegovina",
+        AL: "albania",
+        LT: "lithuania",
+        MK: "northMacedonia",
+        SI: "slovenia",
+        LV: "latvia",
+        EE: "estonia",
+        LU: "luxembourg",
+        TR: "turkey"
+    };
+
+    // Settings of the HeatMap
+    let year: string = "1890";                                                  // current year
+    let chosenGenders: {female: boolean, male: boolean, unknown: boolean} = {   // genders with boolean field...
+        female: false, male: false, unknown: false                              // ...to mark as chosen
+    };
+    let chosenProfession: string = "";                                          // chosen profession
+
     // create Random values between lower bound and upper bound for coloring the HeatMap
     let countryWithColors = new Europe();
     let europeCountryNames = Object.entries(countryWithColors);
@@ -49,21 +95,56 @@
         }
     }
 
-    let colorInput = false;         // for recognizing a change og the color input
-    let year: string = "1890";      // current year
+    let colorInput = false;         // for recognizing a change of the color input
+
+    function countOccurrencesForCountryAndProfession(country: string, gender: string): number {
+        if (chosenProfession === "") {
+            return data[year][gender]["locations"][country]["occurences"];
+        } else {
+            if (data[year][gender]["locations"][country]["professions"][chosenProfession] != undefined) {
+                return data[year][gender]["locations"][country]["professions"][chosenProfession];
+            } else {
+                return 0;
+            }
+        }
+    }
 
     function fillMap(): void {
-        /* TODO: Komponente für Einstellmöglichkeiten an der HEatMap schreiben,
-            dann hierher die Einstellungen bringen und entsprechende Werte aus der Database herausholen.
-        */
-
+        /* old code with country ARRAY
         let countries: string[] = Object.entries(new Europe()).map(country => country.at(0));
+        // initialize object with country names and "heatmap"-value 0
         let heatMapValues: {name: string; value: number}[] = [];
-        for (const country of countries) {
+        countries.forEach(country => heatMapValues.push({name: country, value: 0}));
+         */
 
+        /* {
+                "DE": {"name": "germany", "value": 0},
+                "UK": {"name": "unitedKingdom", "value": 0},
+                ...
+           }
+         */
+        let countryCodesValuesMap = {};
+        let countryCodes: string[] = Object.keys(countryCodesMap);
+        for (const country of countryCodes) {
+            countryCodesValuesMap[country] = {name: countryCodesMap[country], value: 0};
         }
-
+        if (chosenGenders.female) {
+            for (const country of Object.keys(data[year]["female"]["locations"])) {
+                countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "female");
+            }
+        } else if (chosenGenders.male) {
+            for (const country of Object.keys(data[year]["female"]["locations"])) {
+                countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "male");
+            }
+        } else if (chosenGenders.unknown) {
+            for (const country of Object.keys(data[year]["female"]["locations"])) {
+                countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "unknown");
+            }
+        }
+        heatMapRandomColors = Object.values(countryCodesValuesMap);
     }
+    fillMap();
+    // TODO: fillMap vollenden und berichtigen
 
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
@@ -129,7 +210,7 @@
         {/if}
         <!-- Settings for HeatMap -->
         <div class="m-2">
-            <HeatMapSettings />
+            <HeatMapSettings bind:genders={chosenGenders} bind:profession={chosenProfession} />
         </div>
     </div>
 
