@@ -128,7 +128,7 @@
             </div>
         {/if}
         <!-- Settings for HeatMap -->
-        <div class="mb-0.5">
+        <div class="m-2">
             <HeatMapSettings />
         </div>
     </div>
