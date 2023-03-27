@@ -4,6 +4,7 @@
     import {language} from "$lib/stores/language.js";
     import T from "$lib/components/T.svelte";
     import {responsive} from "$lib/stores/responsive.js";
+    import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -110,8 +111,7 @@
      * @param mousewheel WheelEvent detecting whether mousewheel is rotated up or dowm.
      */
     const handleWheel = (mousewheel: WheelEvent) => {
-        let pos = 0;
-        if(mousewheel.deltaY > pos) {
+        if(mousewheel.deltaY > 0) {
             rotate(UP);
         } else {
             rotate(DOWN);
@@ -119,6 +119,14 @@
     }
 
     let windowWidth: number;
+
+    /**
+     * Ensures the visibility of a small value on the bar
+     * @param value data point to display
+     */
+    const display = (value: number) => {
+        return value == 0 ? 0 : Math.max(value, 0.4);
+    };
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} on:keydown={rollByKey}/>
@@ -167,8 +175,8 @@
                                     class="h-full grow"
                                     style="background: linear-gradient(
                                     270deg,
-                                    rgba({leftColour.red},{leftColour.green},{leftColour.blue}, 1){(left / max) * 100}%,
-                                    rgba(255,255,255,0) {(left / max) * 100}%);"
+                                    rgba({leftColour.red},{leftColour.green},{leftColour.blue}, 1){display((left / max) * 100)}%,
+                                    rgba(255,255,255,0) {display((left / max) * 100)}%);"
                             >
                             </div>
                             <!-- bar label -->
@@ -178,14 +186,19 @@
                                     class="h-full grow"
                                     style="background: linear-gradient(
                                     90deg,
-                                    rgba({rightColour.red},{rightColour.green},{rightColour.blue}, 1) {(right / max) * 100}%,
-                                    rgba(255,255,255,0) {(right / max) * 100}%);"
-                            ></div>
+                                    rgba({rightColour.red},{rightColour.green},{rightColour.blue}, 1) {display((right / max) * 100)}%,
+                                    rgba(255,255,255,0) {display((right / max) * 100)}%);"
+                            >
+                            </div>
                         </div>
                     {/each}
                 </div>
             </div>
         </div>
+    </div>
+    <div class="flex items-center gap-2 text-sm">
+        <InformationOutline darkColor="#D2CAB3" />
+        <p><T de="100% auf der Rolle entsprechen {max} Personen." en="100% on roll equals {max} people." /></p>
     </div>
 </div>
 

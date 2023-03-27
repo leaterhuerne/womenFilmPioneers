@@ -21,9 +21,7 @@
     // =================================================================================================================
 
     // Calculate the maximum on the roll
-    let maxFemale = 0;
-    let maxMale = 0;
-    let maxUnknown = 0;
+    let max = 0;
 
     // Genders visible on roll
     const genderPairs = [
@@ -51,10 +49,10 @@
 
     // roll options
     let professionList = new CircularLinkedList()<string>;
-    professionList.add("Darsteller", "Regisseur", "Tänzer", "alle");
+    professionList.add("Darsteller", "Regie", "Produzent", "alle");
     let professionIterator = professionList.iterator() as CircularIterator<string>;
     let countryList= new CircularLinkedList<string>();
-    countryList.add("DE", "AT", "F", "CH", "alle");
+    countryList.add("DE", "AT", "FR", "CH", "alle");
     let countryIterator = countryList.iterator();
 
     let profession: string;
@@ -64,15 +62,46 @@
     //                                                  Functions
     // =================================================================================================================
 
+
+    /**
+     * Gets the value from the database for specific year and gender.
+     * @param year working year
+     * @param gender female, male, unknown
+     * @return number representing the datapoint
+     */
+    const getValue = (year: string, gender: string) => {
+        let locations = data[year][gender]["locations"];
+        let value = 0
+        if (locations != undefined) {
+            // all countries, specific profession
+            if (country == "alle" && data[year][gender]["professions"][profession] != undefined) {
+                value = data[year][gender]["professions"][profession];
+            } else if (locations[country] != undefined) {
+                // specific country, all professions
+                if (profession == "alle") {
+                    value = locations[country]["occurences"];
+                    // specific country, specific profession
+                } else if (data[year][gender]["professions"][profession] != undefined) {
+                    value = data[year][gender]["professions"][profession];
+                }
+            }
+        }
+        return value;
+    }
+
     /**
      * Calculates the max amounts of genders
      */
-    const calculateMaxima = () => {
-        for (const year of Object.keys(genders_by_year)) {
-            const max = (maxValue: number, gender: string) => genders_by_year[year][gender] > maxValue ? genders_by_year[year][gender] : maxValue;
-            maxMale = max(maxMale, "male");
-            maxFemale = max(maxFemale, "female");
-            maxUnknown = max(maxUnknown, "unknown");
+    const calculateMaximumBarValue = () => {
+        max = 0;
+        let left = "";
+        let right = "";
+        for(const year of Object.keys(genders_by_year)) {
+            if((profession == "alle" | profession == undefined) && (country == "alle" | country == undefined)) {
+                max = Math.max(max, genders_by_year[year][leftGender], genders_by_year[year][rightGender]);
+            } else {
+                max = Number(Math.max(max, getValue(year, leftGender), getValue(year, rightGender)));
+            }
         }
     };
 
@@ -100,71 +129,19 @@
     /**
      * Fills the circular list with data for the roll.
      */
-     const fillRoll = () => {
-        const visibilyEnsurance = 25;
-        const displayValue = (value: number) => {
-            return value == 0 ? 0 : Math.max(value, 25);
-        }
+    const fillRoll = () => {
+        calculateMaximumBarValue();
         content = new CircularLinkedList<label>();
-        if((profession == "alle" | profession == undefined) && (country == "alle" | country == undefined)) {
-            console.log("filling default: " + profession + ", " + country)
-            for (const year of Object.keys(genders_by_year)) {
-                const item = {
-                    left: genders_by_year[year][leftGender] == 0 ? 0 : Math.max(genders_by_year[year][leftGender], visibilyEnsurance),
-                    middle: Number(year),
-                    right: genders_by_year[year][rightGender] == 0 ? 0 : Math.max(genders_by_year[year][rightGender], visibilyEnsurance)
-                };
-                if (item.middle < 1946) {
-                    content.add(item);
-                }
-            }
-            frontLabelOnRoll = {
-                left: genders_by_year["1890"][leftGender],
-                middle: 1890,
-                right: genders_by_year["1890"][rightGender]
+        for (const year of Object.keys(genders_by_year)) {
+            let item: label;
+            const mode = (profession == "alle" | profession == undefined) && (country == "alle" | country == undefined);
+            item = {
+                left: mode ? genders_by_year[year][leftGender] : getValue(year, leftGender),
+                middle: Number(year),
+                right: mode ? genders_by_year[year][rightGender] : getValue(year, rightGender)
             };
-        } else if(profession == "alle" && country != "alle") {
-            for (const year of Object.keys(data)) {
-                let leftLocations = data[year][leftGender]["locations"];
-                let leftValue = 0;
-                if(leftLocations != undefined && leftLocations[country] != undefined) {
-                    leftValue = leftLocations[country]["occurences"];
-                }
-                let rightLocations = data[year][rightGender]["locations"];
-                let rightValue = 0;
-                if(rightLocations != undefined && rightLocations[country] != undefined) {
-                    rightValue = rightLocations[country]["occurences"];
-                }
-                const item = {
-                    left: displayValue(leftValue),
-                    middle: Number(year),
-                    right: displayValue(rightValue)
-                };
-                if (item.middle < 1946) {
-                    content.add(item);
-                }
-            }
-        } else if (profession != "alle" && country == "alle") {
-            for (const year of Object.keys(data)) {
-                const item = {
-                    left: 500,
-                    middle: Number(year),
-                    right: 500
-                };
-                if (item.middle < 1946) {
-                    content.add(item);
-                }
-            }
-        } else {
-            for (const year of Object.keys(data)) {
-                const item = {
-                    left: 750,
-                    middle: Number(year),
-                    right: 750
-                };
-                if (item.middle < 1946) {
-                    content.add(item);
-                }
+            if (item.middle < 1946) {
+                content.add(item);
             }
         }
     }
@@ -177,9 +154,13 @@
         profession = profession;
         fillRoll();
     }
-    calculateMaxima();
     //Set colours on the roll
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}]
+    frontLabelOnRoll = {
+        left: genders_by_year["1890"][leftGender],
+        middle: 1890,
+        right: genders_by_year["1890"][rightGender]
+    };
 
 </script>
 
@@ -196,14 +177,14 @@
                 className="border-4 border-green-300"
                 bind:labels={content}
                 barNames={genderPairs[genderPairPosition]}
-                max={Math.max(maxFemale, maxMale)}
+                bind:max={max}
                 bind:frontLabel={frontLabelOnRoll}
                 bind:leftColour={coloursOnRoll[0].rgb}
                 bind:rightColour={coloursOnRoll[1].rgb}
         />
         <!-- Customization of the roll -->
         <div class="flex flex-col grow p-2 border-4 border-pink-500">
-            <h1 class="text-center text-lg font-semibold">
+            <h1 class="text-center text-xl font-semibold">
                 <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
             </h1>
             <p class="text-sm italic">
