@@ -49,10 +49,8 @@
 
     // roll options
     let professionList = new CircularLinkedList()<string>;
-    professionList.add("Darsteller", "Regie", "Produzent", "alle");
     let professionIterator = professionList.iterator() as CircularIterator<string>;
     let countryList= new CircularLinkedList<string>();
-    countryList.add("DE", "AT", "FR", "CH", "alle");
     let countryIterator = countryList.iterator();
 
     let profession: string;
@@ -146,9 +144,33 @@
         }
     }
 
+    const addProfessionsAndCountriesToOptionMenu = () => {
+        let professionSet = new Set<string>;
+        let countrySet = new Set<string>;
+        for(const year of Object.keys(data)) {
+            for(const gender of Object.keys(data[year])) {
+                for(const profession of Object.keys(data[year][gender]["professions"])) {
+                    professionSet.add(profession);
+                }
+                for(const location of Object.keys(data[year][gender]["locations"])) {
+                    countrySet.add(location);
+                }
+            }
+        }
+        let professionArray = Array.from(professionSet).sort();
+        professionArray.forEach(e => professionList.add(e));
+        professionList.add("alle");
+        professionIterator = professionList.iterator() as CircularIterator<string>;
+        let countryArray = Array.from(countrySet).sort();
+        countryArray.forEach(e => countryList.add(e));
+        countryList.add("alle");
+        countryIterator = countryList.iterator() as CircularIterator<string>;
+    }
+
     // =================================================================================================================
     //                                      Initialization of component
     // =================================================================================================================
+    addProfessionsAndCountriesToOptionMenu();
     $: {
         country = country;
         profession = profession;
