@@ -6,9 +6,17 @@
     export let className: string = "";                          // styling variable
     export let colorFrom: rgb = {red: 0, green: 0, blue: 139};  // start color that specifies the minimum heat color
     export let colorTo: rgb = {red: 238, green: 30, blue: 29};  // end color that specifies the maximum heat color
-
     export let upperBound: number = 100;            // The upper bound for interpolating between start and end color
     export let lowerBound: number = 0;              // The lower bound for interpolating between start and end color
+    export let listeners: {                         // passing on listener from SVGEurope.svelte
+        onClick: (country) => void,
+        onMouseOver: (country) => void,
+        onMouseOut: (country) => void
+    } = {
+        onClick: country => console.log("The clicked country is " + country),
+        onMouseOver: country => console.log("Mouse is over: " + country),
+        onMouseOut: country => console.log("Mouse was over: " + country)
+    };
 
     // Specify the color of the countries between the start-color and the end-color.
     // The 'value' should be between upperBound and lowerBound.
@@ -65,5 +73,6 @@
 <div class="{className} w-full">
     <SVGEurope
             countries={europe}
+            bind:listeners={listeners}
     />
 </div>
