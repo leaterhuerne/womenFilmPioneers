@@ -136,6 +136,32 @@ export function GET({ url }: { url:URL }) {
         }
     }
 
+    function getAllYearsGendersSpecificLocationProfession() {
+        if (!getLocationList().includes(location)) {
+            throw error(406, "Location \"" + location + "\" does not exist in the database.")
+        }
+        if (!getProfessionList().includes(profession as string)) {
+            throw error(406, "Profession \"" + profession + "\" does not exist in the database.")
+        }
+        for (const year of Object.keys(data)) {
+            content[year] = {}
+            for (const gender of Object.keys(data[year as dataKey])) {
+                content[year][gender] = {}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                const loc = data[year as dataKey][gender as genderKey]["locations"][location];
+                if (loc != undefined) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    content[year][gender][location] = {}
+                    if (loc["professions"][profession] != undefined) {
+                        content[year][gender][location][profession] = loc["professions"][profession];
+                    }
+                }
+            }
+        }
+    }
+
 // Return profession list
     if(professionList != undefined) {
         content = getProfessionList();
@@ -198,7 +224,7 @@ export function GET({ url }: { url:URL }) {
         }
         // 1100: all years, all genders, specific location, specific profession
         if (year == undefined && gender == undefined && location != undefined && profession != undefined) {
-
+            getAllYearsGendersSpecificLocationProfession();
         }
         // 1101: all years, all genders, specific location, all professions
         if (year == undefined && gender == undefined && location != undefined && profession == undefined) {
