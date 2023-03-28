@@ -1,4 +1,5 @@
 <script lang="ts">
+
     import {Europe} from "$lib/utils/geographic-map/Europe";
     import HeatMap from "$lib/components/geographic-map/HeatMap.svelte";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
@@ -87,6 +88,7 @@
     const colorPickerNamesDE = ["Wenig Aktivität", "Viel Aktivität"];   // german names
     const colorPickerNamesEN = ["Little activity", "Much activity"];    // english names
     let currentLanguage: string[];                                      // names in the current language
+    // Color picker: write words in the correct language
     $: {
         currentLanguage = $language === "de" ? colorPickerNamesDE : colorPickerNamesEN;
         heatMapBoundColors[0].title = currentLanguage[0];
@@ -99,6 +101,7 @@
 
     function countOccurrencesForCountryAndProfession(country: string, gender: string): number {
         if (chosenProfession === "") {
+            console.log(country + " \n" + data[year][gender]["locations"][country]);
             return data[year][gender]["locations"][country]["occurences"];
         } else {
             if (data[year][gender]["locations"][country]["professions"][chosenProfession] != undefined) {
@@ -116,29 +119,50 @@
         let heatMapValues: {name: string; value: number}[] = [];
         countries.forEach(country => heatMapValues.push({name: country, value: 0}));
          */
-
         /* {
-                "DE": {"name": "germany", "value": 0},
-                "UK": {"name": "unitedKingdom", "value": 0},
+                "DE": {
+                    "name": "germany",
+                    "value": 0
+                },
+                "UK": {
+                    "name": "unitedKingdom",
+                    "value": 0
+                },
                 ...
            }
          */
         let countryCodesValuesMap = {};
-        let countryCodes: string[] = Object.keys(countryCodesMap);
-        for (const country of countryCodes) {
+        for (const country of Object.keys(countryCodesMap)) {
             countryCodesValuesMap[country] = {name: countryCodesMap[country], value: 0};
         }
-        if (chosenGenders.female) {
-            for (const country of Object.keys(data[year]["female"]["locations"])) {
-                countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "female");
+        let genderStatus: {female: boolean, male: boolean, unknown: boolean} = { ...chosenGenders };
+        // if no gender is chosen all genders should be calculated
+        if (!genderStatus.female && !genderStatus.male && !genderStatus.unknown) {
+            for (const gender of Object.keys(genderStatus)) {
+                genderStatus[gender] = true;
             }
-        } else if (chosenGenders.male) {
+        }
+
+        if (genderStatus.female) {
             for (const country of Object.keys(data[year]["female"]["locations"])) {
-                countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "male");
+                //console.log(year + " country: " + countryCodesValuesMap[country].value);
+                if (Object.keys(countryCodesValuesMap).includes(country.toString())) {
+                    countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "female");
+                }
             }
-        } else if (chosenGenders.unknown) {
+        }
+        if (genderStatus.male) {
             for (const country of Object.keys(data[year]["female"]["locations"])) {
-                countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "unknown");
+                if (Object.keys(countryCodesValuesMap).includes(country.toString())) {
+                    countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "male");
+                }
+            }
+        }
+        if (genderStatus.unknown) {
+            for (const country of Object.keys(data[year]["female"]["locations"])) {
+                if (Object.keys(countryCodesValuesMap).includes(country.toString())) {
+                    countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "unknown");
+                }
             }
         }
         heatMapRandomColors = Object.values(countryCodesValuesMap);
