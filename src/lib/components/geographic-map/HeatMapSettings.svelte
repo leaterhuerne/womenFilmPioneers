@@ -1,20 +1,22 @@
 <script lang="ts">
-    import data from "$lib/data/genders_by_year_profession_location.json"
+    //import data from "$lib/data/genders_by_year_profession_location.json"
     import T from "$lib/components/T.svelte";
     import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
+    import {domain} from "$lib/stores/domain";
 
     export let genders: {female: boolean, male: boolean, unknown: boolean} = {female: false, male: false, unknown: false};
     export let profession: string = "";
     export let className: string = "";
 
-    let professionList: string[];
+    let professionList = []<string>;
 
     /**
      * Creates an array containing all profession names.
      */
-    function createProfessionList(): string[] {
+    function createProfessionList() {
+        /*
         let professionList: string[] = [];
         for (const year of Object.keys(data)) {
             for (const gender of Object.keys(data[year])) {
@@ -27,10 +29,12 @@
         }
         professionList.sort();
         return professionList;
+
+         */
     }
 
     // create profession list
-    professionList = createProfessionList();
+    //professionList = createProfessionList();
 
     /**
      * Sets the profession variable to the next profession of the profession list.

@@ -1,13 +1,17 @@
 <script lang="ts">
-
     import {Europe} from "$lib/utils/geographic-map/Europe";
     import HeatMap from "$lib/components/geographic-map/HeatMap.svelte";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
     import {language} from "$lib/stores/language";
-    import data from "$lib/data/genders_by_year_profession_location.json";
+    //import data from "$lib/data/genders_by_year_profession_location.json";
     import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
+
+    /** @type {import('./$types').PageData} */
+    export let data;
+
+    console.log(data.professionList);
 
     // a map of country codes as key and name of the country as value
     const countryCodesMap = {
@@ -99,6 +103,7 @@
 
     let colorInput = false;         // for recognizing a change of the color input
 
+    /*
     function countOccurrencesForCountryAndProfession(country: string, gender: string): number {
         if (chosenProfession === "") {
             console.log(country + " \n" + data[year][gender]["locations"][country]);
@@ -112,13 +117,16 @@
         }
     }
 
+     */
+
+    /*
     function fillMap(): void {
         /* old code with country ARRAY
         let countries: string[] = Object.entries(new Europe()).map(country => country.at(0));
         // initialize object with country names and "heatmap"-value 0
         let heatMapValues: {name: string; value: number}[] = [];
         countries.forEach(country => heatMapValues.push({name: country, value: 0}));
-         */
+
         /* {
                 "DE": {
                     "name": "germany",
@@ -130,7 +138,7 @@
                 },
                 ...
            }
-         */
+
         let countryCodesValuesMap = {};
         for (const country of Object.keys(countryCodesMap)) {
             countryCodesValuesMap[country] = {name: countryCodesMap[country], value: 0};
@@ -169,6 +177,7 @@
     }
     fillMap();
     // TODO: fillMap vollenden und berichtigen
+    */
 
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
