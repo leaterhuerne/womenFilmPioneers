@@ -1,10 +1,35 @@
+import {domainString} from "$lib/stores/domain";
+
 /** @type {import('./$types').PageLoad} */
 // @ts-ignore
-export function load({ params }) {
-    return {
-        post: {
-            title: `Title for ${params.slug} goes here`,
-            content: `Content for ${params.slug} goes here`
+export function load({ fetch }) {
+    function getData(consumer: (json: JSON) => void, year?: number, gender?: string, profession?: string): void {
+        let url: string = domainString + "/api/genders-by-year-profession-location?";
+        if (year != undefined) {
+            url += "year=" + year + "&";
         }
+        if (gender != undefined) {
+            url += "gender" + gender + "&"
+        }
+        if (profession != undefined) {
+            url += "profession" + profession;
+        }
+        fetch(url).then((e: Response) => e.json()).then(consumer);
+    }
+
+    function getProfessionList(consumer: (json: JSON) => void): void {
+        fetch(domainString + "/api/genders-by-year-profession-location?profession-list=true")
+            .then((e: Response) => e.json()).then(consumer);
+    }
+
+    function getLocationList(consumer: (json: JSON) => void): void {
+        fetch(domainString + "/api/genders-by-year-profession-location?location-list=true")
+            .then((e: Response) => e.json()).then(consumer);
+    }
+
+    return {
+        getData,
+        getProfessionList,
+        getLocationList
     };
 }
