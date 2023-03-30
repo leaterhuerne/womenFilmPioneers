@@ -184,6 +184,7 @@
     let colorPickerVisibility: string = "-translate-x-[84%] 2xl:translate-x-0";
     let windowWidth = 0;    // current width of the window
     const MD = 768;         // constant for windowWidth of tailwind md: property
+
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
