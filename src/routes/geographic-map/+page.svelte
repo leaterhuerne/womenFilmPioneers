@@ -11,7 +11,6 @@
     /** @type {import('./$types').PageData} */
     export let data;
 
-    console.log(data.professionList);
 
     // a map of country codes as key and name of the country as value
     const countryCodesMap = {
@@ -244,7 +243,7 @@
         {/if}
         <!-- Settings for HeatMap -->
         <div class="m-2">
-            <HeatMapSettings bind:genders={chosenGenders} bind:profession={chosenProfession} />
+            <HeatMapSettings data={data} bind:genders={chosenGenders} bind:profession={chosenProfession} />
         </div>
     </div>
 
