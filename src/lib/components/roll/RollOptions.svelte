@@ -6,17 +6,34 @@
     import T from "$lib/components/T.svelte";
 
     export let className: string;
-    export let professions: CircularIterator<string> = new CircularIterator<string>(new CircularLinkedList<string>());
-    export let countries: CircularIterator<string> = new CircularIterator<string>(new CircularLinkedList<string>());
+    export let professions = ["alle"];
+    export let countries = ["alle"];
 
-    export let professionLabel = professions.getPrevious();
-    export let countryLabel = countries.getPrevious();
+    export let professionLabel = professions[0];
+    export let countryLabel = countries[0];
 
     const boxStyle = "w-full flex place-items-center gap-2 p-2 rounded bg-firebrick-500 dark:bg-warm-gray-800";
     const selectorStyle = "grow flex place-items-center rounded px-2 bg-paper-200 dark:bg-warm-gray-900";
     const selectorLabelStyle = "grow";
     const buttonStyle = "flex flex-col";
     let titleStyle = "text-paper-200";
+
+    const professionUp = () => {
+        professionLabel = professions[(professions.indexOf(professionLabel) - 1 + professions.length) % professions.length];
+    }
+
+    const professionDown = () => {
+        professionLabel = professions[(professions.indexOf(professionLabel) + 1) % professions.length];
+    }
+
+    const countryUp = () => {
+        countryLabel = countries[(countries.indexOf(countryLabel) - 1 + countries.length) % countries.length];
+    }
+
+    const countryDown = () => {
+        countryLabel = countries[(countries.indexOf(countryLabel) + 1) % countries.length];
+    }
+
 </script>
 
 <div
@@ -27,8 +44,8 @@
         <div class={selectorStyle}>
             <p class={selectorLabelStyle} >{professionLabel}</p>
             <div class={buttonStyle}>
-                <button on:click={() => professionLabel = professions.getPrevious()}><CheveronUp /></button>
-                <button on:click={() => professionLabel = professions.getNext()}><CheveronDown /></button>
+                <button on:click={professionUp}><CheveronUp /></button>
+                <button on:click={professionDown}><CheveronDown /></button>
             </div>
         </div>
     </div>
@@ -38,8 +55,8 @@
         <div class={selectorStyle}>
             <p class={selectorLabelStyle}>{countryLabel}</p>
             <div class={buttonStyle}>
-                <button on:click={() => countryLabel = countries.getPrevious()}><CheveronUp /></button>
-                <button on:click={() => countryLabel = countries.getNext()}><CheveronDown /></button>
+                <button on:click={countryUp}><CheveronUp /></button>
+                <button on:click={countryDown}><CheveronDown /></button>
             </div>
         </div>
     </div>

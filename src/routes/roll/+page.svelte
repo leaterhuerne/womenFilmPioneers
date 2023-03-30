@@ -1,5 +1,5 @@
 <script lang="ts">
-    import data from "$lib/data/genders_by_year_profession_location.json";
+    import datajson from "$lib/data/genders_by_year_profession_location.json";
     import genders_by_year from "$lib/data/genders_by_year.json";
     import Roll from "$lib/components/roll/Roll.svelte";
     import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
@@ -19,6 +19,8 @@
     // =================================================================================================================
     //                                                 Variables
     // =================================================================================================================
+
+    export let data;
 
     //gender string map
     const genderMap = {
@@ -64,13 +66,10 @@
     let frontLabelOnRoll: label;
 
     // roll options
-    let professionList = new CircularLinkedList()<string>;
-    let professionIterator = professionList.iterator() as CircularIterator<string>;
-    let countryList= new CircularLinkedList<string>();
-    let countryIterator = countryList.iterator();
-
-    let profession: string;
-    let country: string;
+    let professionList;
+    let countryList;
+    let profession;
+    let country;
 
     // =================================================================================================================
     //                                                  Functions
@@ -84,19 +83,19 @@
      * @return number representing the datapoint
      */
     const getValue = (year: string, gender: string) => {
-        let locations = data[year][gender]["locations"];
+        let locations = datajson[year][gender]["locations"];
         let value = 0
         if (locations != undefined) {
             // all countries, specific profession
-            if (country == "alle" && data[year][gender]["professions"][profession] != undefined) {
-                value = data[year][gender]["professions"][profession];
+            if (country == "alle" && datajson[year][gender]["professions"][profession] != undefined) {
+                value = datajson[year][gender]["professions"][profession];
             } else if (locations[country] != undefined) {
                 // specific country, all professions
                 if (profession == "alle") {
                     value = locations[country]["occurences"];
                     // specific country, specific profession
-                } else if (data[year][gender]["professions"][profession] != undefined) {
-                    value = data[year][gender]["professions"][profession];
+                } else if (datajson[year][gender]["professions"][profession] != undefined) {
+                    value = datajson[year][gender]["professions"][profession];
                 }
             }
         }
@@ -143,7 +142,7 @@
     /**
      * Fills the circular list with data for the roll.
      */
-    const fillRoll = () => {
+    const fillRoll = (json?: JSON) => {
         calculateMaximumBarValue();
         content = new CircularLinkedList<label>();
         for (const year of Object.keys(genders_by_year)) {
@@ -158,46 +157,60 @@
                 content.add(item);
             }
         }
-    }
-
-    const addProfessionsAndCountriesToOptionMenu = () => {
-        let professionSet = new Set<string>;
-        let countrySet = new Set<string>;
-        for(const year of Object.keys(data)) {
-            for(const gender of Object.keys(data[year])) {
-                for(const profession of Object.keys(data[year][gender]["professions"])) {
-                    professionSet.add(profession);
-                }
-                for(let location of Object.keys(data[year][gender]["locations"])) {
-                    countrySet.add(location);
-                }
+        let log = "";
+        for(const year in json) {
+            if(profession == "alle" && country == "alle") {
+                log += JSON.stringify(json[year]) + "\n";
+            } else {
+                log += JSON.stringify(json[year]) + "\n";
             }
         }
-        let professionArray = Array.from(professionSet).sort();
-        professionArray.forEach(e => professionList.add(e));
-        professionList.add("alle");
-        professionIterator = professionList.iterator() as CircularIterator<string>;
-        let countryArray = Array.from(countrySet).sort();
-        countryArray.forEach(e => countryList.add(e));
-        countryList.add("alle");
-        countryIterator = countryList.iterator() as CircularIterator<string>;
+        //console.log(log);
     }
+
+    /**
+     * Populates the profession menu.
+     * @param json contains list of professions
+     */
+    const addProfessionsToOptionMenu = (json: JSON) => {
+        professionList = ["alle", ...json];
+    }
+
+    /**
+     * Populates the location menu.
+     * @param json contains list of locations.
+     */
+    const addLocationsToOptionMenu = (json: JSON) => {
+        countryList = ["alle", ...json];
+    }
+
+
 
     // =================================================================================================================
     //                                      Initialization of component
     // =================================================================================================================
-    addProfessionsAndCountriesToOptionMenu();
+
+    data.getProfessionList(addProfessionsToOptionMenu);
+    data.getLocationList(addLocationsToOptionMenu);
     $: {
-        country = country;
-        profession = profession;
+        console.log("profession: " + profession + "; location: " + country);
+        /*if(profession == "alle" && country == "alle") {
+            data.getAllDefault(fillRoll);
+        } else if (profession == "alle") {
+            data.getProfessionLocation(country, undefined, fillRoll);
+        } else if (country == "alle") {
+            data.getProfessionLocation(undefined, profession, fillRoll);
+        } else {
+            data.getProfessionLocation(country, profession, fillRoll);
+        }*/
         fillRoll();
     }
     //Set colours on the roll
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}]
     frontLabelOnRoll = {
-        left: genders_by_year["1890"][leftGender],
+        left: 1,
         middle: 1890,
-        right: genders_by_year["1890"][rightGender]
+        right: 0
     };
 
 </script>
@@ -229,9 +242,9 @@
                 </h1>
                 <RollOptions
                         className="w-full py-2"
-                        professions={professionIterator}
+                        professions={professionList}
                         bind:professionLabel={profession}
-                        countries={countryIterator}
+                        countries={countryList}
                         bind:countryLabel={country}
                 />
             </div>

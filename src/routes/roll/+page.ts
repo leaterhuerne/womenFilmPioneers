@@ -63,8 +63,15 @@ export function load({fetch}) {
      * @param consumer function to execute on requested data
      * @return Promise<JSON> JSON containing all years with requested gender, location and profession.
      */
-    const get = (location: string, profession: string, consumer: Consumer<JSON>): void => {
+    const getProfessionLocation = (location: string, profession: string, consumer: Consumer<JSON>): void => {
         getData(undefined, undefined,undefined, undefined, location, profession).then(consumer);
+    }
+
+    /**
+     * Returns the default data.
+     */
+    const getDefault = (): Promise<JSON> => {
+        return fetch(domainString + "/api/genders-by-year").then((response: Response) => response.json());
     }
 
     /**
@@ -72,8 +79,17 @@ export function load({fetch}) {
      * @param consumer function performed on default data.
      */
     const getAllDefault = (consumer: Consumer<JSON>): void => {
-        fetch(domainString + "/api/genders-by-year").then((response: Response) => response.json()).then(consumer);
+        getDefault().then(consumer);
     }
 
-    return {getProfessionList,getLocationList, get, getAllDefault};
+    return {
+        getProfessionList,
+        getLocationList,
+        getProfessionLocation,
+        getAllDefault,
+        years: {
+            first: 1890,
+            last: 2021
+        }
+    };
 }

@@ -1,0 +1,36 @@
+import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator";
+
+export class CircularArrayList<T> {
+    size: number
+    data: Array<T>;
+
+    constructor(...items: T[]) {
+        this.data = [];
+        this.size = this.data.length;
+        items.forEach(e => this.add(e));
+    }
+
+    
+    public add(...items: T[]): void {
+        items.forEach(element => this.data.push(element));
+        this.size = this.data.length;
+    }
+
+    public toArray(): T[] {
+        return this.data;
+    }
+
+    public forEach(consumer: (element: T) => void): void {
+        this.data.forEach(consumer);
+    }
+
+    public iterator(): CircularArrayIterator<T> {
+        return new CircularArrayIterator(this);
+    }
+
+    public toString(): string {
+        let res = "";
+        this.forEach(e => res += e + " ");
+        return res;
+    }
+}
