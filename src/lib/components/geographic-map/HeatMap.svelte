@@ -65,6 +65,7 @@
     // if the colorFrom and colorTo change, then the europe SVG is rendered new
     $: {
         state = state;
+        countryHeatValues = countryHeatValues;
         europe = colorHeatMap();
     }
 

@@ -1,11 +1,10 @@
 <script lang="ts">
+    import {language} from "$lib/stores/language";
     import {Europe} from "$lib/utils/geographic-map/Europe";
     import HeatMap from "$lib/components/geographic-map/HeatMap.svelte";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
-    import {language} from "$lib/stores/language";
-    //import data from "$lib/data/genders_by_year_profession_location.json";
     import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
 
     /** @type {import('./$types').PageData} */
@@ -52,7 +51,7 @@
     };
 
     // Settings of the HeatMap
-    let year: string = "1890";                                                  // current year
+    let year: string = "1917";                                                  // current year
     let chosenGenders: {female: boolean, male: boolean, unknown: boolean} = {   // genders with boolean field...
         female: false, male: false, unknown: false                              // ...to mark as chosen
     };
@@ -62,10 +61,12 @@
     let countryWithColors = new Europe();
     let europeCountryNames = Object.entries(countryWithColors);
     let heatMapRandomColors: {name: string; value: number}[] = [];
-    for (const country of europeCountryNames) {
+    /*for (const country of europeCountryNames) {
         let randomColor: {name: string; value: number} = {name: country.at(0), value: Math.random() * 100};
         heatMapRandomColors.push(randomColor);
     }
+
+     */
 
     // initial color of the HeatMap
     let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
@@ -120,12 +121,6 @@
 
     /*
     function fillMap(): void {
-        /* old code with country ARRAY
-        let countries: string[] = Object.entries(new Europe()).map(country => country.at(0));
-        // initialize object with country names and "heatmap"-value 0
-        let heatMapValues: {name: string; value: number}[] = [];
-        countries.forEach(country => heatMapValues.push({name: country, value: 0}));
-
         /* {
                 "DE": {
                     "name": "germany",
@@ -178,12 +173,84 @@
     // TODO: fillMap vollenden und berichtigen
     */
 
+    function fillMap(json: JSON) {
+        function logCountryCodesValuesMap() {
+            let log = "fillMap: \n";
+            for (const key in countryCodesValuesMap) {
+                log += key + "/" + countryCodesValuesMap[key].name + ": " + countryCodesValuesMap[key].value + "\n";
+            }
+            console.log(log);
+        }
+        // if no gender is chosen all genders should be calculated
+        let genderStatus: {female: boolean, male: boolean, unknown: boolean} = { ...chosenGenders };
+        if (!genderStatus.female && !genderStatus.male && !genderStatus.unknown) {
+            for (const gender of Object.keys(genderStatus)) {
+                genderStatus[gender] = true;
+            }
+        }
+
+        /* {
+                "DE": {
+                    "name": "germany",
+                    "value": 0
+                },
+                "UK": {
+                    "name": "unitedKingdom",
+                    "value": 0
+                },
+                ...
+           }
+         */
+        let countryCodesValuesMap = {};
+        for (const country of Object.keys(countryCodesMap)) {
+            countryCodesValuesMap[country] = {name: countryCodesMap[country], value: 0};
+        }
+        for (const gender in genderStatus) {
+            // is current gender chosen?
+            if (genderStatus[gender]) {
+                // no specific profession chosen
+                if (chosenProfession === "") {
+                    for (const country in json[year][gender]) {
+                        if (Object.keys(countryCodesValuesMap).includes(country)) {
+                            countryCodesValuesMap[country].value += json[year][gender][country];
+                        }
+                    }
+                // specific profession
+                } else {
+                    for (const country in json[year][gender]) {
+                        if (Object.keys(countryCodesValuesMap).includes(country)) {
+                            countryCodesValuesMap[country].value += json[year][gender][country][chosenProfession]?? 0;
+                        }
+                    }
+                }
+            }
+        }
+        //logCountryCodesValuesMap();
+        heatMapRandomColors = Object.values(countryCodesValuesMap);
+        console.log(heatMapRandomColors);
+    }
+
+
+    data.getData(json => console.log(json), year, undefined, "Darsteller");
+
+    $: {
+        chosenGenders = chosenGenders; // reactivity for changed gender buttons
+        // no specific profession
+        if (chosenProfession === "") {
+            data.getData(json => {fillMap(json)}, year);
+        // specific profession
+        } else {
+            data.getData(json => {fillMap(json)}, year, undefined, chosenProfession);
+        }
+
+
+    }
+
     /////////////// Styling functionality \\\\\\\\\\\\\\\
 
     let colorPickerVisibility: string = "-translate-x-[84%] 2xl:translate-x-0";
     let windowWidth = 0;    // current width of the window
     const MD = 768;         // constant for windowWidth of tailwind md: property
-
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />

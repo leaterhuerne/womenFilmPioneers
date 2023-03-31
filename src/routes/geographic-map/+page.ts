@@ -1,18 +1,20 @@
 import {domainString} from "$lib/stores/domain";
 
+type genderKey = "female" | "male" | "unknown"
+
 /** @type {import('../../../.svelte-kit/types/src/routes').PageLoad} */
 // @ts-ignore
 export function load({ fetch }) {
-    function getData(consumer: (json: JSON) => void, year?: number, gender?: string, profession?: string): void {
+    function getData(consumer: (json: JSON) => void, year?: number | string, gender?: genderKey, profession?: string): void {
         let url: string = domainString + "/api/genders-by-year-profession-location?";
         if (year != undefined) {
             url += "year=" + year + "&";
         }
         if (gender != undefined) {
-            url += "gender" + gender + "&"
+            url += "gender=" + gender + "&"
         }
         if (profession != undefined) {
-            url += "profession" + profession;
+            url += "profession=" + profession;
         }
         fetch(url).then((e: Response) => e.json()).then(consumer);
     }

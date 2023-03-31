@@ -7,7 +7,7 @@
     // data from load function in +page.ts, data of endpoint genders-by-year-profession-location
     export let data: {getData, getProfessionList, getLocationList} = {};
     export let genders: {female: boolean, male: boolean, unknown: boolean} = {female: false, male: false, unknown: false};
-    export let profession: string = profession ?? "";
+    export let profession: string | undefined = profession ?? "";
     export let className: string = "";
 
     // get data with profession list over load function in +page.ts
@@ -26,7 +26,9 @@
         } else if (profession === professionList.at(professionList.length - 1)) {
             profession = "";
         } else {
-            profession = professionList.at(professionList.indexOf(profession) + 1);
+            if (profession != null) {
+                profession = professionList.at(professionList.indexOf(profession) + 1);
+            }
         }
     }
 
@@ -42,7 +44,9 @@
         } else if (profession === professionList.at(0)) {
             profession = "";
         } else {
-            profession = professionList.at(professionList.indexOf(profession) - 1);
+            if (profession != null) {
+                profession = professionList.at(professionList.indexOf(profession) - 1);
+            }
         }
     }
 
@@ -79,7 +83,6 @@
             " h-8";
         genderButtonStyles[gender] = genders[gender] ? initialGenderButtonStyle : activatedButtonStyle;
         genders[gender] = !genders[gender];
-
     }
 
     /**
