@@ -1,6 +1,5 @@
 <script lang="ts">
     import {language} from "$lib/stores/language";
-    import {Europe} from "$lib/utils/geographic-map/Europe";
     import HeatMap from "$lib/components/geographic-map/HeatMap.svelte";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
@@ -8,8 +7,7 @@
     import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
 
     /** @type {import('./$types').PageData} */
-    export let data;
-
+    export let data;    // data from load function in page.ts
 
     // a map of country codes as key and name of the country as value
     const countryCodesMap = {
@@ -56,17 +54,16 @@
         female: false, male: false, unknown: false                              // ...to mark as chosen
     };
     let chosenProfession: string = "";                                          // chosen profession
+    let heatMapColors: {name: string; value: number}[] = [];            // country with values between min and max
 
-    // create Random values between lower bound and upper bound for coloring the HeatMap
-    let countryWithColors = new Europe();
-    let europeCountryNames = Object.entries(countryWithColors);
-    let heatMapRandomColors: {name: string; value: number}[] = [];
-    /*for (const country of europeCountryNames) {
+     /*Random Colors for the HeatMap:
+        // create Random values between lower bound and upper bound for coloring the HeatMap
+        let countryWithColors = new Europe();
+        let europeCountryNames = Object.entries(countryWithColors);
+        for (const country of europeCountryNames) {
         let randomColor: {name: string; value: number} = {name: country.at(0), value: Math.random() * 100};
-        heatMapRandomColors.push(randomColor);
-    }
-
-     */
+        heatMapColors.push(randomColor);
+    }*/
 
     // initial color of the HeatMap
     let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
@@ -103,75 +100,21 @@
 
     let colorInput = false;         // for recognizing a change of the color input
 
-    /*
-    function countOccurrencesForCountryAndProfession(country: string, gender: string): number {
-        if (chosenProfession === "") {
-            console.log(country + " \n" + data[year][gender]["locations"][country]);
-            return data[year][gender]["locations"][country]["occurences"];
-        } else {
-            if (data[year][gender]["locations"][country]["professions"][chosenProfession] != undefined) {
-                return data[year][gender]["locations"][country]["professions"][chosenProfession];
-            } else {
-                return 0;
-            }
-        }
-    }
 
+    /**
+     * The method returns the real gender status of the gender buttons. If no gender is chosen
+     * all genders should be considered.
+     * @return Returns an object with all genders and its real status to be considered.
      */
-
-    /*
-    function fillMap(): void {
-        /* {
-                "DE": {
-                    "name": "germany",
-                    "value": 0
-                },
-                "UK": {
-                    "name": "unitedKingdom",
-                    "value": 0
-                },
-                ...
-           }
-
-        let countryCodesValuesMap = {};
-        for (const country of Object.keys(countryCodesMap)) {
-            countryCodesValuesMap[country] = {name: countryCodesMap[country], value: 0};
-        }
-        let genderStatus: {female: boolean, male: boolean, unknown: boolean} = { ...chosenGenders };
-        // if no gender is chosen all genders should be calculated
+    function getActualGenderStatus(): {female: boolean, male: boolean, unknown: boolean} {
+        let genderStatus: { female: boolean, male: boolean, unknown: boolean } = {...chosenGenders};
         if (!genderStatus.female && !genderStatus.male && !genderStatus.unknown) {
             for (const gender of Object.keys(genderStatus)) {
                 genderStatus[gender] = true;
             }
         }
-
-        if (genderStatus.female) {
-            for (const country of Object.keys(data[year]["female"]["locations"])) {
-                //console.log(year + " country: " + countryCodesValuesMap[country].value);
-                if (Object.keys(countryCodesValuesMap).includes(country.toString())) {
-                    countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "female");
-                }
-            }
-        }
-        if (genderStatus.male) {
-            for (const country of Object.keys(data[year]["female"]["locations"])) {
-                if (Object.keys(countryCodesValuesMap).includes(country.toString())) {
-                    countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "male");
-                }
-            }
-        }
-        if (genderStatus.unknown) {
-            for (const country of Object.keys(data[year]["female"]["locations"])) {
-                if (Object.keys(countryCodesValuesMap).includes(country.toString())) {
-                    countryCodesValuesMap[country].value += countOccurrencesForCountryAndProfession(country, "unknown");
-                }
-            }
-        }
-        heatMapRandomColors = Object.values(countryCodesValuesMap);
+        return genderStatus;
     }
-    fillMap();
-    // TODO: fillMap vollenden und berichtigen
-    */
 
     function fillMap(json: JSON) {
         function logCountryCodesValuesMap() {
@@ -182,13 +125,7 @@
             console.log(log);
         }
         // if no gender is chosen all genders should be calculated
-        let genderStatus: {female: boolean, male: boolean, unknown: boolean} = { ...chosenGenders };
-        if (!genderStatus.female && !genderStatus.male && !genderStatus.unknown) {
-            for (const gender of Object.keys(genderStatus)) {
-                genderStatus[gender] = true;
-            }
-        }
-
+        let genderStatus = getActualGenderStatus();
         /* {
                 "DE": {
                     "name": "germany",
@@ -226,13 +163,51 @@
             }
         }
         //logCountryCodesValuesMap();
-        heatMapRandomColors = Object.values(countryCodesValuesMap);
-        console.log(heatMapRandomColors);
+        heatMapColors = Object.values(countryCodesValuesMap);
+        console.log(heatMapColors);
     }
 
 
-    data.getData(json => console.log(json), year, undefined, "Darsteller");
+    let maxPersonsOfAllYears: number = 0;       // upper bound of the map
+    function calculateMaximumOfAllYears(json): void {
+        maxPersonsOfAllYears = 0;
+        let genderStatus = getActualGenderStatus();
+        for (const yearEntry in json) {
+            let amountPerYear: number = 0;
+            for (const gender in genderStatus) {
+                // is current gender chosen
+                if (genderStatus[gender]) {
+                    // no specific profession chosen
+                    if (chosenProfession === "") {
+                        for (const country in json[yearEntry][gender]) {
+                            if (Object.keys(countryCodesMap).includes(country)) {
+                                amountPerYear += json[yearEntry][gender][country];
+                                console.log(amountPerYear);
+                            }
+                        }
+                    // specific profession
+                    } else {
+                        for (const country in json[yearEntry][gender]) {
+                            if (Object.keys(countryCodesMap).includes(country)) {
+                                amountPerYear += json[yearEntry][gender][country][chosenProfession]?? 0;
+                            }
+                        }
+                    }
+                }
+            }
+            maxPersonsOfAllYears = Math.max(maxPersonsOfAllYears, amountPerYear);
+        }
+    }
 
+    // if genders or profession changes then maxima must be recalculated
+    $: {
+        chosenGenders = chosenGenders;
+        chosenProfession = chosenProfession;
+        data.getData(json => calculateMaximumOfAllYears(json));
+
+    }
+
+    // reactive block: update Heat map on each change of year or settings
     $: {
         chosenGenders = chosenGenders; // reactivity for changed gender buttons
         // no specific profession
@@ -242,8 +217,6 @@
         } else {
             data.getData(json => {fillMap(json)}, year, undefined, chosenProfession);
         }
-
-
     }
 
     /////////////// Styling functionality \\\\\\\\\\\\\\\
@@ -260,10 +233,10 @@
         <!-- Map -->
         <HeatMap
                 className="relative p-2"
-                countryHeatValues={heatMapRandomColors}
+                countryHeatValues={heatMapColors}
                 colorFrom={heatMapBoundColors[0].rgb}
                 colorTo={heatMapBoundColors[1].rgb}
-                upperBound=100
+                upperBound={maxPersonsOfAllYears}
                 lowerBound=0
                 state={colorInput}
         />
