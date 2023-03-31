@@ -4,13 +4,15 @@
     import CheveronUp from "$lib/icons/components/CheveronUp.svelte";
     import CheveronDown from "$lib/icons/components/CheveronDown.svelte";
     import T from "$lib/components/T.svelte";
+    import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator";
+    import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
 
     export let className: string;
-    export let professions = ["alle"];
-    export let countries = ["alle"];
+    export let professions = new CircularArrayIterator(new CircularArrayList<string>("alle"));
+    export let countries = new CircularArrayIterator(new CircularArrayList<string>("alle"));
 
-    export let professionLabel = professions[0];
-    export let countryLabel = countries[0];
+    export let professionLabel = professions.current;
+    export let countryLabel = countries.current;
 
     const boxStyle = "w-full flex place-items-center gap-2 p-2 rounded bg-firebrick-500 dark:bg-warm-gray-800";
     const selectorStyle = "grow flex place-items-center rounded px-2 bg-paper-200 dark:bg-warm-gray-900";
@@ -19,19 +21,19 @@
     let titleStyle = "text-paper-200";
 
     const professionUp = () => {
-        professionLabel = professions[(professions.indexOf(professionLabel) - 1 + professions.length) % professions.length];
+        professionLabel = professions.previous();
     }
 
     const professionDown = () => {
-        professionLabel = professions[(professions.indexOf(professionLabel) + 1) % professions.length];
+        professionLabel = professions.next();
     }
 
     const countryUp = () => {
-        countryLabel = countries[(countries.indexOf(countryLabel) - 1 + countries.length) % countries.length];
+        countryLabel = countries.previous();
     }
 
     const countryDown = () => {
-        countryLabel = countries[(countries.indexOf(countryLabel) + 1) % countries.length];
+        countryLabel = countries.next();
     }
 
 </script>

@@ -9,6 +9,7 @@
     import T from "$lib/components/T.svelte";
     import RollOptions from "$lib/components/roll/RollOptions.svelte";
     import {CircularIterator} from "$lib/utils/list/CircularIterator";
+    import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
 
     // =================================================================================================================
     //                                              Type definitions
@@ -173,7 +174,11 @@
      * @param json contains list of professions
      */
     const addProfessionsToOptionMenu = (json: JSON) => {
-        professionList = ["alle", ...json];
+        let list = new CircularArrayList("alle");
+        for(const profession in json) {
+            list.add(json[profession]);
+        }
+        professionList = list.iterator();
     }
 
     /**
@@ -181,7 +186,11 @@
      * @param json contains list of locations.
      */
     const addLocationsToOptionMenu = (json: JSON) => {
-        countryList = ["alle", ...json];
+        let list = new CircularArrayList("alle");
+        for(const country in json) {
+            list.add(json[country]);
+        }
+        countryList = list.iterator();
     }
 
 
