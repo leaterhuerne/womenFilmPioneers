@@ -9,7 +9,7 @@
     import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
     import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator.js";
     import Roll from "$lib/components/roll/Roll.svelte";
-    import {startYear} from "$lib/components/roll/startyear";
+    import {currentYear} from "$lib/components/roll/currentYear";
 
     // =================================================================================================================
     //                                              Type definitions

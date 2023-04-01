@@ -3,7 +3,7 @@
     import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
     import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator";
     import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
-    import {startYear} from "$lib/components/roll/startyear.js";
+    import {currentYear} from "$lib/components/roll/currentYear.js";
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -45,7 +45,7 @@
      */
     const fillRoll = () => {
         const turnToStartYear = (iterator: CircularArrayIterator<label>) => {
-            while(iterator.current.year != $startYear) {
+            while(iterator.current.year != $currentYear) {
                 iterator.next()
             }
         }
@@ -109,7 +109,7 @@
         }
         rotation = "transform: rotateX(" + currdeg +"deg)"; // now rotate the roll
         frontLabel = items.current;
-        $startYear = items.current.year;
+        $currentYear = items.current.year;
         items = items; // trigger re-rendering of roll
     }
 
