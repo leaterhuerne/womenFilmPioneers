@@ -9,7 +9,6 @@
     import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
     import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator.js";
     import Roll from "$lib/components/roll/Roll.svelte";
-    import {currentYear} from "$lib/components/roll/currentYear";
 
     // =================================================================================================================
     //                                              Type definitions
@@ -21,6 +20,10 @@
     //                                                 Variables
     // =================================================================================================================
 
+    const ALL = undefined;
+    const yearSpan = {first: 1895, last: 1945};
+
+    /** @type {import('./$types').PageData} */
     export let data;
 
     //gender string map
@@ -63,66 +66,18 @@
     let coloursOnRoll: {title: string, rgb: {red: number, green: number, blue: number}}[]
 
     // content list and front side for the roll
-    let defaultList: CircularArrayList<label> = new CircularArrayList();
-    for(let i = 0; i < 20; i++) {
-        defaultList.add({left: 50, year: i, right: 50});
-    }
-    let content = new  CircularArrayIterator<label>(defaultList);
-    let frontLabelOnRoll: {left: 0, year: 1890, right: 0};
+    let content:  CircularArrayIterator<label>;
+    let frontLabelOnRoll: label =  {left: 0, year: 1890, right: 0};
 
     // roll options
     let professionList;
     let countryList;
-    let profession;
-    let country;
+    let profession = "alle";
+    let country = "alle";
 
     // =================================================================================================================
     //                                                  Functions
     // =================================================================================================================
-
-
-    /**
-     * Gets the value from the database for specific year and gender.
-     * @param year working year
-     * @param gender female, male, unknown
-     * @return number representing the datapoint
-     */
-    const getValue = (year: string, gender: string) => {
-        let locations = datajson[year][gender]["locations"];
-        let value = 0
-        if (locations != undefined) {
-            // all countries, specific profession
-            if (country == "alle" && datajson[year][gender]["professions"][profession] != undefined) {
-                value = datajson[year][gender]["professions"][profession];
-            } else if (locations[country] != undefined) {
-                // specific country, all professions
-                if (profession == "alle") {
-                    value = locations[country]["occurences"];
-                    // specific country, specific profession
-                } else if (datajson[year][gender]["professions"][profession] != undefined) {
-                    value = datajson[year][gender]["professions"][profession];
-                }
-            }
-        }
-        return value;
-    }
-
-    /**
-     * Calculates the max amounts of genders
-     */
-    const calculateMaximumBarValue = () => {
-        max = 0;
-        let left = "";
-        let right = "";
-        for(const year of Object.keys(genders_by_year)) {
-            if((profession == "alle" | profession == undefined) && (country == "alle" | country == undefined)) {
-                max = Math.max(max, genders_by_year[year][leftGender], genders_by_year[year][rightGender]);
-            } else {
-                max = Number(Math.max(max, getValue(year, leftGender), getValue(year, rightGender)));
-            }
-        }
-    };
-
     /**
      * Creates a rgb object with random values.
      */
@@ -141,38 +96,93 @@
         rightGender = genderPairs[genderPairPosition].right;
         coloursOnRoll[0].rgb = randomRgb();
         coloursOnRoll[1].rgb = randomRgb();
-        fillRoll();
+    }
+
+    /**
+     * Resets the roll labels to 0.
+     */
+    function resetRoll() {
+        max = 0;
+        let contentList = new CircularArrayList<label>();
+        for (let year = yearSpan.first; year <= yearSpan.last; year++) {
+            contentList.add({left: 0, year: Number(year), right: 0});
+        }
+        content = contentList.iterator();
     }
 
     /**
      * Fills the circular list with data for the roll.
      */
-    const fillRoll = (json?: JSON) => {
-        calculateMaximumBarValue();
-        let contentList = new CircularArrayList<label>();
-        for (const year of Object.keys(genders_by_year)) {
-            let item: label;
-            const mode = (profession == "alle" | profession == undefined) && (country == "alle" | country == undefined);
-            item = {
-                left: mode ? genders_by_year[year][leftGender] : getValue(year, leftGender),
-                year: Number(year),
-                right: mode ? genders_by_year[year][rightGender] : getValue(year, rightGender)
-            };
-            if (item.year < 1946) {
-                contentList.add(item);
+    const populateRoll = () => {
+        // define constants
+        const iterateOver = (json: JSON,  consumer: (json: JSON, year: string, gender: string) => void) => {
+            for (const year in json) {
+                for (const gender in json[year]) {
+                    consumer(json, year, gender);
+                }
+                if (Number(year) >= yearSpan.first && Number(year) < yearSpan.last) {
+                    list.add({left: left, year: Number(year), right: right});
+                }
+                max = Math.max(max, left, right);
             }
-        }
-        content = contentList.iterator();
+            content = list.iterator();
+        };
 
-        /*let log = "";
-        for(const year in json) {
-            if(profession == "alle" && country == "alle") {
-                log += JSON.stringify(json[year]) + "\n";
-            } else {
-                log += JSON.stringify(json[year]) + "\n";
+        const allProfessionsAllLocations = (json: JSON, year: string, gender: string) => {
+            for (const location in json[year][gender]) {
+                if (gender == leftGender) {
+                    left += json[year][gender][location] ?? 0;
+                }
+                if (gender == rightGender) {
+                    right += json[year][gender][location] ?? 0;
+                }
             }
-        }*/
-        //console.log(log);
+        };
+
+        const allProfessionsSpecificLocation = (json: JSON, year: string, gender: string) => {
+            if (gender == leftGender) {
+                left += json[year][gender][country] ?? 0;
+            }
+            if (gender == rightGender) {
+                right += json[year][gender][country] ?? 0;
+            }
+        };
+
+        const specificProfessionAllLocations = (json: JSON, year: string, gender: string) => {
+            for(const location in json[year][gender]) {
+                if (gender == leftGender) {
+                    left += json[year][gender][location][profession] ?? 0;
+                }
+                if (gender == rightGender) {
+                    right += json[year][gender][location][profession] ?? 0;
+                }
+            }
+        };
+
+        const specificProfessionSpecificLocation = (json: JSON, year: string, gender: string) => {
+            if (gender == leftGender) {
+                left += json[year][gender][country][profession] ?? 0;
+            }
+            if (gender == rightGender) {
+                right += json[year][gender][country][profession] ?? 0;
+            }
+        };
+
+        //populate roll
+        resetRoll();
+        let list = new CircularArrayList<label>();
+        let left = 0;
+        let right = 0;
+        if (profession == "alle" && country == "alle") {
+            data.getProfessionLocation(ALL, ALL, (json: JSON) => iterateOver(json, allProfessionsAllLocations));
+        } else if (profession == "alle" && country != "alle") {
+            data.getProfessionLocation(ALL, country, (json: JSON) => iterateOver(json, allProfessionsSpecificLocation));
+        } else if (profession != "alle" && country == "alle") {
+            data.getProfessionLocation(profession, ALL, (json: JSON) => iterateOver(json, specificProfessionAllLocations));
+        } else {
+            //TODO Function does not work
+            data.getProfessionLocation(profession, country, (json: JSON) => iterateOver(json, specificProfessionSpecificLocation));
+        }
     }
 
     /**
@@ -204,31 +214,20 @@
     // =================================================================================================================
     //                                      Initialization of component
     // =================================================================================================================
-
+    resetRoll();
     data.getProfessionList(addProfessionsToOptionMenu);
     data.getLocationList(addLocationsToOptionMenu);
     $: {
+        // trigger rerendering
+        leftGender = leftGender;
+        rightGender = rightGender;
         profession = profession;
         country = country;
-        console.log("profession: " + profession + "; location: " + country);
-        /*if(profession == "alle" && country == "alle") {
-            data.getAllDefault(fillRoll);
-        } else if (profession == "alle") {
-            data.getProfessionLocation(country, undefined, fillRoll);
-        } else if (country == "alle") {
-            data.getProfessionLocation(undefined, profession, fillRoll);
-        } else {
-            data.getProfessionLocation(country, profession, fillRoll);
-        }*/
-        fillRoll();
+
+        populateRoll();
     }
     //Set colours on the roll
-    coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}]
-    frontLabelOnRoll = {
-        left: 1,
-        year: 1890,
-        right: 0
-    };
+    coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}];
 
 </script>
 

@@ -33,7 +33,18 @@ export class CircularArrayList<T> {
 
     public toString(): string {
         let res = "";
-        this.data.forEach(e => res += e + " ");
+        const elementString = (e: T): string => {
+            let element = "{";
+            if(typeof e == "object") {
+                for(const key in e) {
+                    element += key  + ": " + e[key] + ", "
+                }
+                return element.slice(0, -2) + "}"
+            } else {
+                return String(e);
+            }
+        }
+        this.data.forEach(e => res += elementString(e) + " -> ");
         return res;
     }
 }

@@ -1,12 +1,12 @@
 import {domainString} from "$lib/stores/domain";
-type Response = { json: () => any; };
+type Response = { json: () => never; };
 type gender = "female" | "male" | "unknown";
 interface Consumer<T> {
     (t: T): void;
 }
 
-type jsumer = (json: JSON) => void
-
+/** @type {import('./$types').PageLoad} */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export function load({fetch}) {
 
@@ -63,7 +63,7 @@ export function load({fetch}) {
      * @param consumer function to execute on requested data
      * @return Promise<JSON> JSON containing all years with requested gender, location and profession.
      */
-    const getProfessionLocation = (location: string, profession: string, consumer: Consumer<JSON>): void => {
+    const getProfessionLocation = (profession: string, location: string, consumer: Consumer<JSON>): void => {
         getData(undefined, undefined,undefined, undefined, location, profession).then(consumer);
     }
 

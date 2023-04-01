@@ -27,7 +27,6 @@ export class CircularArrayIterator<T> {
 
     public setNext(n: number, value: T) {
         this.circle.data[(this.indexOfCurrent + n) % this.circle.size] = value;
-        console.log("next "  + n + ": " + this.peekNext(n));
     }
 
     public previous(): T {
