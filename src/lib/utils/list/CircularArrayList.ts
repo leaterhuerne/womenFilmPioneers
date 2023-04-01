@@ -4,10 +4,13 @@ export class CircularArrayList<T> {
     size: number
     data: Array<T>;
 
+    head: T;
+
     constructor(...items: T[]) {
         this.data = [];
         this.size = this.data.length;
         items.forEach(e => this.add(e));
+        this.head = this.data[0];
     }
 
     
@@ -30,7 +33,7 @@ export class CircularArrayList<T> {
 
     public toString(): string {
         let res = "";
-        this.forEach(e => res += e + " ");
+        this.data.forEach(e => res += e + " ");
         return res;
     }
 }

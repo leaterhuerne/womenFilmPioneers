@@ -1,10 +1,9 @@
 <script lang="ts">
-    
-    import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
-    import {language} from "$lib/stores/language.js";
     import T from "$lib/components/T.svelte";
-    import {responsive} from "$lib/stores/responsive.js";
     import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
+    import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator";
+    import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
+    import {startYear} from "$lib/components/roll/startyear.js";
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
@@ -19,48 +18,71 @@
         de: "Um die Rolle zu drehen die Cursortasten hoch und runter, sowie das Mausrad verwendet werden.",
         en: "You can use the cursor keys up and down and the mousewheel to rotate the roll."
     };
-    export let labels = new CircularLinkedList<label>;
-    // define how many sides the roll has.
 
+    let defaultList: CircularArrayList<label> = new CircularArrayList();
+
+    let itemList: CircularArrayList<label> = new CircularArrayList<label>();
+    for(let i = 0; i < 30; i++) {
+        defaultList.add({left: 50, year: i, right: 50});
+        if(i < 20) {
+            itemList.add({left: 100, year: -1, right: 100})
+        }
+    }
+    export let labels: CircularArrayIterator<label> = new CircularArrayIterator(defaultList);
+
+    // define how many sides the roll has.
     const SIDES_ON_ROLL = 20;
-    let items: label[] = new Array(SIDES_ON_ROLL).fill({left: 50, middle: 0, right: 50});
+    let items: CircularArrayIterator<label> = new CircularArrayIterator<label>(itemList);
 
     // define constants
     const UP = true;
     const DOWN = false;
 
-    let currentLabel = labels.iterator();
-    let labelIndex = 0;
-    let frontItemIndex = 0;               // index of the front facing side of the roll
+    let currentLabel: label;
 
     /**
      * Fills the sides which are visible at mount.
      */
     const fillRoll = () => {
-        for (let i = 0; i < 5; i++) {
-            items[frontItemIndex + i] = currentLabel.peekNext(i).content;
-            items[(frontItemIndex - i - 1 + items.length) % items.length] = currentLabel.peekPrevious(i + 1).content;
+        const turnToStartYear = (iterator: CircularArrayIterator<label>) => {
+            while(iterator.current.year != $startYear) {
+                iterator.next()
+            }
         }
+        turnToStartYear(labels);
+        for (let i = 0; i < 5; i++) {
+            items.setCurrent(labels.current);
+            items.next();
+            labels.next();
+        }
+        turnToStartYear(items);
+        items.previous();
+        turnToStartYear(labels);
+        labels.previous();
+        for (let i = 0; i < 5; i++) {
+            items.setCurrent(labels.current);
+            items.previous();
+            labels.previous();
+        }
+        turnToStartYear(items);
+        turnToStartYear(labels);
     }
 
     // if data for the roll changed, rerender roll
-    $: {
-        labels = labels;
-        currentLabel = labels.iterator();
-        //TODO
-        //currentLabel.jumpTo(labelIndex);
+    /*$: {*/
+        currentLabel = labels.current;
         fillRoll();
-    }
+    /*}*/
 
     // calculate the inner radius of the regular n-polygon
-    const innerRadiusofRoll = (50 / 2) * (1 / Math.tan(Math.PI / items.length));
+    const innerRadiusofRoll = (50 / 2) * (1 / Math.tan(Math.PI / items.circle.size));
 
     const rotationAngle = 360 / SIDES_ON_ROLL;
     // roll state
     let currdeg  = 0;                       // rotation degree
     let rotation = "";                      // rotation style string
 
-    export let frontLabel = items[frontItemIndex];
+    export let frontLabel = items.current;
 
     /**
      * Handles one-step rotation of the roll.
@@ -72,24 +94,23 @@
             currdeg = currdeg - rotationAngle;
 
             // calculate displayed values when rotating up
-            items[(frontItemIndex + 5) % items.length] = currentLabel.peekNext(5).content;
-            currentLabel.next();
-            frontItemIndex = (frontItemIndex + 1) % items.length;
+            items.setNext(5, labels.peekNext(5));
+            items.next();
+            labels.next();
         }
         else {
             //calculate down rotation
             currdeg = currdeg + rotationAngle;
 
             //calculate displayed values when rotating down
-            items[(frontItemIndex - 5 + items.length) % items.length] = currentLabel.peekPrevious(5).content;
-            currentLabel.previous();
-            frontItemIndex = (frontItemIndex - 1 + items.length) % items.length;
-        }
-        if (currentLabel.current) {
-            labelIndex = currentLabel.current.index;
+            items.setPrevious(5, labels.peekPrevious(5));
+            items.previous();
+            labels.previous();
         }
         rotation = "transform: rotateX(" + currdeg +"deg)"; // now rotate the roll
-        frontLabel = items[frontItemIndex];
+        frontLabel = items.current;
+        $startYear = items.current.year;
+        items = items; // trigger re-rendering of roll
     }
 
     /**
@@ -155,7 +176,7 @@
                 <!-- Roll -->
                 <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
                     <!-- Items on the roll -->
-                    {#each items as {left, middle: year, right}, itemIndex}
+                    {#each items.circle.data as {left, year, right}, itemIndex}
                         <div
                                 class="
                                     preserve-3d block absolute

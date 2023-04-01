@@ -1,20 +1,20 @@
 <script lang="ts">
     import datajson from "$lib/data/genders_by_year_profession_location.json";
     import genders_by_year from "$lib/data/genders_by_year.json";
-    import Roll from "$lib/components/roll/Roll.svelte";
-    import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
     import T from "$lib/components/T.svelte";
     import RollOptions from "$lib/components/roll/RollOptions.svelte";
-    import {CircularIterator} from "$lib/utils/list/CircularIterator";
     import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
+    import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator.js";
+    import Roll from "$lib/components/roll/Roll.svelte";
+    import {startYear} from "$lib/components/roll/startyear";
 
     // =================================================================================================================
     //                                              Type definitions
     // =================================================================================================================
-    type label = {left: number, middle: number, right: number}
+    type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number}
 
     // =================================================================================================================
@@ -63,8 +63,12 @@
     let coloursOnRoll: {title: string, rgb: {red: number, green: number, blue: number}}[]
 
     // content list and front side for the roll
-    let content: CircularLinkedList<label>;
-    let frontLabelOnRoll: label;
+    let defaultList: CircularArrayList<label> = new CircularArrayList();
+    for(let i = 0; i < 20; i++) {
+        defaultList.add({left: 50, year: i, right: 50});
+    }
+    let content = new  CircularArrayIterator<label>(defaultList);
+    let frontLabelOnRoll: {left: 0, year: 1890, right: 0};
 
     // roll options
     let professionList;
@@ -145,27 +149,29 @@
      */
     const fillRoll = (json?: JSON) => {
         calculateMaximumBarValue();
-        content = new CircularLinkedList<label>();
+        let contentList = new CircularArrayList<label>();
         for (const year of Object.keys(genders_by_year)) {
             let item: label;
             const mode = (profession == "alle" | profession == undefined) && (country == "alle" | country == undefined);
             item = {
                 left: mode ? genders_by_year[year][leftGender] : getValue(year, leftGender),
-                middle: Number(year),
+                year: Number(year),
                 right: mode ? genders_by_year[year][rightGender] : getValue(year, rightGender)
             };
-            if (item.middle < 1946) {
-                content.add(item);
+            if (item.year < 1946) {
+                contentList.add(item);
             }
         }
-        let log = "";
+        content = contentList.iterator();
+
+        /*let log = "";
         for(const year in json) {
             if(profession == "alle" && country == "alle") {
                 log += JSON.stringify(json[year]) + "\n";
             } else {
                 log += JSON.stringify(json[year]) + "\n";
             }
-        }
+        }*/
         //console.log(log);
     }
 
@@ -202,6 +208,8 @@
     data.getProfessionList(addProfessionsToOptionMenu);
     data.getLocationList(addLocationsToOptionMenu);
     $: {
+        profession = profession;
+        country = country;
         console.log("profession: " + profession + "; location: " + country);
         /*if(profession == "alle" && country == "alle") {
             data.getAllDefault(fillRoll);
@@ -218,7 +226,7 @@
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}]
     frontLabelOnRoll = {
         left: 1,
-        middle: 1890,
+        year: 1890,
         right: 0
     };
 
@@ -234,15 +242,17 @@
     <!-- Roll and Customizations -->
     <div class="flex flex-col lg:w-2/3">
         <!-- Roll -->
-        <Roll
-                className="pb-2"
-                bind:labels={content}
-                barNames={genderPairs[genderPairPosition]}
-                bind:max={max}
-                bind:frontLabel={frontLabelOnRoll}
-                bind:leftColour={coloursOnRoll[0].rgb}
-                bind:rightColour={coloursOnRoll[1].rgb}
-        />
+        {#key content}
+            <Roll
+                    className="pb-2"
+                    labels={content}
+                    barNames={genderPairs[genderPairPosition]}
+                    bind:max={max}
+                    bind:frontLabel={frontLabelOnRoll}
+                    bind:leftColour={coloursOnRoll[0].rgb}
+                    bind:rightColour={coloursOnRoll[1].rgb}
+            />
+        {/key}
         <!-- Customization of the roll -->
         <div class="flex flex-col justify-between grow p-2 border-t border-firebrick-500 dark:border-firebrick-1000">
             <div>
@@ -351,7 +361,7 @@
             "
     >
         <h1 class="text-3xl font-semibold text-center">
-            <T de="Die Filmindustrie im Jahr" en="The film industry in the year"/> {frontLabelOnRoll.middle}
+            <T de="Die Filmindustrie im Jahr" en="The film industry in the year"/> {frontLabelOnRoll.year}
         </h1>
         <div>
             <h2 class="text-lg font-semibold"><T de="Geschlechterverteilung" en="Gender distribution" /></h2>

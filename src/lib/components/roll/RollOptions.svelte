@@ -1,6 +1,4 @@
 <script lang="ts">
-    import {CircularIterator} from "$lib/utils/list/CircularIterator";
-    import {CircularLinkedList} from "$lib/utils/list/CircularLinkedList";
     import CheveronUp from "$lib/icons/components/CheveronUp.svelte";
     import CheveronDown from "$lib/icons/components/CheveronDown.svelte";
     import T from "$lib/components/T.svelte";
