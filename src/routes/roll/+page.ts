@@ -5,6 +5,9 @@ interface Consumer<T> {
     (t: T): void;
 }
 
+const ALL = undefined;
+
+
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -64,29 +67,13 @@ export function load({fetch}) {
      * @return Promise<JSON> JSON containing all years with requested gender, location and profession.
      */
     const getProfessionLocation = (profession: string, location: string, consumer: Consumer<JSON>): void => {
-        getData(undefined, undefined,undefined, undefined, location, profession).then(consumer);
+        getData(ALL, ALL, ALL, ALL, location, profession).then(consumer);
     }
-
-    /**
-     * Returns the default data.
-     */
-    const getDefault = (): Promise<JSON> => {
-        return fetch(domainString + "/api/genders-by-year").then((response: Response) => response.json());
-    }
-
-    /**
-     * Performs a consumer on the default data.
-     * @param consumer function performed on default data.
-     */
-    const getAllDefault = (consumer: Consumer<JSON>): void => {
-        getDefault().then(consumer);
-    }
-
+    
     return {
         getProfessionList,
         getLocationList,
         getProfessionLocation,
-        getAllDefault,
         years: {
             first: 1890,
             last: 2021

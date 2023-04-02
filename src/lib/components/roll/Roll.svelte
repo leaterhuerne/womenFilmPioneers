@@ -4,23 +4,25 @@
     import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator";
     import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
     import {currentYear} from "$lib/components/roll/currentYear.js";
+
+    //==================================================================================================================
+    //                                              type definitions
+    //==================================================================================================================
     type label = {left: number, year: number, right: number}
     type rgb = {red: number, green: number, blue: number};
 
+    //==================================================================================================================
+    //                                              variable definitions
+    //==================================================================================================================
     export let className: string;
     export let leftColour: rgb = {red: 255, green: 0, blue: 0};
     export let rightColour: rgb = {red: 0, green: 0, blue: 255};
     export let max = 100;
-
     export let barNames= {left: "left", right: "right"};
+    export let frontLabel: label;
 
-    export const rollControlInformation = {
-        de: "Um die Rolle zu drehen die Cursortasten hoch und runter, sowie das Mausrad verwendet werden.",
-        en: "You can use the cursor keys up and down and the mousewheel to rotate the roll."
-    };
-
+    // create default content for the roll
     let defaultList: CircularArrayList<label> = new CircularArrayList();
-
     let itemList: CircularArrayList<label> = new CircularArrayList<label>();
     for(let i = 0; i < 30; i++) {
         defaultList.add({left: 50, year: i, right: 50});
@@ -38,51 +40,53 @@
     const UP = true;
     const DOWN = false;
 
+    //define front label of the roll
     let currentLabel: label;
 
+    // calculate the inner radius of the regular n-polygon and set rotation angle
+    const innerRadiusofRoll = (50 / 2) * (1 / Math.tan(Math.PI / items.circle.size));
+    const rotationAngle = 360 / SIDES_ON_ROLL;
+
+    // roll state
+    let currdeg  = 0;                       // rotation degree
+    let rotation = "";                      // rotation style string
+
+    let windowWidth: number;
+
+    //==================================================================================================================
+    //                                              functions
+    //==================================================================================================================
     /**
      * Fills the sides which are visible at mount.
      */
-    const fillRoll = () => {
-        const turnToStartYear = (iterator: CircularArrayIterator<label>) => {
+    const populateRoll = () => {
+        /**
+         * Turns the given iterator to a given year.
+         * @param iterator Iterator to turn.
+         */
+        const goToStartYear = (iterator: CircularArrayIterator<label>) => {
             while(iterator.current.year != $currentYear) {
                 iterator.next()
             }
         }
-        turnToStartYear(labels);
+        goToStartYear(labels);
         for (let i = 0; i < 5; i++) {
             items.setCurrent(labels.current);
             items.next();
             labels.next();
         }
-        turnToStartYear(items);
+        goToStartYear(items);
         items.previous();
-        turnToStartYear(labels);
+        goToStartYear(labels);
         labels.previous();
         for (let i = 0; i < 5; i++) {
             items.setCurrent(labels.current);
             items.previous();
             labels.previous();
         }
-        turnToStartYear(items);
-        turnToStartYear(labels);
+        goToStartYear(items);
+        goToStartYear(labels);
     }
-
-    // if data for the roll changed, rerender roll
-    /*$: {*/
-        currentLabel = labels.current;
-        fillRoll();
-    /*}*/
-
-    // calculate the inner radius of the regular n-polygon
-    const innerRadiusofRoll = (50 / 2) * (1 / Math.tan(Math.PI / items.circle.size));
-
-    const rotationAngle = 360 / SIDES_ON_ROLL;
-    // roll state
-    let currdeg  = 0;                       // rotation degree
-    let rotation = "";                      // rotation style string
-
-    export let frontLabel = items.current;
 
     /**
      * Handles one-step rotation of the roll.
@@ -139,8 +143,6 @@
         }
     }
 
-    let windowWidth: number;
-
     /**
      * Ensures the visibility of a small value on the bar
      * @param value data point to display
@@ -148,13 +150,20 @@
     const display = (value: number) => {
         return value == 0 ? 0 : Math.max(value, 0.4);
     };
+
+    //==================================================================================================================
+    //                                       Initialization of the component
+    //==================================================================================================================
+
+    currentLabel = labels.current;
+    populateRoll();
+    frontLabel = items.current;
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} on:keydown={rollByKey}/>
 <div class="{className} flex flex-col w-full">
     <!-- Bar names -->
     <div class="grid grid-cols-2 place-items-center gap-2 p-2 text-xl font-semibold">
-        <!-- TODO -->
         <p>
             <T
                     de={barNames.left  === "male" ? "Männlich" : (barNames.left  === "female" ? "Weiblich" : "Divers/Unbekannt")}
@@ -189,14 +198,15 @@
                                     opacity-[0.99] f
                                     flex justify-center place-items-center gap-2
                                 "
-                                style="transform: rotateX({rotationAngle * itemIndex}deg) translateZ({innerRadiusofRoll}px)"
+                                style="transform: {'rotateX(' + rotationAngle * itemIndex + 'deg)'} translateZ({innerRadiusofRoll}px)"
                         >
                             <!-- left bar -->
                             <div
                                     class="h-full grow"
-                                    style="background: linear-gradient(
-                                    270deg,
-                                    rgba({leftColour.red},{leftColour.green},{leftColour.blue}, 1){display((left / max) * 100)}%,
+                                    style="background: {'linear-gradient(\n' +
+                                    '270deg, ' +
+                                    'rgba(' + leftColour.red + ', ' + leftColour.green + ', ' + leftColour.blue + ', 1)'}
+                                    {display((left / max) * 100)}%,
                                     rgba(255,255,255,0) {display((left / max) * 100)}%);"
                             >
                             </div>
@@ -205,9 +215,10 @@
                             <!-- right bar -->
                             <div
                                     class="h-full grow"
-                                    style="background: linear-gradient(
-                                    90deg,
-                                    rgba({rightColour.red},{rightColour.green},{rightColour.blue}, 1) {display((right / max) * 100)}%,
+                                    style="background: {'linear-gradient(\n' +
+                                    '90deg, ' +
+                                    'rgba(' + rightColour.red + ', ' + rightColour.green + ', ' + rightColour.blue + ', 1)'}
+                                    {display((right / max) * 100)}%,
                                     rgba(255,255,255,0) {display((right / max) * 100)}%);"
                             >
                             </div>
@@ -217,6 +228,7 @@
             </div>
         </div>
     </div>
+    <!-- Roll information -->
     <div class="flex items-center gap-2 text-sm pl-2">
         <InformationOutline darkColor="#D2CAB3" />
         <p><T de="100% auf der Rolle entsprechen {max} Personen." en="100% on roll equals {max} people." /></p>

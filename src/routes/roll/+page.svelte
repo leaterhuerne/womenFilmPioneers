@@ -18,26 +18,18 @@
     //                                                 Variables
     // =================================================================================================================
 
+    // define constants
     const ALL = undefined;
-    const yearSpan = {first: 1895, last: 1960};
+    const yearSpan = {first: 1895, last: 1950};
 
     /** @type {import('./$types').PageData} */
     export let data;
 
     //gender string map
     const genderMap = {
-        male: {
-            de: "Männlich",
-            en: "Male"
-        },
-        female: {
-            de: "Weiblich",
-            en: "Female"
-        },
-        unknown: {
-            de: "Divers/Unbekannt",
-            en: "Queer/Unknown"
-        }
+        male: {de: "Männlich", en: "Male"},
+        female: {de: "Weiblich", en: "Female"},
+        unknown: {de: "Divers/Unbekannt", en: "Queer/Unknown"}
     }
 
     // Calculate the maximum on the roll
@@ -61,7 +53,7 @@
     let buttonRotation: string;
 
     // colours on the roll
-    let coloursOnRoll: {title: string, rgb: {red: number, green: number, blue: number}}[]
+    let coloursOnRoll: {title: string, rgb: {red: number, green: number, blue: number}}[];
 
     // content list and front side for the roll
     let content:  CircularArrayIterator<label>;
@@ -218,39 +210,46 @@
     }
 
     /**
-     * Populates the profession menu.
-     * @param json contains list of professions
+     * Populates the Roll Options.
      */
-    const addProfessionsToOptionMenu = (json: JSON) => {
-        let list = new CircularArrayList("alle");
-        for(const profession in json) {
-            list.add(json[profession]);
+    const populateOptions = () => {
+        /**
+         * Populates the profession menu.
+         * @param json contains list of professions
+         */
+        const addProfessionsToOptionMenu = (json: JSON) => {
+            let list = new CircularArrayList("alle");
+            for(const profession in json) {
+                list.add(json[profession]);
+            }
+            professionList = list.iterator();
         }
-        professionList = list.iterator();
-    }
 
-    /**
-     * Populates the location menu.
-     * @param json contains list of locations.
-     */
-    const addLocationsToOptionMenu = (json: JSON) => {
-        let list = new CircularArrayList("alle");
-        for(const country in json) {
-            list.add(json[country]);
+        /**
+         * Populates the location menu.
+         * @param json contains list of locations.
+         */
+        const addLocationsToOptionMenu = (json: JSON) => {
+            let list = new CircularArrayList("alle");
+            for(const country in json) {
+                list.add(json[country]);
+            }
+            countryList = list.iterator();
         }
-        countryList = list.iterator();
+
+        // populate Roll Options
+        data.getProfessionList(addProfessionsToOptionMenu);
+        data.getLocationList(addLocationsToOptionMenu);
+
     }
-
-
 
     // =================================================================================================================
     //                                      Initialization of component
     // =================================================================================================================
     resetRoll();
-    data.getProfessionList(addProfessionsToOptionMenu);
-    data.getLocationList(addLocationsToOptionMenu);
+    populateOptions();
     $: {
-        // trigger rerendering
+        // trigger re-rendering
         leftGender = leftGender;
         rightGender = rightGender;
         profession = profession;
@@ -336,27 +335,27 @@
         >
             <div class="relative flex justify-between px-2">
                 <button class="flex grow w-1/2" on:click={() => handleGenderChangeButton("left")}>
-                    <div class="absolute left-2 ">
+                    <span class="absolute left-2 ">
                         <CheveronLeft size=2 darkColor="#D2CAB3" />
-                    </div>
-                    <div class="font-semibold w-full text-end">
+                    </span>
+                    <span class="font-semibold w-full text-end">
                         <T
                                 de={leftGender === "male" ? "Männlich" : (leftGender === "female" ? "Weiblich" : "Divers/Unbekannt")}
                                 en={leftGender === "male" ? "Male" : (leftGender === "female" ? "Female" : "Queer/Unknown")}
                         />
-                    </div>
+                    </span>
                 </button>
                 <p class="font-semibold text-xl mx-2">|</p>
                 <button class="flex grow w-1/2" on:click={() => handleGenderChangeButton("right")}>
-                    <div class="font-semibold w-full text-start">
+                    <span class="font-semibold w-full text-start">
                         <T
                                 de={rightGender === "male" ? "Männlich" : (rightGender === "female" ? "Weiblich" : "Divers/Unbekannt")}
                                 en={rightGender === "male" ? "Male" : (rightGender === "female" ? "Female" : "Queer/Unknown")}
                         />
-                    </div>
-                    <div class="absolute right-2">
+                    </span>
+                    <span class="absolute right-2">
                         <CheveronRight size=2 darkColor="#D2CAB3" />
-                    </div>
+                    </span>
                 </button>
             </div>
             <ColorPicker
