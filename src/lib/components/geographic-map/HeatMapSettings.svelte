@@ -7,6 +7,7 @@
     // data from load function in +page.ts, data of endpoint genders-by-year-profession-location
     export let data: {getData, getProfessionList, getLocationList} = {};
     export let genders: {female: boolean, male: boolean, unknown: boolean} = {female: false, male: false, unknown: false};
+    export let absoluteMap: boolean = true;
     export let profession: string | undefined = profession ?? "";
     export let className: string = "";
 
@@ -59,16 +60,24 @@
         " hover:bg-firebrick-500 hover:dark:bg-firebrick-800 dark:hover:border border-firebrick-700";
 
     // initial styling of all gender buttons
-    let initialGenderButtonStyle: string = "text-md font-bold" +
+    let initialButtonStyle: string = "text-md font-bold" +
         " border border-amber-500 dark:border-none rounded" +
         " bg-amber-400 dark:bg-firebrick-800" +
         " h-8";
 
+    // style of an activated button
+    let activatedButtonStyle: string = "text-lg font-bold" +
+        " ring-2 ring-amber-500 rounded dark:bg-firebrick-700 dark:ring-firebrick-600" +
+        " bg-amber-400 dark:bg-firebrick-800" +
+        " h-8";
+
     // current styling of all gender buttons
-    let genderButtonStyles: {female: string, male: string, unknown: string} = {
-        female: initialGenderButtonStyle,
-        male: initialGenderButtonStyle,
-        unknown: initialGenderButtonStyle
+    let currentButtonStyles: {female: string, male: string, unknown: string, absolute: string, relative: string} = {
+        female: initialButtonStyle,
+        male: initialButtonStyle,
+        unknown: initialButtonStyle,
+        absolute: activatedButtonStyle,
+        relative: initialButtonStyle
     }
 
     /**
@@ -77,12 +86,19 @@
      * @param gender the name of the button to be activated or deactivated
      */
     function activateGenderButton(gender: string): void {
-        let activatedButtonStyle: string = "text-lg font-bold" +
-            " ring-2 ring-amber-500 rounded dark:ring-firebrick-700" +
-            " bg-amber-400 dark:bg-firebrick-800" +
-            " h-8";
-        genderButtonStyles[gender] = genders[gender] ? initialGenderButtonStyle : activatedButtonStyle;
+        currentButtonStyles[gender] = genders[gender] ? initialButtonStyle : activatedButtonStyle;
         genders[gender] = !genders[gender];
+    }
+
+    /**
+     * Activates the 'relative' button and deactivates the 'absolute' button or vice versa.
+     */
+    function toggleAbsoluteRelativeButtons(): void {
+        currentButtonStyles.absolute =
+            currentButtonStyles.absolute === activatedButtonStyle ? initialButtonStyle : activatedButtonStyle;
+        currentButtonStyles.relative =
+            currentButtonStyles.relative === activatedButtonStyle ? initialButtonStyle : activatedButtonStyle;
+        absoluteMap = !absoluteMap;
     }
 
     /**
@@ -99,20 +115,33 @@
 <div class={className}>
     <!-- Grid layout: 1.Row: Gender Buttons, 2.Row: Professions 3.Row: Profession list (hidden) -->
     <div class="grid grid-cols-9 place-items-center gap-2">
+        <!-- Buttons for 'absolute' or 'relative' Map -->
+        <div class="col-span-9 grid grid-cols-2 gap-2 w-full border-blue-500">
+            <button class="w-full {currentButtonStyles.absolute}"
+                    on:click={toggleAbsoluteRelativeButtons}
+            >
+                <T en="including germany" de="Mit Deutschland" />
+            </button>
+            <button class="w-full {currentButtonStyles.relative}"
+                    on:click={toggleAbsoluteRelativeButtons}
+            >
+                <T en="excluding germany" de="Ohne Deutschland" />
+            </button>
+        </div>
         <!-- Gender Button: female -->
-        <button class="col-span-3 w-full {genderButtonStyles.female}"
+        <button class="col-span-3 w-full {currentButtonStyles.female}"
                 on:click={() => activateGenderButton("female")}
         >
             <T en="female" de="weiblich" />
         </button>
         <!-- Gender Button: male -->
-        <button class="col-span-3 w-full {genderButtonStyles.male}"
+        <button class="col-span-3 w-full {currentButtonStyles.male}"
                 on:click={() => activateGenderButton("male")}
         >
             <T en="male" de="männlich" />
         </button>
         <!-- Gender Button: unknown -->
-        <button class="col-span-3 w-full {genderButtonStyles.unknown}"
+        <button class="col-span-3 w-full {currentButtonStyles.unknown}"
                 on:click={() => activateGenderButton("unknown")}
         >
             <T en="unknown" de="unbekannt" />

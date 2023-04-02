@@ -9,6 +9,7 @@
 
     /** @type {import('./$types').PageData} */
     export let data;    // data from load function in page.ts
+    const ALLE = "";    // constant for "no specific profession is choosed"
 
     // a map of country codes as key and name of the country as value
     const countryCodesMap = {
@@ -54,9 +55,11 @@
     let chosenGenders: {female: boolean, male: boolean, unknown: boolean} = {   // genders with boolean field...
         female: false, male: false, unknown: false                              // ...to mark as chosen
     };
-    let chosenProfession: string = "";                                          // chosen profession
+    let chosenProfession: string = ALLE;                                          // chosen profession
     let heatMapColors: {name: string; value: number}[] = [];            // country with values between min and max
-    let maxPersonsOfAllYears: number = 0;                               // upper bound of the map
+    let mapUpperBound: number = 0;                                      // upper bound of the map
+    // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
+    let germanyCounted: boolean = true;
 
      /*Random Colors for the HeatMap:
         // create Random values between lower bound and upper bound for coloring the HeatMap
@@ -144,13 +147,11 @@
         }
         for (const gender of getChosenGenders()) {
             for (const country in json[year][gender]) {
-                // no specific profession chosen
-                if (chosenProfession === "" && json[year] != undefined) {
+                if (chosenProfession === ALLE && json[year] != undefined) {         // all professions chosen
                     if (Object.keys(countryCodesValuesMap).includes(country)) {
                         countryCodesValuesMap[country].value += json[year][gender][country];
                     }
-                // specific profession
-                } else {
+                } else {                                                            // specific profession
                     if (json[year] != undefined) {
                         if (Object.keys(countryCodesValuesMap).includes(country)) {
                             countryCodesValuesMap[country].value += json[year][gender][country][chosenProfession] ?? 0;
@@ -167,45 +168,88 @@
      * @param json database
      */
     function calculateMaximumOfAllYears(json): void {
-        maxPersonsOfAllYears = 0;
+        mapUpperBound = 0;      // reset upper bound
         for (const yearEntry in json) {
             let amountPerYear: number = 0;
             for (const gender of getChosenGenders()) {
                 for (const country in json[yearEntry][gender]) {
-                    // no specific profession chosen
-                    if (chosenProfession === "") {
+                    if (chosenProfession === ALLE) {        // all professions chosen
                         amountPerYear += json[yearEntry][gender][country] ?? 0;
-                    // specific profession
-                    } else {
+                    } else {                                // specific profession
                         amountPerYear += json[yearEntry][gender][country][chosenProfession]?? 0;
                     }
                 }
             }
-            maxPersonsOfAllYears = Math.max(maxPersonsOfAllYears, amountPerYear);
+            mapUpperBound = Math.max(mapUpperBound, amountPerYear);
         }
     }
 
-    // if genders or profession changes then maxima must be recalculated
-    $: {
-        chosenGenders = chosenGenders;
-        // specific profession
-        if (chosenProfession != "") {
-            data.getDataSpecificProfession(json => calculateMaximumOfAllYears(json), chosenProfession);
-        } else {
-            data.getData(json => calculateMaximumOfAllYears(json));
+    function calculateMaximumExcludingGermany(json): void {
+        mapUpperBound = 0;      // reset upper bound
+        for (const yearEntry in json) {
+            let amountPerYear: number = 0;
+            for (const gender of getChosenGenders()) {
+                for (const country in json[yearEntry][gender]) {
+                    // don't count germany
+                    if (country === "(DE)" || country === "DE" || country === "DE(" || country === "De") {
+                        continue;
+                    }
+                    if (chosenProfession === ALLE) {        // all professions chosen
+                        amountPerYear += json[yearEntry][gender][country] ?? 0;
+                    } else {                                // specific profession
+                        amountPerYear += json[yearEntry][gender][country][chosenProfession] ?? 0;
+                    }
+                }
+            }
+            mapUpperBound = Math.max(mapUpperBound, amountPerYear);
         }
-        //console.log(maxPersonsOfAllYears)
+    }
+
+    function calculateMaximum() {
+        if (germanyCounted) {
+            data.getDataProfession(calculateMaximumOfAllYears, chosenProfession);
+        } else {
+            data.getDataProfession(calculateMaximumExcludingGermany, chosenProfession);
+        }
+    }
+
+    /**
+     * Calculates the maximum amount of persons in the current year
+     * @param json database
+     */
+    function calculateMaximumPerYear(json): void {
+        mapUpperBound = 0;      // reset upper bound
+        for (const gender of getChosenGenders()) {
+            for (const country in json[year][gender]) {
+                if (chosenProfession === ALLE && json[year] != undefined) {                 // all professions chosen
+                    mapUpperBound += json[year][gender][country];
+                } else {
+                    mapUpperBound += json[year][gender][country][chosenProfession] ?? 0;    // specific profession
+                }
+            }
+        }
+        mapUpperBound = mapUpperBound === 0 ? 1 : mapUpperBound;
+    }
+
+    // if genders, profession or maximum-setting changes then maximum must be recalculated
+    $: {
+        // trigger re-rendering
+        chosenGenders = chosenGenders;
+        chosenProfession = chosenProfession;
+        germanyCounted = germanyCounted;
+        calculateMaximum();
     }
 
     // reactive block: update Heat map on each change of year or settings
     $: {
         chosenGenders = chosenGenders; // reactivity for changed gender buttons
+        year = year;
         // no specific profession
-        if (chosenProfession === "") {
-            data.getData(json => {fillMap(json)}, year);
+        if (chosenProfession === ALLE) {
+            data.getData(fillMap, year);
         // specific profession
         } else {
-            data.getData(json => {fillMap(json)}, year, undefined, chosenProfession);
+            data.getDataSpecificYearAndProfession(fillMap, year, chosenProfession);
         }
     }
 
@@ -226,7 +270,7 @@
                 countryHeatValues={heatMapColors}
                 colorFrom={heatMapBoundColors[0].rgb}
                 colorTo={heatMapBoundColors[1].rgb}
-                upperBound={maxPersonsOfAllYears}
+                upperBound={mapUpperBound}
                 lowerBound=0
                 state={colorInput}
         />
@@ -273,7 +317,12 @@
         {/if}
         <!-- Settings for HeatMap -->
         <div class="m-2">
-            <HeatMapSettings data={data} bind:genders={chosenGenders} bind:profession={chosenProfession} />
+            <HeatMapSettings
+                    data={data}
+                    bind:genders={chosenGenders}
+                    bind:profession={chosenProfession}
+                    bind:absoluteMap={germanyCounted}
+            />
         </div>
     </div>
 
@@ -284,8 +333,8 @@
     <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
         Detaillierte Informationen:
         <p>
-            <T de="Ein maximal eingefärbtes Land entspricht {maxPersonsOfAllYears} Personen."
-               en="A maximum colored country equals {maxPersonsOfAllYears} persons."
+            <T de="Ein maximal eingefärbtes Land entspricht {mapUpperBound} Personen."
+               en="A maximum colored country equals {mapUpperBound} persons."
         />
         </p>
     </div>

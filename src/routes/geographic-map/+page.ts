@@ -33,8 +33,13 @@ export function load({ fetch }) {
      * @param consumer
      * @param profession
      */
-    function getDataSpecificProfession(consumer: (json: JSON) => void, profession: string): void {
-        getData(consumer, undefined, undefined, profession);
+    function getDataProfession(consumer: (json: JSON) => void, profession: string): void {
+        getData(consumer, undefined, undefined, profession.length > 0 ? profession : undefined);
+    }
+
+    function getDataSpecificYearAndProfession(consumer: (json: JSON) => void,
+                                              year: number | string, profession: string): void {
+        getData(consumer, year, undefined, profession);
     }
 
     /**
@@ -57,7 +62,8 @@ export function load({ fetch }) {
 
     return {
         getData,
-        getDataSpecificProfession,
+        getDataProfession,
+        getDataSpecificYearAndProfession,
         getProfessionList,
         getLocationList
     };
