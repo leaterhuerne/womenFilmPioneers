@@ -5,6 +5,7 @@
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
     import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
+    import T from "$lib/components/T.svelte";
 
     /** @type {import('./$types').PageData} */
     export let data;    // data from load function in page.ts
@@ -55,6 +56,7 @@
     };
     let chosenProfession: string = "";                                          // chosen profession
     let heatMapColors: {name: string; value: number}[] = [];            // country with values between min and max
+    let maxPersonsOfAllYears: number = 0;                               // upper bound of the map
 
      /*Random Colors for the HeatMap:
         // create Random values between lower bound and upper bound for coloring the HeatMap
@@ -106,26 +108,24 @@
      * all genders should be considered.
      * @return Returns an object with all genders and its real status to be considered.
      */
-    function getActualGenderStatus(): {female: boolean, male: boolean, unknown: boolean} {
-        let genderStatus: { female: boolean, male: boolean, unknown: boolean } = {...chosenGenders};
-        if (!genderStatus.female && !genderStatus.male && !genderStatus.unknown) {
-            for (const gender of Object.keys(genderStatus)) {
-                genderStatus[gender] = true;
-            }
-        }
-        return genderStatus;
+    function getChosenGenders(): string[] {
+        let res = []
+        Object.keys(chosenGenders).forEach(e => chosenGenders[e] ? res.push(e) : null);
+        res = Object.values(chosenGenders).includes(true) ? res : ["male", "female", "unknown"];
+        return res;
     }
 
+    /**
+     * Method to calculate for each country the amount of persons who worked there.
+     * @param json database
+     */
     function fillMap(json: JSON) {
         function logCountryCodesValuesMap() {
             let log = "fillMap: \n";
             for (const key in countryCodesValuesMap) {
                 log += key + "/" + countryCodesValuesMap[key].name + ": " + countryCodesValuesMap[key].value + "\n";
             }
-            console.log(log);
         }
-        // if no gender is chosen all genders should be calculated
-        let genderStatus = getActualGenderStatus();
         /* {
                 "DE": {
                     "name": "germany",
@@ -139,59 +139,45 @@
            }
          */
         let countryCodesValuesMap = {};
-        for (const country of Object.keys(countryCodesMap)) {
+        for (const country in countryCodesMap) {
             countryCodesValuesMap[country] = {name: countryCodesMap[country], value: 0};
         }
-        for (const gender in genderStatus) {
-            // is current gender chosen?
-            if (genderStatus[gender]) {
+        for (const gender of getChosenGenders()) {
+            for (const country in json[year][gender]) {
                 // no specific profession chosen
-                if (chosenProfession === "") {
-                    for (const country in json[year][gender]) {
-                        if (Object.keys(countryCodesValuesMap).includes(country)) {
-                            countryCodesValuesMap[country].value += json[year][gender][country];
-                        }
+                if (chosenProfession === "" && json[year] != undefined) {
+                    if (Object.keys(countryCodesValuesMap).includes(country)) {
+                        countryCodesValuesMap[country].value += json[year][gender][country];
                     }
                 // specific profession
                 } else {
-                    for (const country in json[year][gender]) {
+                    if (json[year] != undefined) {
                         if (Object.keys(countryCodesValuesMap).includes(country)) {
-                            countryCodesValuesMap[country].value += json[year][gender][country][chosenProfession]?? 0;
+                            countryCodesValuesMap[country].value += json[year][gender][country][chosenProfession] ?? 0;
                         }
                     }
                 }
             }
         }
-        //logCountryCodesValuesMap();
         heatMapColors = Object.values(countryCodesValuesMap);
-        console.log(heatMapColors);
     }
 
-
-    let maxPersonsOfAllYears: number = 0;       // upper bound of the map
+    /**
+     * Calculates the maximum amount of all persons per year
+     * @param json database
+     */
     function calculateMaximumOfAllYears(json): void {
         maxPersonsOfAllYears = 0;
-        let genderStatus = getActualGenderStatus();
         for (const yearEntry in json) {
             let amountPerYear: number = 0;
-            for (const gender in genderStatus) {
-                // is current gender chosen
-                if (genderStatus[gender]) {
+            for (const gender of getChosenGenders()) {
+                for (const country in json[yearEntry][gender]) {
                     // no specific profession chosen
                     if (chosenProfession === "") {
-                        for (const country in json[yearEntry][gender]) {
-                            if (Object.keys(countryCodesMap).includes(country)) {
-                                amountPerYear += json[yearEntry][gender][country];
-                                console.log(amountPerYear);
-                            }
-                        }
+                        amountPerYear += json[yearEntry][gender][country] ?? 0;
                     // specific profession
                     } else {
-                        for (const country in json[yearEntry][gender]) {
-                            if (Object.keys(countryCodesMap).includes(country)) {
-                                amountPerYear += json[yearEntry][gender][country][chosenProfession]?? 0;
-                            }
-                        }
+                        amountPerYear += json[yearEntry][gender][country][chosenProfession]?? 0;
                     }
                 }
             }
@@ -202,9 +188,13 @@
     // if genders or profession changes then maxima must be recalculated
     $: {
         chosenGenders = chosenGenders;
-        chosenProfession = chosenProfession;
-        data.getData(json => calculateMaximumOfAllYears(json));
-
+        // specific profession
+        if (chosenProfession != "") {
+            data.getDataSpecificProfession(json => calculateMaximumOfAllYears(json), chosenProfession);
+        } else {
+            data.getData(json => calculateMaximumOfAllYears(json));
+        }
+        //console.log(maxPersonsOfAllYears)
     }
 
     // reactive block: update Heat map on each change of year or settings
@@ -292,6 +282,11 @@
 
     <!-- Detailed Information to Women -->
     <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
-        Detaillierte Informationen
+        Detaillierte Informationen:
+        <p>
+            <T de="Ein maximal eingefärbtes Land entspricht {maxPersonsOfAllYears} Personen."
+               en="A maximum colored country equals {maxPersonsOfAllYears} persons."
+        />
+        </p>
     </div>
 </div>
