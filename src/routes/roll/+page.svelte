@@ -1,6 +1,4 @@
 <script lang="ts">
-    import datajson from "$lib/data/genders_by_year_profession_location.json";
-    import genders_by_year from "$lib/data/genders_by_year.json";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
@@ -21,7 +19,7 @@
     // =================================================================================================================
 
     const ALL = undefined;
-    const yearSpan = {first: 1895, last: 1945};
+    const yearSpan = {first: 1895, last: 1960};
 
     /** @type {import('./$types').PageData} */
     export let data;
@@ -114,65 +112,100 @@
      * Fills the circular list with data for the roll.
      */
     const populateRoll = () => {
+        // define types
+        type bar = {left: number, right: number}
         // define constants
-        const iterateOver = (json: JSON,  consumer: (json: JSON, year: string, gender: string) => void) => {
+        /**
+         * Iterates over the json coming from endpoint api/genders-by-year-profession-location?<params>
+         * @param json JSON
+         * @param consumer function caluclating label values from json.
+         */
+        const iterateOver = (json: JSON,  consumer: (json: JSON, year: string, gender: string, bars: bar) => void) => {
             for (const year in json) {
+                let bars = {left: 0, right: 0}
                 for (const gender in json[year]) {
-                    consumer(json, year, gender);
+                    consumer(json, year, gender, bars);
                 }
-                if (Number(year) >= yearSpan.first && Number(year) < yearSpan.last) {
-                    list.add({left: left, year: Number(year), right: right});
+                if (Number(year) >= yearSpan.first && Number(year) <= yearSpan.last) {
+                    list.add({left: bars.left, year: Number(year), right: bars.right});
                 }
-                max = Math.max(max, left, right);
+                max = Math.max(max, bars.left, bars.right);
             }
             content = list.iterator();
         };
 
-        const allProfessionsAllLocations = (json: JSON, year: string, gender: string) => {
+        /**
+         * Handles all professions and locations.
+         * @param json json from endpoint.
+         * @param year current year
+         * @param gender current gender
+         * @param bars bar values
+         */
+        const allProfessionsAllLocations = (json: JSON, year: string, gender: string, bars: bar) => {
             for (const location in json[year][gender]) {
                 if (gender == leftGender) {
-                    left += json[year][gender][location] ?? 0;
+                    bars.left += json[year][gender][location] ?? 0;
                 }
                 if (gender == rightGender) {
-                    right += json[year][gender][location] ?? 0;
+                    bars.right += json[year][gender][location] ?? 0;
                 }
             }
         };
 
-        const allProfessionsSpecificLocation = (json: JSON, year: string, gender: string) => {
+        /**
+         * Handles all professions and a specific location.
+         * @param json json from endpoint.
+         * @param year current year
+         * @param gender current gender
+         * @param bars bar values
+         */
+        const allProfessionsSpecificLocation = (json: JSON, year: string, gender: string, bars: bar) => {
             if (gender == leftGender) {
-                left += json[year][gender][country] ?? 0;
+                bars.left += json[year][gender][country] ?? 0;
             }
             if (gender == rightGender) {
-                right += json[year][gender][country] ?? 0;
+                bars.right += json[year][gender][country] ?? 0;
             }
         };
 
-        const specificProfessionAllLocations = (json: JSON, year: string, gender: string) => {
+        /**
+         * Handles a specific profession and all locations.
+         * @param json json from endpoint.
+         * @param year current year
+         * @param gender current gender
+         * @param bars bar values
+         */
+        const specificProfessionAllLocations = (json: JSON, year: string, gender: string, bars: bar) => {
             for(const location in json[year][gender]) {
                 if (gender == leftGender) {
-                    left += json[year][gender][location][profession] ?? 0;
+                    bars.left += json[year][gender][location][profession] ?? 0;
                 }
                 if (gender == rightGender) {
-                    right += json[year][gender][location][profession] ?? 0;
+                    bars.right += json[year][gender][location][profession] ?? 0;
                 }
             }
         };
 
-        const specificProfessionSpecificLocation = (json: JSON, year: string, gender: string) => {
-            if (gender == leftGender) {
-                left += json[year][gender][country][profession] ?? 0;
+        /**
+         * Handles a specific professions and a specific location.
+         * @param json json from endpoint.
+         * @param year current year
+         * @param gender current gender
+         * @param bars bar values
+         */
+        const specificProfessionSpecificLocation = (json: JSON, year: string, gender: string, bars: bar) => {
+            console.log(year + ", " + gender + ", " + country + ", " + profession);
+            if (gender == leftGender && json[year][gender][country] != undefined) {
+                bars.left += json[year][gender][country][profession] ?? 0;
             }
-            if (gender == rightGender) {
-                right += json[year][gender][country][profession] ?? 0;
+            if (gender == rightGender  && json[year][gender][country] != undefined) {
+                bars.right += json[year][gender][country][profession] ?? 0;
             }
         };
 
         //populate roll
         resetRoll();
         let list = new CircularArrayList<label>();
-        let left = 0;
-        let right = 0;
         if (profession == "alle" && country == "alle") {
             data.getProfessionLocation(ALL, ALL, (json: JSON) => iterateOver(json, allProfessionsAllLocations));
         } else if (profession == "alle" && country != "alle") {
@@ -180,7 +213,6 @@
         } else if (profession != "alle" && country == "alle") {
             data.getProfessionLocation(profession, ALL, (json: JSON) => iterateOver(json, specificProfessionAllLocations));
         } else {
-            //TODO Function does not work
             data.getProfessionLocation(profession, country, (json: JSON) => iterateOver(json, specificProfessionSpecificLocation));
         }
     }
