@@ -6,6 +6,7 @@
     import YearNumbers from "$lib/components/geographic-map/YearNumbers.svelte";
     import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
     import T from "$lib/components/T.svelte";
+    import {Europe} from "$lib/utils/geographic-map/Europe";
 
     /** @type {import('./$types').PageData} */
     export let data;    // data from load function in page.ts
@@ -58,15 +59,24 @@
     let chosenProfession: string = ALLE;                                          // chosen profession
     let heatMapColors: {name: string; value: number}[] = [];            // country with values between min and max
     let mapUpperBound: number = 0;                                      // upper bound of the map
-    let countryAmount: {country: string, amount: number} = {country: "", amount: 0};
+    let countryAmount: {countryDE: string, countryEN: string, amount: number} = {countryDE: "", countryEN: "", amount: 0};
+
+    function mouseAction(country) {
+        return countryAmount = {
+            countryDE: country.de,
+            countryEN: country.en,
+            amount: calculatePersonsPerLocation(country["key"])
+        };
+    }
+
     let svgListeners: {                                                 // listener for action on country
         onClick: (country) => void,
         onMouseOver: (country) => void,
         onMouseOut: (country) => void
     } = {
-        onClick: country => countryAmount = {country: country, amount: calculatePersonsPerLocation(country)},
-        onMouseOver: country => countryAmount = {country: country, amount: calculatePersonsPerLocation(country)},
-        onMouseOut: country => countryAmount = {country: country, amount: calculatePersonsPerLocation(country)}
+        onClick: country => mouseAction(country),
+        onMouseOver: country => mouseAction(country),
+        onMouseOut: country => mouseAction(country)
     };
     // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
     let germanyCounted: boolean = true;
@@ -133,45 +143,32 @@
      * @param json database
      */
     function fillMap(json: JSON) {
-        function logCountryCodesValuesMap() {
-            let log = "fillMap: \n";
-            for (const key in countryCodesValuesMap) {
-                log += key + "/" + countryCodesValuesMap[key].name + ": " + countryCodesValuesMap[key].value + "\n";
-            }
-        }
-        /* {
-                "DE": {
-                    "name": "germany",
-                    "value": 0
-                },
-                "UK": {
-                    "name": "unitedKingdom",
-                    "value": 0
-                },
-                ...
-           }
-         */
-        let countryCodesValuesMap = {};
-        for (const country in countryCodesMap) {
-            countryCodesValuesMap[country] = {name: countryCodesMap[country], value: 0};
+        let countryPeopleAmount: {name: string, value: number}[] = [];
+        let europe = new Europe();
+        for (const country in europe) {
+            countryPeopleAmount.push({name: country, value: 0});
         }
         for (const gender of getChosenGenders()) {
             for (const country in json[year][gender]) {
                 if (chosenProfession === ALLE && json[year] != undefined) {         // all professions chosen
-                    if (Object.keys(countryCodesValuesMap).includes(country)) {
-                        countryCodesValuesMap[country].value += json[year][gender][country];
+                    if (Object.keys(europe).includes(country)) {
+                        let index = countryPeopleAmount.findIndex(entry => entry.name === country);
+                        countryPeopleAmount[index].value += json[year][gender][country];
                     }
                 } else {                                                            // specific profession
                     if (json[year] != undefined) {
-                        if (Object.keys(countryCodesValuesMap).includes(country)) {
-                            countryCodesValuesMap[country].value += json[year][gender][country][chosenProfession] ?? 0;
+                        if (Object.keys(europe).includes(country)) {
+                            let index = countryPeopleAmount.findIndex(entry => entry.name === country);
+                            countryPeopleAmount[index].value += json[year][gender][country][chosenProfession] ?? 0;
                         }
                     }
                 }
             }
         }
-        heatMapColors = Object.values(countryCodesValuesMap);
+        console.log(countryPeopleAmount)
+        heatMapColors = countryPeopleAmount;
     }
+
 
     function calculatePersonsPerLocation(country: string): number {
         return heatMapColors.find(entry => entry.name === country).value;
@@ -321,8 +318,8 @@
             />
         </p>
         <p>
-            <T de="In {countryAmount.country} waren {countryAmount.amount} Personen beschäftigt."
-               en="In {countryAmount.country} worked {countryAmount.amount} persons."
+            <T de="In {countryAmount.countryDE} waren {countryAmount.amount} Personen beschäftigt."
+               en="In {countryAmount.countryEN} worked {countryAmount.amount} persons."
             />
         </p>
         <!-- SCREEN: Year numbers on top right side in the map -->

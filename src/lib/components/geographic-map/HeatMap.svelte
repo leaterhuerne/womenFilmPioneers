@@ -57,7 +57,8 @@
     function colorHeatMap(): Europe {
         let europeRes = new Europe();
         for (const country of countryHeatValues) {
-            europeRes[country.name] = mapColor(country.value);
+            europeRes[country.name].color = mapColor(country.value);
+            //europeRes[country.name] = mapColor(country.value);
         }
         return europeRes;
     }
@@ -68,7 +69,6 @@
         countryHeatValues = countryHeatValues;
         europe = colorHeatMap();
     }
-
 </script>
 
 <div class="{className} w-full">
