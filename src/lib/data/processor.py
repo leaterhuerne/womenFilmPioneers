@@ -236,10 +236,45 @@ def genders_by_year():
         file.write(json.dumps(years, indent=4))
     print("JSON written.")
 
+def films():
+    print("Loading database...")
+    database = get_database("database.json")
+    print("Database loaded.")
+
+    print("Creating JSON from film data...")
+    films = {}
+    for entry in database:
+        for film in database[entry]["filme"]:
+            film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
+            name = database[entry]["person"]["IDName"]
+            person = {
+                "gender": database[entry]["person"]["Geschlecht"],
+                "profession": database[entry]["filme"][film]["rel"],
+                "born": database[entry]["person"]["Geburtsdatum"],
+                "died": database[entry]["person"]["Sterbedatum"]
+            }
+            if film_title not in films:
+                year = database[entry]["filme"][film]["Jahr"]
+                films[film_title] = {
+                    "year": "unknown" if ((not year.isdigit()) or (not (1890 <= int(year) <= 2021))) else year,
+                    "location": database[entry]["filme"][film]["Region"],
+                    "people": {
+                        name: person
+                    }
+                }
+            else:
+                films[film_title]["people"][name] = person
+
+    print("JSON created.")
+
+    print("Writing JSON to file...")
+    with open("films.json", "w") as file:
+        file.write(json.dumps(films, indent=4))
+    print("JSON written.")
 
 
 def main():
-    genders_by_year()
+    films()
 
 
 if __name__ == "__main__":
