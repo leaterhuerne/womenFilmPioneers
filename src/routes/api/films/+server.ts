@@ -1,6 +1,19 @@
 import database from "$lib/data/films.json";
+import {error} from "@sveltejs/kit";
 type film = keyof typeof database;
 export function GET({ url }: { url:URL }) {
+    const checkIfYearInDatabase = (): void => {
+        if(Number(year) < 1890 || Number(year) > 2021) {
+            throw error(406, "The year \"" + year + "\" is not in the database.");
+        }
+    }
+
+    const checkIfGenderInDatabase = (): void => {
+        if(!(gender == "male" || gender == "female" || gender == "unknown")) {
+            throw error(406, "The gender \"" + gender + "\" is not in the database.");
+        }
+    }
+
     const ALL = undefined;
 
     const personList = url.searchParams.get("person-list");
@@ -11,7 +24,13 @@ export function GET({ url }: { url:URL }) {
     const year = url.searchParams.get("year");
     let json = {};
 
-    // Return list of all persons
+    function checkIfPersonInDatabase(result: {}) {
+        if (Object.keys(result).length == 0) {
+            throw error(406, "The person \"" + person + "\" is not in the database.");
+        }
+    }
+
+// Return list of all persons
     if(personList == "true") {
         const persons: Record<string, {"gender": string, "born": string, "died": string}> = {};
         for (const film in database) {
@@ -37,6 +56,7 @@ export function GET({ url }: { url:URL }) {
         }
         //0001: all films, all genders, all persons, specific year
         if(film == ALL && gender == ALL && person == ALL && year != ALL) {
+            checkIfYearInDatabase();
             for(const film in database) {
                 if(database[film as film]["year"] == url.searchParams.get("year")) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -50,6 +70,7 @@ export function GET({ url }: { url:URL }) {
         }
         //0010: all films, all genders, specific person, all years
         if(film == ALL && gender == ALL && person != ALL && year == ALL) {
+
             const films= {};
             for(const film in database) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -60,11 +81,23 @@ export function GET({ url }: { url:URL }) {
                     films[film] = database[film as film];
                 }
             }
+            checkIfPersonInDatabase(films);
             json = films;
         }
         //0011: all films, all genders, specific person, specific year
         if(film == ALL && gender == ALL && person != ALL && year != ALL) {
-
+            checkIfYearInDatabase();
+            const films: Record<string, {"location": string[], "people": {}}> = {};
+            for(const film in database) {
+                if(database[film as film]["year"] == year && (person?? "") in database[film as film]["people"]) {
+                    films[film] = {
+                        "location": database[film as film]["location"],
+                        "people": database[film as film]["people"]
+                    };
+                }
+            }
+            checkIfPersonInDatabase(films);
+            json = films;
         }
         //0100: all films, specific gender, all persons, all years
         if(film == ALL && gender != ALL && person == ALL && year == ALL) {
