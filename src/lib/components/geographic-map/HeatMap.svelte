@@ -10,17 +10,17 @@
     export let lowerBound: number = 0;              // The lower bound for interpolating between start and end color
     export let listeners: {                         // passing on listener from SVGEurope.svelte
         onClick: (country) => void,
-        onMouseOver: (country) => void,
-        onMouseOut: (country) => void
+        onMouseEnter: (country) => void,
+        onMouseLeave: (country) => void
     } = {
         onClick: country => console.log("The clicked country is " + country),
-        onMouseOver: country => console.log("Mouse is over: " + country),
-        onMouseOut: country => console.log("Mouse was over: " + country)
+        onMouseEnter: country => console.log("Mouse is over: " + country),
+        onMouseLeave: country => console.log("Mouse was over: " + country)
     };
 
     // Specify the color of the countries between the start-color and the end-color.
     // The 'value' should be between upperBound and lowerBound.
-    export let countryHeatValues: {name: string; value: number}[];
+    export let countryHeatValues: {name: string; value: number}[] = [];
     export let state = false;               // for responsive behavior, if state changes, then europe SVG is rerendered
 
     let europe: Europe;                     // europe SVG that is to be rendered
@@ -57,7 +57,8 @@
     function colorHeatMap(): Europe {
         let europeRes = new Europe();
         for (const country of countryHeatValues) {
-            europeRes[country.name] = mapColor(country.value);
+            europeRes[country.name].color = mapColor(country.value);
+            //europeRes[country.name] = mapColor(country.value);
         }
         return europeRes;
     }
@@ -68,7 +69,6 @@
         countryHeatValues = countryHeatValues;
         europe = colorHeatMap();
     }
-
 </script>
 
 <div class="{className} w-full">
