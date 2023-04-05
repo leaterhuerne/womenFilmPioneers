@@ -13,7 +13,13 @@ export function load({ fetch }) {
      * @param gender parameter for endpoint request
      * @param profession parameter for endpoint request
      */
-    function getData(consumer: (json: JSON) => void, year?: number | string, gender?: genderKey, profession?: string): void {
+    function getData(
+        consumer: (json: JSON) => void,
+        year?: number | string,
+        gender?: genderKey,
+        profession?: string,
+        location?: string,
+    ): void {
         let url: string = domainString + "/api/genders-by-year-profession-location?";
         if (year != undefined) {
             url += "year=" + year + "&";
@@ -22,7 +28,10 @@ export function load({ fetch }) {
             url += "gender=" + gender + "&"
         }
         if (profession != undefined) {
-            url += "profession=" + profession;
+            url += "profession=" + profession + "&";
+        }
+        if (location != undefined) {
+            url += "location=" + profession;
         }
         fetch(url).then((e: Response) => e.json()).then(consumer);
     }

@@ -58,6 +58,16 @@
     let chosenProfession: string = ALLE;                                          // chosen profession
     let heatMapColors: {name: string; value: number}[] = [];            // country with values between min and max
     let mapUpperBound: number = 0;                                      // upper bound of the map
+    let countryAmount: {country: string, amount: number} = {country: "", amount: 0};
+    let svgListeners: {                                                 // listener for action on country
+        onClick: (country) => void,
+        onMouseOver: (country) => void,
+        onMouseOut: (country) => void
+    } = {
+        onClick: country => countryAmount = {country: country, amount: calculatePersonsPerLocation(country)},
+        onMouseOver: country => countryAmount = {country: country, amount: calculatePersonsPerLocation(country)},
+        onMouseOut: country => countryAmount = {country: country, amount: calculatePersonsPerLocation(country)}
+    };
     // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
     let germanyCounted: boolean = true;
 
@@ -161,6 +171,10 @@
             }
         }
         heatMapColors = Object.values(countryCodesValuesMap);
+    }
+
+    function calculatePersonsPerLocation(country: string): number {
+        return heatMapColors.find(entry => entry.name === country).value;
     }
 
     /**
@@ -273,6 +287,7 @@
                 upperBound={mapUpperBound}
                 lowerBound=0
                 state={colorInput}
+                listeners={svgListeners}
         />
         <!-- ColorPicker and Button -->
         <div
@@ -299,6 +314,17 @@
                 <CheveronRight size={windowWidth < 768 ? 2 : 4} darkColor="black"/>
             </button>
         </div>
+        <!-- Information to amount of persons per country -->
+        <p>
+            <T de="Ein maximal eingefärbtes Land entspricht {mapUpperBound} Personen."
+               en="A maximum colored country equals {mapUpperBound} persons."
+            />
+        </p>
+        <p>
+            <T de="In {countryAmount.country} waren {countryAmount.amount} Personen beschäftigt."
+               en="In {countryAmount.country} worked {countryAmount.amount} persons."
+            />
+        </p>
         <!-- SCREEN: Year numbers on top right side in the map -->
         {#if windowWidth >= MD}
             <div class="mt-2 mr-2
@@ -332,10 +358,5 @@
     <!-- Detailed Information to Women -->
     <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
         Detaillierte Informationen:
-        <p>
-            <T de="Ein maximal eingefärbtes Land entspricht {mapUpperBound} Personen."
-               en="A maximum colored country equals {mapUpperBound} persons."
-        />
-        </p>
     </div>
 </div>

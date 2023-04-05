@@ -1,5 +1,44 @@
 <script lang="ts">
     //object for the default color of every country of europe
+
+    const countries2 = {
+        // default color for each country is blue
+        DE: {id: "germany", color: "blue", de: "Deutschland", en: "Germany"},
+        UK: {id: "unitedKingdom", color: "blue", de: "Großbritannien", en: "United Kingdom"},
+        FR: {id: "france", color: "blue", de: "Frankreich", en: "France"},
+        IT: {id: "italy", color: "blue", de: "Italien", en: "Italy"},
+        ES: {id: "spain", color: "blue", de: "Spanien", en: "Spain"},
+        UA: {id: "ukraine", color: "blue", de: "Ukraine", en: "Ukraine"},
+        PL: {id: "poland", color: "blue", de: "Polen", en: "Poland"},
+        RO: {id: "romania", color: "blue", de: "Rumänien", en: "Romania"},
+        NL: {id: "netherlands", color: "blue", de: "Niederlande", en: "Netherlands"},
+        BE: {id: "belgium", color: "blue", de: "Belgien", en: "Belgium"},
+        CZ: {id: "czechia", color: "blue", de: "Tschechien", en: "Czechia"},
+        EL: {id: "greece", color: "blue", de: "Griechenland", en: "Greece"},
+        PT: {id: "portugal", color: "blue", de: "Portugal", en: "Portugal"},
+        SE: {id: "sweden", color: "blue", de: "Schweden", en: "Sweden"},
+        HU: {id: "hungary", color: "blue", de: "Ungarn", en: "Hungary"},
+        BY: {id: "belarus", color: "blue", de: "Belarus", en: "Belarus"},
+        AT: {id: "austria", color: "blue", de: "Österreich", en: "Austria"},
+        CH: {id: "switzerland", color: "blue", de: "Schweiz", en: "Switzerland"},
+        BG: {id: "bulgaria", color: "blue", de: "Bulgarien", en: "Bulgaria"},
+        DK: {id: "denmark", color: "blue", de: "Dänemark", en: "Denmark"},
+        FI: {id: "finland", color: "blue", de: "Finland", en: "Finland"},
+        SK: {id: "slovakia", color: "blue", de: "Slowakei", en: "Slovakia"},
+        NO: {id: "norway", color: "blue", de: "Norwegen", en: "Norway"},
+        IE: {id: "ireland", color: "blue", de: "Irland", en: "Ireland"},
+        HR: {id: "croatia", color: "blue", de: "Kroatien", en: "Croatia"},
+        MD: {id: "moldova", color: "blue", de: "Moldawien", en: "Moldova"},
+        BA: {id: "bosniaAndHerzegovina", color: "blue", de: "Bosnien und Herzegowina", en: "Bosnia and Herzegovina"},
+        AL: {id: "albania", color: "blue", de: "Albanien", en: "Albania"},
+        LT: {id: "lithuania", color: "blue", de: "Litauen", en: "Lithuania"},
+        MK: {id: "northMacedonia", color: "blue", de: "Nordmazedonien", en: "North Macedonia"},
+        SI: {id: "slovenia", color: "blue", de: "Slowenien", en: "Slovenia"},
+        LV: {id: "latvia", color: "blue", de: "Lettland", en: "Latvia"},
+        EE: {id: "estonia", color: "blue", de: "Estland", en: "Estonia"},
+        LU: {id: "luxembourg", color: "blue", de: "Luxemburg", en: "Luxembourg"},
+        TR: {id: "turkey", color: "blue", de: "Türkei", en: "Turkey"},
+    };
     export let countries = {
         // default color for each country is blue
         russia: "blue",
@@ -161,19 +200,22 @@ l22 -19 -50 2 -50 3 3 41 c4 48 -14 68 -51 59 -33 -9 -78 -55 -54 -55 55 0
 63 12 28 19 54 15 57 -3 4 -27 -3 -51 -15 -25 -12 -48 -22 -50 -22 -2 0 7 17
 21 37 17 26 23 45 19 64 -5 22 -2 28 17 33 13 3 32 6 44 6 27 0 57 33 52 57
 -2 10 -18 23 -38 30 -34 11 -132 15 -177 6z m-4183 -4373 c24 -47 24 -50 6
--50 -13 0 -36 48 -36 76 0 23 9 16 30 -26z" fill={countries.norway} stroke="none"
+-50 -13 0 -36 48 -36 76 0 23 9 16 30 -26z"
+              fill={countries2.NO.color} stroke="none"
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")} />
         <path class="{svgPathStyling}"
               d="M6870 12610 c0 -28 21 -70 35 -70 15 0 45 32 45 48 0 12 -50 42 -70
-42 -5 0 -10 -9 -10 -20z" fill={countries.norway} stroke="none"
+42 -5 0 -10 -9 -10 -20z"
+              fill={countries2.NO.color} stroke="none"
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")} />
         <path class="{svgPathStyling}"
               d="M5957 12221 c-3 -11 -17 -22 -36 -26 -17 -4 -31 -11 -31 -17 0 -12
-58 -68 70 -68 19 0 40 33 40 61 0 54 -32 91 -43 50z" fill={countries.norway} stroke="none"
+58 -68 70 -68 19 0 40 33 40 61 0 54 -32 91 -43 50z"
+              fill={countries2.NO.color} stroke="none"
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")} />
@@ -200,25 +242,29 @@ l22 -19 -50 2 -50 3 3 41 c4 48 -14 68 -51 59 -33 -9 -78 -55 -54 -55 55 0
 44 256 43 46 36 73 -88 386 l-91 227 39 63 c21 34 64 111 96 171 l57 108 -41
 67 c-51 84 -99 134 -164 171 -32 18 -55 39 -62 57 -36 92 -41 182 -15 263 13
 41 14 56 5 71 -17 27 -15 38 15 81 18 26 26 50 25 75 -1 26 11 59 40 111 74
-134 53 198 -109 332 -53 44 -101 79 -107 79 -6 -1 -54 -26 -106 -55z" fill={countries.finland} stroke="none"
+134 53 198 -109 332 -53 44 -101 79 -107 79 -6 -1 -54 -26 -106 -55z"
+              fill={countries2.FI.color} stroke="none"
               on:click={() => listeners.onClick("finland")}
               on:mouseover={() => listeners.onMouseOver("finland")}
               on:mouseout={() => listeners.onMouseOut("finland")}/>
         <path class="{svgPathStyling}"
               d="M5800 12060 c-6 -10 -13 -40 -16 -65 -6 -38 -4 -45 10 -45 24 0 66
-45 66 70 0 52 -39 79 -60 40z" fill={countries.norway} stroke="none"
+45 66 70 0 52 -39 79 -60 40z"
+              fill={countries2.NO.color} stroke="none"
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")}/>
         <path class="{svgPathStyling}"
               d="M5963 12054 c-32 -50 -13 -179 27 -179 28 0 51 65 48 135 -3 62 -4
-65 -30 68 -20 2 -31 -4 -45 -24z" fill={countries.norway}
+65 -30 68 -20 2 -31 -4 -45 -24z"
+              fill={countries2.NO.color}
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")}/>
         <path class="{svgPathStyling}"
               d="M5646 11909 c-27 -21 -62 -118 -52 -145 13 -34 96 9 96 50 0 13 7 29
-15 36 27 23 13 80 -21 80 -6 0 -23 -9 -38 -21z" fill={countries.norway}
+15 36 27 23 13 80 -21 80 -6 0 -23 -9 -38 -21z"
+              fill={countries2.NO.color}
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")}/>
@@ -249,14 +295,16 @@ l22 -19 -50 2 -50 3 3 41 c4 48 -14 68 -51 59 -33 -9 -78 -55 -54 -55 55 0
 83 36 76 9 -4 17 1 20 14 7 25 8 25 67 -5 40 -20 64 -25 128 -25 64 0 80 3 85
 16 3 9 -4 58 -16 108 -23 98 -27 185 -10 256 19 83 14 160 -15 220 -16 35 -26
 72 -26 103 0 26 -4 47 -9 47 -15 0 -21 28 -26 143 -4 62 -11 130 -17 152 -25
-98 -112 195 -288 323 -145 105 -198 148 -251 204 -47 49 -62 57 -75 37z" fill={countries.sweden}
+98 -112 195 -288 323 -145 105 -198 148 -251 204 -47 49 -62 57 -75 37z"
+              fill={countries2.SE.color}
               on:click={() => listeners.onClick("sweden")}
               on:mouseover={() => listeners.onMouseOver("sweden")}
               on:mouseout={() => listeners.onMouseOut("sweden")}/>
         <path class="{svgPathStyling}"
               d="M5133 11580 c-7 -10 -33 -28 -58 -39 -33 -15 -45 -26 -45 -41 0 -23
 17 -22 73 7 15 7 27 11 27 9 0 -3 -13 -27 -30 -53 -41 -64 -40 -77 8 -68 20 4
-37 8 37 8 0 1 8 23 17 49 13 36 14 56 7 90 -13 54 -21 63 -36 38z" fill={countries.norway}
+37 8 37 8 0 1 8 23 17 49 13 36 14 56 7 90 -13 54 -21 63 -36 38z"
+              fill={countries2.NO.color}
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")}/>
@@ -265,19 +313,20 @@ l22 -19 -50 2 -50 3 3 41 c4 48 -14 68 -51 59 -33 -9 -78 -55 -54 -55 55 0
 -20 -30 -20 -45 0 -35 -17 -50 -59 -50 -68 -1 -161 -60 -148 -95 13 -31 69
 -15 124 37 17 17 36 27 41 24 6 -3 31 10 56 29 26 19 48 35 51 35 3 0 -1 -16
 -9 -35 -24 -57 3 -44 99 48 83 80 86 85 83 123 -4 52 -34 58 -71 15 -32 -38
--37 -39 -37 -2 0 39 -20 55 -47 36z" fill={countries.norway}
+-37 -39 -37 -2 0 39 -20 55 -47 36z"
+              fill={countries2.NO.color}
               on:click={() => listeners.onClick("norway")}
               on:mouseover={() => listeners.onMouseOver("norway")}
               on:mouseout={() => listeners.onMouseOut("norway")}/>
         <path class="{svgPathStyling}"
-              d="M6093 7623 c-19 -7 -16 -62 3 -70 21 -8 44 21 44 54 0 23 -17 29 -47
-16z" fill={countries.finland}
+              d="M6093 7623 c-19 -7 -16 -62 3 -70 21 -8 44 21 44 54 0 23 -17 29 -47 16z"
+              fill={countries2.FI.color}
               on:click={() => listeners.onClick("finland")}
               on:mouseover={() => listeners.onMouseOver("finland")}
               on:mouseout={() => listeners.onMouseOut("finland")}/>
         <path class="{svgPathStyling}"
-              d="M6636 7569 c-29 -23 -33 -34 -12 -42 18 -7 66 29 66 49 0 20 -23 17
--54 -7z" fill={countries.finland}
+              d="M6636 7569 c-29 -23 -33 -34 -12 -42 18 -7 66 29 66 49 0 20 -23 17 -54 -7z"
+              fill={countries2.FI.color}
               on:click={() => listeners.onClick("finland")}
               on:mouseover={() => listeners.onMouseOver("finland")}
               on:mouseout={() => listeners.onMouseOut("finland")}/>
@@ -288,19 +337,22 @@ l22 -19 -50 2 -50 3 3 41 c4 48 -14 68 -51 59 -33 -9 -78 -55 -54 -55 55 0
 -39 5 -64 -9 -56 11 -75 57 -56 61 25 83 24 139 -5 29 -16 85 -59 124 -96 39
 -38 77 -68 83 -68 6 0 23 7 36 16 17 11 36 14 58 10 42 -8 91 23 118 73 17 32
 17 35 -3 85 -46 114 -19 272 70 422 l42 69 -123 6 c-88 4 -147 13 -212 32
--123 35 -174 41 -206 24z" fill={countries.estonia}
+-123 35 -174 41 -206 24z"
+              fill={countries2.EE.color}
               on:click={() => listeners.onClick("estonia")}
               on:mouseover={() => listeners.onMouseOver("estonia")}
               on:mouseout={() => listeners.onMouseOut("estonia")}/>
         <path class="{svgPathStyling}"
               d="M6621 7116 c-18 -21 3 -56 34 -56 31 0 52 35 34 56 -6 8 -22 14 -34
-14 -12 0 -28 -6 -34 -14z" fill={countries.estonia}
+14 -12 0 -28 -6 -34 -14z"
+              fill={countries2.EE.color}
               on:click={() => listeners.onClick("estonia")}
               on:mouseover={() => listeners.onMouseOver("estonia")}
               on:mouseout={() => listeners.onMouseOut("estonia")}/>
         <path class="{svgPathStyling}"
               d="M6624 6949 c-17 -5 -38 -17 -48 -28 -22 -25 -18 -75 7 -79 22 -4 120
-44 144 70 17 19 17 20 -2 34 -21 16 -54 17 -101 3z" fill={countries.estonia}
+44 144 70 17 19 17 20 -2 34 -21 16 -54 17 -101 3z"
+              fill={countries2.EE.color}
               on:click={() => listeners.onClick("estonia")}
               on:mouseover={() => listeners.onMouseOver("estonia")}
               on:mouseout={() => listeners.onMouseOut("estonia")}/>
@@ -330,7 +382,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 -74 0 -149 21 -138 39 4 5 23 15 44 21 103 34 180 101 96 86 -19 -4 -42 -10
 -50 -13 -32 -12 -11 14 38 47 67 46 119 113 173 224 54 111 76 193 54 206 -51
 32 -272 17 -373 -26 -110 -46 -115 -44 -70 34 14 24 28 61 30 81 2 31 16 48
-96 123 89 84 92 88 75 105 -15 16 -41 18 -186 21 l-169 3 -20 -53z" fill={countries.unitedKingdom}
+96 123 89 84 92 88 75 105 -15 16 -41 18 -186 21 l-169 3 -20 -53z"
+              fill={countries2.UK.color}
               on:click={() => listeners.onClick("unitedKingdom")}
               on:mouseover={() => listeners.onMouseOver("unitedKingdom")}
               on:mouseout={() => listeners.onMouseOut("unitedKingdom")}/>
@@ -343,14 +396,15 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 -22 53 -40 61 -40 30 0 79 -34 155 -106 43 -41 82 -74 87 -74 5 0 22 10 36 21
 18 14 49 24 89 28 34 4 73 14 87 24 33 23 89 95 96 124 14 55 -25 171 -65 193
 -18 9 -19 18 -14 99 l6 89 -42 30 c-63 46 -104 57 -156 42 -52 -14 -65 -7
--155 86 -52 53 -117 94 -150 93 -8 0 -37 -9 -64 -19z" fill={countries.latvia}
+-155 86 -52 53 -117 94 -150 93 -8 0 -37 -9 -64 -19z"
+              fill={countries2.LV.color}
               on:click={() => listeners.onClick("latvia")}
               on:mouseover={() => listeners.onMouseOver("latvia")}
               on:mouseout={() => listeners.onMouseOut("latvia")}/>
         <path class="{svgPathStyling}"
               d="M5895 6722 c-55 -34 -112 -116 -129 -185 -7 -30 9 -107 23 -107 18 0
-59 41 75 74 9 19 16 55 16 80 0 46 5 55 59 99 24 19 25 50 1 54 -8 2 -29 -5
--45 -15z" fill={countries.sweden}
+59 41 75 74 9 19 16 55 16 80 0 46 5 55 59 99 24 19 25 50 1 54 -8 2 -29 -5 -45 -15z"
+              fill={countries2.SE.color}
               on:click={() => listeners.onClick("sweden")}
               on:mouseover={() => listeners.onMouseOver("sweden")}
               on:mouseout={() => listeners.onMouseOut("sweden")}/>
@@ -360,7 +414,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 -48 45 -87 4 -27 9 -57 12 -67 7 -27 45 -47 99 -53 39 -4 56 -1 83 16 23 14
 30 24 22 29 -45 28 -39 241 8 254 11 2 21 15 23 28 2 15 12 25 28 29 21 5 26
 13 31 50 7 49 40 84 70 75 18 -6 69 33 69 53 0 5 -18 12 -39 16 -59 9 -81 43
--81 122 0 36 9 97 20 136 23 83 25 119 8 136 -15 15 -17 15 -53 -4z" fill={countries.denmark}
+-81 122 0 36 9 97 20 136 23 83 25 119 8 136 -15 15 -17 15 -53 -4z"
+              fill={countries2.DK.color}
               on:click={() => listeners.onClick("denmark")}
               on:mouseover={() => listeners.onMouseOver("denmark")}
               on:mouseout={() => listeners.onMouseOut("denmark")}/>
@@ -371,8 +426,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 -7 25 -26 50 -41 24 -16 54 -44 66 -63 31 -50 84 -74 165 -74 61 0 68 2 95 31
 15 17 45 35 64 40 74 21 145 108 160 196 6 36 12 45 43 60 23 11 39 27 42 43
 4 16 16 28 35 35 40 12 42 15 25 25 -9 6 -14 24 -13 51 1 24 -6 57 -17 78 -43
-85 -154 181 -208 181 -15 0 -40 15 -64 40 -22 22 -43 40 -47 39 -3 0 -18 -9
--33 -21z" fill={countries.lithuania}
+85 -154 181 -208 181 -15 0 -40 15 -64 40 -22 22 -43 40 -47 39 -3 0 -18 -9 -33 -21z"
+              fill={countries2.LT.color}
               on:click={() => listeners.onClick("lithuania")}
               on:mouseover={() => listeners.onMouseOver("lithuania")}
               on:mouseout={() => listeners.onMouseOut("lithuania")}/>
@@ -389,7 +444,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 48 -3 28 -7 30 -58 38 -64 10 -76 18 -85 54 -3 14 -23 46 -45 70 -51 58 -131
 218 -132 263 0 19 3 55 7 80 12 81 -47 173 -140 216 -61 29 -80 30 -112 4 -41
 -32 -63 -27 -63 15 0 44 -35 71 -82 61 -24 -5 -34 -2 -45 14 -11 15 -21 18
--40 14 -19 -5 -30 -2 -39 11 -12 16 -17 13 -66 -33z" fill={countries.belarus}
+-40 14 -19 -5 -30 -2 -39 11 -12 16 -17 13 -66 -33z"
+              fill={countries2.BY.color}
               on:click={() => listeners.onClick("belarus")}
               on:mouseover={() => listeners.onMouseOver("belarus")}
               on:mouseout={() => listeners.onMouseOut("belarus")}/>
@@ -397,25 +453,27 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
               d="M4520 6016 c-59 -22 -155 -73 -170 -91 -11 -14 -11 -24 4 -65 10 -27
 15 -53 12 -59 -13 -20 174 -154 191 -137 3 3 -2 17 -11 30 -22 35 -20 43 14
 61 l30 16 -22 29 c-29 40 -17 82 27 90 28 5 30 9 29 47 -1 47 -26 93 -52 92
--9 0 -33 -6 -52 -13z" fill={countries.denmark}
+-9 0 -33 -6 -52 -13z"
+              fill={countries2.DK.color}
               on:click={() => listeners.onClick("denmark")}
               on:mouseover={() => listeners.onMouseOver("denmark")}
               on:mouseout={() => listeners.onMouseOut("denmark")}/>
         <path class="{svgPathStyling}"
               d="M522 5745 c-99 -50 -102 -53 -136 -120 -29 -57 -21 -63 67 -47 72 14
-111 47 151 127 45 93 35 99 -82 40z" fill={countries.ireland}
+111 47 151 127 45 93 35 99 -82 40z"
+              fill={countries2.IE.color}
               on:click={() => listeners.onClick("ireland")}
               on:mouseover={() => listeners.onMouseOver("ireland")}
               on:mouseout={() => listeners.onMouseOut("ireland")}/>
         <path class="{svgPathStyling}"
               d="M6299 5708 c-47 -49 -46 -54 11 -49 14 1 31 9 38 18 13 18 17 70 5
-75 -5 2 -29 -18 -54 -44z" fill={countries.lithuania}
+75 -5 2 -29 -18 -54 -44z" fill={countries2.LT.color}
               on:click={() => listeners.onClick("lithuania")}
               on:mouseover={() => listeners.onMouseOver("lithuania")}
               on:mouseout={() => listeners.onMouseOut("lithuania")}/>
         <path class="{svgPathStyling}"
               d="M5060 5735 c0 -19 36 -55 55 -55 20 0 19 12 -6 44 -22 29 -49 35 -49
-11z" fill={countries.denmark}
+11z" fill={countries2.DK.color}
               on:click={() => listeners.onClick("denmark")}
               on:mouseover={() => listeners.onMouseOver("denmark")}
               on:mouseout={() => listeners.onMouseOut("denmark")}/>
@@ -423,7 +481,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
               d="M742 5720 c-57 -23 -201 -146 -237 -203 -17 -27 -17 -28 9 -65 47
 -65 67 -86 74 -76 26 39 87 104 97 104 7 0 18 -14 25 -31 16 -39 75 -79 117
 -79 19 0 43 10 61 25 53 44 78 145 36 145 -17 0 -30 29 -39 84 -4 26 -18 51
--40 73 -34 34 -60 40 -103 23z" fill={countries.unitedKingdom}
+-40 73 -34 34 -60 40 -103 23z"
+              fill={countries2.UK.color}
               on:click={() => listeners.onClick("unitedKingdom")}
               on:mouseover={() => listeners.onMouseOver("unitedKingdom")}
               on:mouseout={() => listeners.onMouseOut("unitedKingdom")}/>
@@ -444,7 +503,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 195 -10 294 -27 54 -54 72 -93 65 -17 -4 -37 1 -53 11 -116 79 -122 81 -147
 75 -45 -10 -184 -86 -224 -122 -34 -31 -41 -33 -83 -27 -90 12 -111 48 -49 85
 61 36 47 46 -79 54 -48 4 -73 10 -82 21 -6 9 -25 16 -41 16 -42 0 -48 11 -18
-34 49 39 5 73 -126 96 -35 6 -75 14 -89 17 l-24 6 18 -29z" fill={countries.germany}
+34 49 39 5 73 -126 96 -35 6 -75 14 -89 17 l-24 6 18 -29z"
+              fill={countries2.DE.color}
               on:click={() => listeners.onClick("germany")}
               on:mouseover={() => listeners.onMouseOver("germany")}
               on:mouseout={() => listeners.onMouseOut("germany")}/>
@@ -460,13 +520,15 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 134 -62 253 l-13 123 -41 42 c-23 23 -41 46 -41 52 0 5 23 32 51 59 28 28 59
 67 70 87 19 37 19 38 -6 155 -24 116 -77 295 -94 321 -15 24 -161 33 -447 28
 -154 -3 -304 -8 -334 -11 -48 -5 -62 -2 -110 22 -46 23 -57 35 -68 68 -27 84
--65 92 -212 49z" fill={countries.poland}
+-65 92 -212 49z"
+              fill={countries2.PL.color}
               on:click={() => listeners.onClick("poland")}
               on:mouseover={() => listeners.onMouseOver("poland")}
               on:mouseout={() => listeners.onMouseOut("poland")}/>
         <path class="{svgPathStyling}"
               d="M4750 5520 c0 -6 7 -26 14 -45 16 -37 38 -39 56 -5 8 15 4 23 -16 39
--29 23 -54 27 -54 11z" fill={countries.germany}
+-29 23 -54 27 -54 11z"
+              fill={countries2.DE.color}
               on:click={() => listeners.onClick("germany")}
               on:mouseover={() => listeners.onMouseOver("germany")}
               on:mouseout={() => listeners.onMouseOut("germany")}/>
@@ -480,7 +542,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 14 -4 20 -14 20 -34 0 -23 4 -29 23 -29 31 0 140 53 166 81 15 17 31 22 55 21
 27 -2 44 6 81 38 55 47 69 55 115 65 19 4 45 16 56 27 21 19 24 19 54 3 42
 -21 53 -11 81 73 57 173 24 417 -71 527 -21 25 -42 55 -46 67 -6 21 -10 19
--60 -37 l-53 -59 -62 67 c-61 67 -103 97 -135 97 -14 0 -16 -8 -11 -46z" fill={countries.ireland}
+-60 -37 l-53 -59 -62 67 c-61 67 -103 97 -135 97 -14 0 -16 -8 -11 -46z"
+              fill={countries2.IE.color}
               on:click={() => listeners.onClick("ireland")}
               on:mouseover={() => listeners.onMouseOver("ireland")}
               on:mouseout={() => listeners.onMouseOut("ireland")}/>
@@ -491,7 +554,8 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 c-38 -18 -70 -34 -72 -36 -1 -2 28 -2 67 0 66 4 72 3 137 -37 37 -22 82 -46
 101 -52 31 -11 36 -10 54 12 16 20 18 33 13 79 -13 108 -15 100 36 120 64 24
 101 52 123 94 l19 36 -32 33 c-39 40 -39 47 -6 78 39 35 84 109 84 137 0 32
--48 78 -96 91 -45 12 -123 13 -174 1z" fill={countries.netherlands}
+-48 78 -96 91 -45 12 -123 13 -174 1z"
+              fill={countries2.NL.color}
               on:click={() => listeners.onClick("netherlands")}
               on:mouseover={() => listeners.onMouseOver("netherlands")}
               on:mouseout={() => listeners.onMouseOut("netherlands")}/>
@@ -521,7 +585,8 @@ l-30 -44 16 -63 c24 -97 23 -105 -18 -98 -31 5 -37 2 -55 -27 -46 -76 -31
 -29 4 -55 36 -102 127 -111 130 -191 79 -59 -37 -69 -37 -114 -2 -30 22 -46
 27 -87 25 -28 0 -59 3 -69 9 -23 12 -49 71 -41 92 10 25 -3 59 -37 102 -40 50
 -51 56 -115 59 -30 1 -60 8 -68 14 -24 20 -38 108 -25 146 14 37 3 75 -33 121
--32 40 -123 79 -158 67z" fill={countries.ukraine}
+-32 40 -123 79 -158 67z"
+              fill={countries2.UA.color}
               on:click={() => listeners.onClick("ukraine")}
               on:mouseover={() => listeners.onMouseOver("ukraine")}
               on:mouseout={() => listeners.onMouseOut("ukraine")}/>
@@ -531,7 +596,8 @@ l-30 -44 16 -63 c24 -97 23 -105 -18 -98 -31 5 -37 2 -55 -27 -46 -76 -31
 -101 -3 -14 -2 -28 3 -31 11 -6 45 11 82 42 34 29 47 30 47 6 0 -36 52 -123
 88 -147 68 -46 108 -26 99 47 -8 54 12 114 36 112 27 -3 50 39 42 75 -8 37
 -48 81 -73 81 -27 0 -39 17 -47 70 -9 54 -25 75 -86 105 -25 13 -51 31 -58 39
--18 21 -22 21 -126 -20z" fill={countries.belgium}
+-18 21 -22 21 -126 -20z"
+              fill={countries2.BE.color}
               on:click={() => listeners.onClick("belgium")}
               on:mouseover={() => listeners.onMouseOver("belgium")}
               on:mouseout={() => listeners.onMouseOut("belgium")}/>
@@ -555,7 +621,8 @@ l-30 -44 16 -63 c24 -97 23 -105 -18 -98 -31 5 -37 2 -55 -27 -46 -76 -31
 110 52 145 36 84 44 114 36 124 -3 5 -33 19 -66 30 -33 12 -114 44 -181 72
 -66 27 -147 56 -180 63 -41 9 -83 30 -139 68 -89 60 -132 81 -169 81 -30 0
 -39 12 -46 65 -5 37 -7 40 -47 47 -56 9 -98 42 -124 95 l-21 43 -49 -6 -50 -7
--16 42 c-14 36 -20 41 -47 41 -17 -1 -48 -9 -70 -20z" fill={countries.france}
+-16 42 c-14 36 -20 41 -47 41 -17 -1 -48 -9 -70 -20z"
+              fill={countries2.FR.color}
               on:click={() => listeners.onClick("france")}
               on:mouseover={() => listeners.onMouseOver("france")}
               on:mouseout={() => listeners.onMouseOut("france")}/>
@@ -565,13 +632,14 @@ l-30 -44 16 -63 c24 -97 23 -105 -18 -98 -31 5 -37 2 -55 -27 -46 -76 -31
 97 -28 75 -22 245 -30 259 -12 7 9 29 14 57 14 58 0 124 41 145 91 11 25 32
 46 74 72 76 47 79 69 14 115 -61 44 -243 137 -267 137 -11 0 -32 -11 -49 -25
 -16 -14 -34 -25 -39 -25 -18 0 -109 93 -115 117 -8 29 -40 46 -118 64 -44 11
--60 19 -67 37 -7 19 -16 22 -56 21 -27 0 -77 -8 -113 -18z" fill={countries.czechia}
+-60 19 -67 37 -7 19 -16 22 -56 21 -27 0 -77 -8 -113 -18z"
+              fill={countries2.CZ.color}
               on:click={() => listeners.onClick("czechia")}
               on:mouseover={() => listeners.onMouseOver("czechia")}
               on:mouseout={() => listeners.onMouseOut("czechia")}/>
         <path class="{svgPathStyling}"
-              d="M3286 4053 c-18 -46 1 -139 30 -150 22 -8 54 31 54 66 0 55 -69 124
--84 84z" fill={countries.luxembourg}
+              d="M3286 4053 c-18 -46 1 -139 30 -150 22 -8 54 31 54 66 0 55 -69 124 -84 84z"
+              fill={countries2.LU.color}
               on:click={() => listeners.onClick("luxembourg")}
               on:mouseover={() => listeners.onMouseOver("luxembourg")}
               on:mouseout={() => listeners.onMouseOut("luxembourg")}/>
@@ -582,7 +650,8 @@ l-30 -44 16 -63 c24 -97 23 -105 -18 -98 -31 5 -37 2 -55 -27 -46 -76 -31
 13 59 21 8 10 27 15 53 14 64 -3 65 -2 106 42 32 35 46 43 87 48 67 7 161 -5
 182 -24 28 -25 57 -19 88 19 26 32 90 172 82 178 -2 2 -35 17 -74 34 -154 67
 -251 69 -360 8 -81 -45 -104 -43 -122 9 -16 47 -40 76 -62 76 -9 0 -31 -12
--50 -27z" fill={countries.slovakia}
+-50 -27z"
+              fill={countries2.SK.color}
               on:click={() => listeners.onClick("slovakia")}
               on:mouseover={() => listeners.onMouseOver("slovakia")}
               on:mouseout={() => listeners.onMouseOut("slovakia")}/>
@@ -594,7 +663,8 @@ l-30 -44 16 -63 c24 -97 23 -105 -18 -98 -31 5 -37 2 -55 -27 -46 -76 -31
 54 -14 33 -26 54 -26 96 -1 33 19 158 52 207 54 18 1 33 -10 55 -41 37 -50 84
 -74 191 -98 119 -26 229 -24 361 7 204 48 263 91 265 193 2 82 9 98 63 123
 l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
-27 -92 32 -122 28 -186 -25z" fill={countries.austria}
+27 -92 32 -122 28 -186 -25z"
+              fill={countries2.AT.color}
               on:click={() => listeners.onClick("austria")}
               on:mouseover={() => listeners.onMouseOver("austria")}
               on:mouseout={() => listeners.onMouseOut("austria")}/>
@@ -606,7 +676,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 -38 -31 -68 -22 -76 -14 -150 23 -202 37 -54 152 -130 253 -169 75 -29 83 -31
 108 -17 84 47 120 56 395 106 169 30 167 29 196 135 24 91 218 345 262 345 36
 0 32 24 -11 62 -40 36 -118 68 -164 68 -11 0 -29 9 -41 20 -24 22 -109 33
--167 21z" fill={countries.hungary}
+-167 21z"
+              fill={countries2.HU.color}
               on:click={() => listeners.onClick("hungary")}
               on:mouseover={() => listeners.onMouseOver("hungary")}
               on:mouseout={() => listeners.onMouseOut("hungary")}/>
@@ -616,7 +687,7 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 108 10 5 38 7 62 4 34 -5 48 -2 61 11 22 22 22 52 -1 59 -10 3 -30 31 -45 62
 -16 31 -46 78 -68 104 -45 53 -47 67 -18 104 26 33 19 55 -21 63 -17 3 -35 14
 -41 24 -7 14 -21 19 -48 19 -25 0 -41 5 -44 15 -8 20 -72 50 -135 64 -60 12
--61 12 -120 -1z" fill={countries.moldova}
+-61 12 -120 -1z" fill={countries2.MD.color}
               on:click={() => listeners.onClick("moldova")}
               on:mouseover={() => listeners.onMouseOver("moldova")}
               on:mouseout={() => listeners.onMouseOut("moldova")}/>
@@ -631,7 +702,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 155 41 92 -1 182 -28 214 -65 20 -22 34 -29 63 -29 41 0 58 19 58 66 0 68 66
 264 89 264 5 0 17 -10 26 -22 14 -22 17 -22 42 -8 15 9 38 31 50 49 21 30 22
 37 9 55 -19 30 -77 33 -120 7 -47 -29 -116 -28 -143 2 -29 32 -31 42 -48 215
--9 86 -21 175 -26 197 -22 80 -164 331 -220 388 -31 30 -64 34 -94 11z" fill={countries.romania}
+-9 86 -21 175 -26 197 -22 80 -164 331 -220 388 -31 30 -64 34 -94 11z"
+              fill={countries2.RO.color}
               on:click={() => listeners.onClick("romania")}
               on:mouseover={() => listeners.onMouseOver("romania")}
               on:mouseout={() => listeners.onMouseOut("romania")}/>
@@ -641,7 +713,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 -97 112 -97 63 1 99 19 112 56 10 28 63 69 89 69 7 0 19 -15 27 -33 8 -19 21
 -39 29 -46 23 -19 59 7 97 69 17 28 36 50 42 50 7 0 23 -9 37 -20 14 -11 30
 -20 35 -20 15 0 81 56 105 90 l21 30 -45 -6 c-42 -6 -48 -4 -80 28 -33 33 -56
-89 -56 136 0 13 -5 32 -10 43 -12 21 -57 23 -185 8z" fill={countries.switzerland}
+89 -56 136 0 13 -5 32 -10 43 -12 21 -57 23 -185 8z"
+              fill={countries2.CH.color}
               on:click={() => listeners.onClick("switzerland")}
               on:mouseover={() => listeners.onMouseOver("switzerland")}
               on:mouseout={() => listeners.onMouseOut("switzerland")}/>
@@ -664,14 +737,16 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 -100 1 -156 35 -76 45 -137 123 -176 225 -68 176 -98 215 -203 266 -45 22 -47
 22 -61 4 -25 -34 -43 -12 -50 62 -18 180 -18 200 -7 207 14 9 14 58 -1 107
 -18 62 -4 80 102 124 51 21 99 45 106 53 18 18 18 112 0 156 -12 29 -22 36
--82 55 -65 19 -83 29 -146 74 -30 21 -109 30 -156 18z" fill={countries.italy}
+-82 55 -65 19 -83 29 -146 74 -30 21 -109 30 -156 18z"
+              fill={countries2.IT.color}
               on:click={() => listeners.onClick("italy")}
               on:mouseover={() => listeners.onMouseOver("italy")}
               on:mouseout={() => listeners.onMouseOut("italy")}/>
         <path class="{svgPathStyling}"
               d="M5241 3055 c-68 -22 -184 -45 -310 -60 -96 -13 -113 -58 -60 -163 47
 -94 96 -124 134 -82 23 25 46 25 96 -1 51 -25 63 -21 63 22 1 29 6 36 39 51
-20 10 37 24 38 31 0 6 1 27 2 46 2 30 10 41 60 79 122 93 95 127 -62 77z" fill={countries.slovenia}
+20 10 37 24 38 31 0 6 1 27 2 46 2 30 10 41 60 79 122 93 95 127 -62 77z"
+              fill={countries2.SI.color}
               on:click={() => listeners.onClick("slovenia")}
               on:mouseover={() => listeners.onMouseOver("slovenia")}
               on:mouseout={() => listeners.onMouseOut("slovenia")}/>
@@ -693,7 +768,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 -76 77 -25 66 -43 94 -84 124 -30 23 -47 45 -59 80 -10 29 -34 65 -58 89 -36
 35 -46 40 -88 39 -60 0 -154 -21 -178 -39 -18 -13 -18 -15 -1 -81 15 -58 15
 -70 4 -82 -24 -24 -47 11 -47 72 0 51 -12 76 -36 76 -6 0 -14 -9 -17 -20 -12
--46 -134 -12 -307 85 -130 72 -168 83 -217 61z" fill={countries.croatia}
+-46 -134 -12 -307 85 -130 72 -168 83 -217 61z"
+              fill={countries2.HR.color}
               on:click={() => listeners.onClick("croatia")}
               on:mouseover={() => listeners.onMouseOver("croatia")}
               on:mouseout={() => listeners.onMouseOut("croatia")}/>
@@ -703,7 +779,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 72 56 167 101 150 13 -5 15 1 13 33 -2 36 0 38 28 41 56 5 59 9 35 46 -14 24
 -20 48 -18 76 1 30 -3 45 -14 51 -34 19 -29 109 7 109 16 0 31 42 20 59 -4 7
 -22 9 -44 5 -28 -4 -49 0 -79 15 -53 27 -104 37 -275 56 -183 20 -176 20 -188
--15 -6 -16 -13 -30 -15 -30 -3 0 -18 16 -35 35 -30 34 -48 42 -62 28z" fill={countries.bosniaAndHerzegovina}
+-15 -6 -16 -13 -30 -15 -30 -3 0 -18 16 -35 35 -30 34 -48 42 -62 28z"
+              fill={countries2.BA.color}
               on:click={() => listeners.onClick("bosniaAndHerzegovina")}
               on:mouseover={() => listeners.onMouseOver("bosniaAndHerzegovina")}
               on:mouseout={() => listeners.onMouseOut("bosniaAndHerzegovina")}/>
@@ -715,7 +792,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 -8 81 -41 81 -30 1 -30 26 1 65 18 22 43 72 84 168 10 22 29 39 59 54 64 31
 70 67 12 68 -11 0 -65 21 -120 48 -93 43 -107 47 -176 47 -71 0 -79 -2 -165
 -50 l-90 -50 -175 1 c-260 1 -373 24 -377 74 0 14 -1 31 -2 38 -1 18 -25 15
--55 -9z" fill={countries.bulgaria}
+-55 -9z"
+              fill={countries2.BG.color}
               on:click={() => listeners.onClick("bulgaria")}
               on:mouseover={() => listeners.onMouseOver("bulgaria")}
               on:mouseout={() => listeners.onMouseOut("bulgaria")}/>
@@ -734,13 +812,15 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 -9 -24 -20 -9 -17 -21 -20 -78 -20 -40 0 -79 6 -96 15 -16 9 -45 14 -65 13
 -31 -3 -36 0 -45 27 -6 17 -15 33 -21 37 -5 4 -57 8 -115 8 -217 0 -365 33
 -439 97 -60 50 -111 60 -410 73 -239 11 -350 23 -446 49 -22 6 -97 10 -166 10
--108 0 -134 3 -172 20 -56 26 -101 27 -147 3z" fill={countries.spain}
+-108 0 -134 3 -172 20 -56 26 -101 27 -147 3z"
+              fill={countries2.ES.color}
               on:click={() => listeners.onClick("spain")}
               on:mouseover={() => listeners.onMouseOver("spain")}
               on:mouseout={() => listeners.onMouseOut("spain")}/>
         <path class="{svgPathStyling}"
               d="M3878 1909 c-21 -15 -28 -29 -28 -54 0 -64 22 -190 36 -204 12 -13
-17 -12 40 10 60 56 95 173 70 233 -14 32 -19 36 -53 36 -22 -1 -49 -9 -65 -21z" fill={countries.france}
+17 -12 40 10 60 56 95 173 70 233 -14 32 -19 36 -53 36 -22 -1 -49 -9 -65 -21z"
+              fill={countries2.FR.color}
               on:click={() => listeners.onClick("france")}
               on:mouseover={() => listeners.onMouseOver("france")}
               on:mouseout={() => listeners.onMouseOut("france")}/>
@@ -748,14 +828,16 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
               d="M6049 1898 c-42 -14 -54 -55 -35 -119 20 -65 21 -248 2 -301 -11 -30
 -11 -43 0 -75 8 -21 14 -50 14 -65 0 -19 10 -33 33 -49 44 -30 67 -60 67 -86
 0 -13 4 -23 9 -23 16 0 77 78 111 141 17 33 38 63 46 66 22 8 17 27 -28 114
--42 79 -43 84 -43 177 0 70 -5 105 -17 127 -35 65 -111 110 -159 93z" fill={countries.albania}
+-42 79 -43 84 -43 177 0 70 -5 105 -17 127 -35 65 -111 110 -159 93z"
+              fill={countries2.AL.color}
               on:click={() => listeners.onClick("albania")}
               on:mouseover={() => listeners.onMouseOver("albania")}
               on:mouseout={() => listeners.onMouseOut("albania")}/>
         <path class="{svgPathStyling}"
               d="M6392 1809 c-12 -12 -25 -20 -28 -16 -15 14 -62 -25 -88 -73 -33 -61
 -36 -104 -12 -157 20 -45 56 -70 106 -73 66 -5 87 0 134 32 29 18 69 35 100
-39 92 15 124 94 73 183 -33 60 -75 79 -177 84 -81 4 -89 3 -108 -19z" fill={countries.northMacedonia}
+39 92 15 124 94 73 183 -33 60 -75 79 -177 84 -81 4 -89 3 -108 -19z"
+              fill={countries2.MK.color}
               on:click={() => listeners.onClick("northMacedonia")}
               on:mouseover={() => listeners.onMouseOver("northMacedonia")}
               on:mouseout={() => listeners.onMouseOut("northMacedonia")}/>
@@ -767,7 +849,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 -17 29 -17 31 10 78 36 65 34 90 -12 169 -21 37 -40 71 -40 76 -1 5 20 16 46
 25 l48 16 0 55 c0 36 6 64 18 80 11 16 17 44 17 85 0 59 9 84 61 175 25 44 20
 102 -12 136 -30 32 -95 33 -130 3 -21 -18 -34 -20 -98 -17 -59 3 -76 8 -90 24
--22 27 -40 32 -79 22z" fill={countries.portugal}
+-22 27 -40 32 -79 22z"
+              fill={countries2.PT.color}
               on:click={() => listeners.onClick("portugal")}
               on:mouseover={() => listeners.onMouseOver("portugal")}
               on:mouseout={() => listeners.onMouseOut("portugal")}/>
@@ -775,7 +858,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
               d="M7503 1755 c-44 -19 -67 -56 -58 -95 5 -21 2 -39 -9 -55 -34 -52 -9
 -156 44 -185 31 -17 58 -7 118 44 63 54 98 65 245 74 l112 8 -65 31 c-75 36
 -96 53 -136 108 -37 51 -44 56 -70 50 -11 -2 -37 4 -57 15 -43 23 -79 25 -124
-5z" fill={countries.turkey}
+5z"
+              fill={countries2.TR.color}
               on:click={() => listeners.onClick("turkey")}
               on:mouseover={() => listeners.onMouseOver("turkey")}
               on:mouseout={() => listeners.onMouseOut("turkey")}/>
@@ -800,7 +884,8 @@ l49 24 -6 61 c-8 79 -33 163 -56 186 -11 11 -40 20 -77 24 -32 3 -86 15 -118
 75 -10 102 17 27 -7 71 -81 148 -66 69 -88 76 -199 62 -94 -12 -129 -24 -207
 -66 -106 -58 -217 -77 -309 -52 -36 9 -62 8 -145 -6 -127 -23 -188 -16 -346
 35 -66 21 -131 39 -144 39 -18 0 -41 17 -78 57 -41 44 -56 54 -65 45 -17 -17
--69 -15 -96 4 -13 9 -34 33 -48 55 -26 42 -35 44 -109 28z" fill={countries.turkey}
+-69 -15 -96 4 -13 9 -34 33 -48 55 -26 42 -35 44 -109 28z"
+              fill={countries2.TR.color}
               on:click={() => listeners.onClick("turkey")}
               on:mouseover={() => listeners.onMouseOver("turkey")}
               on:mouseout={() => listeners.onMouseOut("turkey")}/>
@@ -816,14 +901,16 @@ l-60 37 33 9 c33 9 33 9 17 34 -9 14 -15 35 -13 47 3 19 9 22 46 20 35 -2 43
 -19 37 -19 48 0 25 21 77 43 106 15 19 16 19 23 -10 10 -44 33 -65 70 -65 61
 0 81 14 88 63 4 25 16 53 27 62 23 22 180 54 260 55 30 0 79 -7 108 -16 29 -8
 69 -14 89 -12 35 3 37 5 35 38 -1 19 -8 39 -17 46 -9 6 -55 14 -103 17 -49 4
--126 18 -172 32 -96 28 -127 30 -191 9z" fill={countries.greece}
+-126 18 -172 32 -96 28 -127 30 -191 9z"
+              fill={countries2.EL.color}
               on:click={() => listeners.onClick("greece")}
               on:mouseover={() => listeners.onMouseOver("greece")}
               on:mouseout={() => listeners.onMouseOut("greece")}/>
         <path class="{svgPathStyling}"
               d="M3843 1479 c-59 -28 -63 -32 -63 -64 0 -19 7 -60 15 -92 19 -74 19
 -129 -2 -205 l-17 -61 39 -34 c21 -18 45 -33 52 -33 8 0 26 14 40 31 14 16 32
-28 39 25 29 -11 65 81 79 202 12 107 -46 262 -98 262 -12 0 -50 -14 -84 -31z" fill={countries.italy}
+28 39 25 29 -11 65 81 79 202 12 107 -46 262 -98 262 -12 0 -50 -14 -84 -31z"
+              fill={countries2.IT.color}
               on:click={() => listeners.onClick("italy")}
               on:mouseover={() => listeners.onMouseOver("italy")}
               on:mouseout={() => listeners.onMouseOut("italy")}/>
@@ -832,7 +919,8 @@ l-60 37 33 9 c33 9 33 9 17 34 -9 14 -15 35 -13 47 3 19 9 22 46 20 35 -2 43
 50 -99 -15 -9 -12 -61 4 -74 11 -10 20 -10 36 -1 31 17 46 7 75 -50 14 -27 29
 -50 33 -50 5 0 16 17 26 37 l18 38 19 -24 c11 -13 25 -21 34 -17 24 9 18 71
 -16 148 -17 38 -28 72 -25 76 3 3 28 -5 54 -17 56 -26 105 -25 110 3 3 15 0
-18 -18 13 -16 -4 -33 4 -63 32 -60 53 -105 85 -162 113 -68 35 -87 39 -110 26z" fill={countries.greece}
+18 -18 13 -16 -4 -33 4 -63 32 -60 53 -105 85 -162 113 -68 35 -87 39 -110 26z"
+              fill={countries2.EL.color}
               on:click={() => listeners.onClick("greece")}
               on:mouseover={() => listeners.onMouseOver("greece")}
               on:mouseout={() => listeners.onMouseOut("greece")}/>
@@ -840,13 +928,15 @@ l-60 37 33 9 c33 9 33 9 17 34 -9 14 -15 35 -13 47 3 19 9 22 46 20 35 -2 43
               d="M4720 745 c-8 -9 -26 -15 -46 -13 -19 1 -40 -4 -46 -11 -30 -30 154
 -154 277 -186 66 -17 98 -35 120 -69 9 -13 30 -30 46 -36 26 -11 34 -10 57 7
 34 25 38 51 18 111 -17 52 -12 82 28 157 33 62 37 61 -149 40 -113 -12 -138
--12 -190 0 -77 18 -100 18 -115 0z" fill={countries.italy}
+-12 -190 0 -77 18 -100 18 -115 0z"
+              fill={countries2.IT.color}
               on:click={() => listeners.onClick("italy")}
               on:mouseover={() => listeners.onMouseOver("italy")}
               on:mouseout={() => listeners.onMouseOut("italy")}/>
         <path class="{svgPathStyling}"
               d="M6890 92 c0 -12 46 -27 107 -36 23 -3 63 -17 89 -31 83 -44 219 -25
-161 23 -29 24 -357 65 -357 44z" fill={countries.greece}
+161 23 -29 24 -357 65 -357 44z"
+              fill={countries2.EL.color}
               on:click={() => listeners.onClick("greece")}
               on:mouseover={() => listeners.onMouseOver("greece")}
               on:mouseout={() => listeners.onMouseOut("greece")}/>
