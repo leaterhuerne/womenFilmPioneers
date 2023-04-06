@@ -34,7 +34,7 @@ export function GET({ url }: { url:URL }) {
 
     }
 
-    let json = {};
+    let json: Record<string, object> | string[] = {};
 
 // Return list of all persons
     if(personList == "true") {
@@ -58,15 +58,13 @@ export function GET({ url }: { url:URL }) {
     } else {
         //0000: all films, all genders, all persons, all years
         if(film == ALL && gender == ALL && person == ALL && year == ALL) {
-            json = database;
+            json = database as Record<string, object>;
         }
         //0001: all films, all genders, all persons, specific year
         if(film == ALL && gender == ALL && person == ALL && year != ALL) {
             checkIfYearInDatabase();
             for(const film in database) {
                 if(database[film as film]["year"] == url.searchParams.get("year")) {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
                     json[film] = {
                         "people": database[film as film]["people"],
                         "location": database[film as film]["location"]
@@ -76,13 +74,9 @@ export function GET({ url }: { url:URL }) {
         }
         //0010: all films, all genders, specific person, all years
         if(film == ALL && gender == ALL && person != ALL && year == ALL) {
-            const films= {};
+            const films: Record<string, object>= {};
             for(const film in database) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                if(person in database[film as film]["people"]) {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
+                if(person?? "" in database[film as film]["people"]) {
                     films[film] = database[film as film];
                 }
             }
