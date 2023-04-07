@@ -12,8 +12,9 @@ export function load({ fetch }) {
      * @param year parameter for endpoint request
      * @param gender parameter for endpoint request
      * @param profession parameter for endpoint request
+     * @location location parameter for endpoint request
      */
-    function getData(
+    function getPersonData(
         consumer: (json: JSON) => void,
         year?: number | string,
         gender?: genderKey,
@@ -43,12 +44,12 @@ export function load({ fetch }) {
      * @param profession
      */
     function getDataProfession(consumer: (json: JSON) => void, profession: string): void {
-        getData(consumer, undefined, undefined, profession.length > 0 ? profession : undefined);
+        getPersonData(consumer, undefined, undefined, profession.length > 0 ? profession : undefined);
     }
 
     function getDataSpecificYearAndProfession(consumer: (json: JSON) => void,
                                               year: number | string, profession: string): void {
-        getData(consumer, year, undefined, profession);
+        getPersonData(consumer, year, undefined, profession);
     }
 
     /**
@@ -70,7 +71,7 @@ export function load({ fetch }) {
     }
 
     return {
-        getData,
+        getPersonData,
         getDataProfession,
         getDataSpecificYearAndProfession,
         getProfessionList,
