@@ -236,6 +236,9 @@ def genders_by_year():
         file.write(json.dumps(years, indent=4))
     print("JSON written.")
 
+def mapGender(gender):
+    return "male" if gender == "M" else ("female" if gender == "W" else "unknown")
+
 def films():
     print("Loading database...")
     database = get_database("database.json")
@@ -248,7 +251,7 @@ def films():
             film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
             name = database[entry]["person"]["IDName"]
             person = {
-                "gender": database[entry]["person"]["Geschlecht"],
+                "gender": mapGender(database[entry]["person"]["Geschlecht"]),
                 "profession": database[entry]["filme"][film]["rel"],
                 "born": database[entry]["person"]["Geburtsdatum"],
                 "died": database[entry]["person"]["Sterbedatum"]
