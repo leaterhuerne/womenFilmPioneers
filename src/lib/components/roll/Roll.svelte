@@ -4,6 +4,8 @@
     import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator";
     import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
     import {currentYear} from "$lib/components/roll/currentYear.js";
+    import CheveronUp from "$lib/icons/components/CheveronUp.svelte";
+    import CheveronDown from "$lib/icons/components/CheveronDown.svelte";
 
     //==================================================================================================================
     //                                              type definitions
@@ -151,6 +153,7 @@
         return value == 0 ? 0 : Math.max(value, 0.4);
     };
 
+
     //==================================================================================================================
     //                                       Initialization of the component
     //==================================================================================================================
@@ -228,6 +231,22 @@
             </div>
         </div>
     </div>
+    {#if windowWidth < 768}
+        <div class="grid grid-cols-2 gap-2 place-items-center text-2xl p-2 ">
+            <button
+                    class="rounded-xl border-2 border-firebrick-500 dark:border-firebrick-1000 w-full grid place-items-center"
+                    on:click={() => rotate(UP)}
+            >
+                <CheveronUp size=3 />
+            </button>
+            <button
+                    class="rounded-xl border-2 border-firebrick-500 dark:border-firebrick-1000 w-full grid place-items-center"
+                    on:click={() => rotate(DOWN)}
+            >
+                <CheveronDown size=3 />
+            </button>
+        </div>
+    {/if}
     <!-- Roll information -->
     <div class="flex items-center gap-2 text-sm pl-2">
         <InformationOutline darkColor="#D2CAB3" />
