@@ -6,10 +6,10 @@
         id: string,
         color: string,
         de: string,
-        en: string}
-        = {key: "", id: "", color: "", de: "", en: ""};
+        en: string
+    } = {key: "", id: "", color: "", de: "", en: ""};
     export let d: string = "";
-    export let stroke: string ="none";
+    export let stroke: string = "none";
     export let listeners: {                     // listener to make a path reactive for mouse action
         onClick: (country) => void,
         onMouseEnter: (country) => void,

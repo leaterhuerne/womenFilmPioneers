@@ -31,7 +31,7 @@
         MD: {key: "MD", id: "moldova", color: "#00008b", de: "Moldawien", en: "Moldova"},
         AL: {key: "AL", id: "albania", color: "#00008b", de: "Albanien", en: "Albania"},
         LT: {key: "LT", id: "lithuania", color: "#00008b", de: "Litauen", en: "Lithuania"},
-        YU: {key: "YU", id: "Yugoslavia", color: "#00008b", de: "Jugoslawien", en: "Yugoslavia"},
+        YU: {key: "YU", id: "yugoslavia", color: "#00008b", de: "Jugoslawien", en: "Yugoslavia"},
         LV: {key: "LV", id: "latvia", color: "#00008b", de: "Lettland", en: "Latvia"},
         EE: {key: "EE", id: "estonia", color: "#00008b", de: "Estland", en: "Estonia"},
         LU: {key: "LU", id: "luxembourg", color: "#00008b", de: "Luxemburg", en: "Luxembourg"},
