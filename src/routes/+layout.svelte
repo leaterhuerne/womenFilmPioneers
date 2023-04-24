@@ -6,14 +6,19 @@
 
 <div
         class="
-            flex flex-col
+            flex flex-col place-items-center
             min-h-screen
             bg-paper-200 dark:bg-warm-gray-900
             dark:text-dark-paper-200
         "
 >
     <Header />
-    <div class="grow flex flex-col">
+    <div
+            class="
+                flex flex-col
+                grow
+                w-full max-w-screen-2xl
+                2xl:border-x border-firebrick-500 dark:border-firebrick-1000">
         <slot />
     </div>
     <Footer />

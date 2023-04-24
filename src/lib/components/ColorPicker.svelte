@@ -70,7 +70,6 @@
         }
         highlightColorField[activeColorField] = "scale-100";
     }
-
 </script>
 
 <style>
