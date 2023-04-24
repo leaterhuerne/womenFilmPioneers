@@ -3,7 +3,6 @@ import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator";
 export class CircularArrayList<T> {
     size: number
     data: Array<T>;
-
     head: T;
 
     constructor(...items: T[]) {

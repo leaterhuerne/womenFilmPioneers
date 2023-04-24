@@ -2,7 +2,6 @@ import type {CircularArrayList} from "$lib/utils/list/CircularArrayList";
 export class CircularArrayIterator<T> {
     circle: CircularArrayList<T>;
     current: T;
-
     indexOfCurrent: number;
 
     constructor(circle: CircularArrayList<T>) {
