@@ -20,6 +20,7 @@ rotationSpeed: speed of rotation in degrees per second, positive value clockwise
     export let direction: string = "0";
     export let className: string = "";
     export let color: string = "inherit";
+    export let darkColor: string = "inherit";
     export let hover: string = "";
     export let rotationSpeed: string = "0";
     export let backgroundColor: string = "inherit";
@@ -34,12 +35,27 @@ rotationSpeed: speed of rotation in degrees per second, positive value clockwise
     setInterval(spinning, 10);
 </script>
 
+<style>
+    :root {
+        --color: inherit;
+        --darkColor: inherit;
+    }
+    .fill {
+        fill: var(--color);
+    }
+    @media (prefers-color-scheme: dark) {
+        .fill {
+            fill: var(--darkColor);
+        }
+    }
+</style>
+
 <div style="width: {size}rem; height: {size}rem; background-color: {backgroundColor}; border-radius: 50%">
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
     <svg 
         viewBox="0 0 20 20" 
-        class="{className}" 
-        style="{style}; transform: rotate({direction}deg);"
+        class="{className} fill"
+        style="--color: {color}; --darkColor: {darkColor}; transform: rotate({direction}"
         on:mouseover={() => {style = "fill: " + (hover == "" ? color : hover)}}
         on:mouseout={() => {style = "fill: " + color}}
     >

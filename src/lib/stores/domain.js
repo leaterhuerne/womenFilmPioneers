@@ -1,3 +1,5 @@
 import { readable } from "svelte/store";
 
-export const domain = readable("http://127.0.0.1:5173");
+const value = "http://192.168.2.102:5173";
+export const domain = readable(value);
+export const domainString = value;

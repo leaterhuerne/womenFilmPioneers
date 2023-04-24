@@ -237,10 +237,75 @@ def genders_by_year():
     print("JSON written.")
 
 
+def professions_by_gender_year_location():
+    print("Loading database...")
+    database = get_database("database.json")
+    print("Database loaded.")
+    snapshot = {}
+    for i in range(1890, 2022):
+        snapshot[i] = {
+              "female": {
+                  "professions": {
+                  },
+                  "locations": {
+                   # "DE": {
+                    #    "occurence": 0,
+                     #   "professions": {
+                      #  }
+                    #}
+                  }
+              },
+              "male": {
+                  "professions": {
+                  },
+                  "locations": {
+                  }
+              },
+              "unknown": {
+                  "professions": {
+                  },
+                  "locations": {
+                  }
+              }
+        }
+    for entry in database:
+        genderString = database[entry]["person"]["Geschlecht"]
+        gender = "female" if genderString == "W" else ("male" if genderString == "M" else "unknown")
+        for film in database[entry]["filme"]:
+            years = database[entry]["filme"][film]["Jahr"].split("/")
+            for year in years:
+                if not year.isdigit():
+                    continue
+                if isIn(int(year), 1890, 2021):
+                    # adding profession in the film
+                    profession = database[entry]["filme"][film]["rel"]
+                    if profession not in snapshot[int(year)][gender]["professions"]:
+                        snapshot[int(year)][gender]["professions"][profession] = 1
+                    else:
+                        snapshot[int(year)][gender]["professions"][profession] += 1
+                    # adding location
+                    locations = database[entry]["filme"][film]["Region"]
+                    for location in locations:
+                        if location not in snapshot[int(year)][gender]["locations"]:
+                            snapshot[int(year)][gender]["locations"][location] = {
+                                "occurences": 1,
+                                "professions": {}
+                            }
+                        else:
+                            snapshot[int(year)][gender]["locations"][location]["occurences"] += 1
+                        if profession not in snapshot[int(year)][gender]["locations"][location]["professions"]:
+                            snapshot[int(year)][gender]["locations"][location]["professions"][profession] = 1
+                        else:
+                            snapshot[int(year)][gender]["locations"][location]["professions"][profession] += 1
+    print("Writing JSON to file...")
+    with open("genders_by_year_profession_location.json", "w") as file:
+        file.write(json.dumps(snapshot, indent=4))
+    print("JSON written.")
+
+
 
 def main():
-    genders_by_year()
-
+    extract_locations()
 
 if __name__ == "__main__":
     main()
