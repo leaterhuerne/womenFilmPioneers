@@ -132,6 +132,9 @@ class CircularArrayIterator {
   }
 }
 class CircularArrayList {
+  size;
+  data;
+  head;
   constructor(...items) {
     this.data = [];
     this.size = this.data.length;
@@ -649,4 +652,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-acc08900.js.map
+//# sourceMappingURL=_page.svelte-01a4b2a1.js.map
