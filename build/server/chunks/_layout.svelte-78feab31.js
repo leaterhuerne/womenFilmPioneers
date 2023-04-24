@@ -10,8 +10,7 @@ const Language = create_ssr_component(($$result, $$props, $$bindings, slots) => 
   return `<div class="${"bg-paper-400 dark:bg-dark-paper-400 text-firebrick-500 dark:text-firebrick-1000 font-bold aspect-square h-8 rounded-[50%] cursor-pointer grid place-items-center "}"><p>${escape($language === "de" ? "EN" : "DE")}</p></div>`;
 });
 const Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<div class="${"z-50 flex justify-between w-full p-2 text-center text-paper-200 dark:text-dark-paper-200 bg-firebrick-500 dark:bg-firebrick-1000 "}"><span></span>
-    <h1 class="${"text-lg"}">${validate_component(T, "T").$$render(
+  return `<div class="${"z-50 flex justify-between gap-8 place-items-center w-full p-2 text-center text-paper-200 dark:text-dark-paper-200 bg-firebrick-500 dark:bg-firebrick-1000 "}"><a href="${"/"}" class="${"italic font-semibold "}">${validate_component(T, "T").$$render(
     $$result,
     {
       de: "Frauen in der frühen Filmgeschichte",
@@ -19,7 +18,11 @@ const Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     },
     {},
     {}
-  )}</h1>
+  )}</a>
+    <div class="${"grow flex justify-end gap-4 place-items-center font-semibold"}"><a href="${"/roll"}" class="${"hover:underline"}">${validate_component(T, "T").$$render($$result, { de: "Walze", en: "Roll" }, {}, {})}</a>
+        <a href="${"/geographic-map"}" class="${"hover:underline"}">${validate_component(T, "T").$$render($$result, { de: "Europakarte", en: "Map of Europe" }, {}, {})}</a>
+        <a href="${"/api"}" class="${"hover:underline"}">API
+        </a></div>
     ${validate_component(Language, "Language").$$render($$result, {}, {}, {})}</div>`;
 });
 const Footer = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -32,4 +35,4 @@ const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Layout as default };
-//# sourceMappingURL=_layout.svelte-82fb56fd.js.map
+//# sourceMappingURL=_layout.svelte-78feab31.js.map
