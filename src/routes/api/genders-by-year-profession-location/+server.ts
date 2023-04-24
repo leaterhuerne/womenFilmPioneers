@@ -480,7 +480,8 @@ export function GET({ url }: { url:URL }) {
         {
             status: 200,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             }
         }
     );
