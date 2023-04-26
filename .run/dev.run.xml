@@ -6,6 +6,7 @@
       <script value="dev" />
     </scripts>
     <node-interpreter value="project" />
+    <node-options value="--max-old-space-size=4096" />
     <envs />
     <method v="2" />
   </configuration>
