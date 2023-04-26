@@ -79,5 +79,49 @@
             "en" : "Return the film data based on the parameters above.",
             "de": "Gibt die Filmdaten basierend auf den obigen Parametern zurück."
         }
+    },
+    "films": {
+        "endpoint" : "/api/films",
+        "method" : "GET",
+        "parameters": [
+            {
+                "name": "person-list",
+                "en": "true",
+                "de": "true"
+            },
+            {
+                "name": "film-list",
+                "en": "true",
+                "de": "true"
+            },
+            {
+                "name": "film",
+                "en": "film title",
+                "de": "Filmtitel"
+            },
+            {
+                "name": "gender",
+                "en": "female, male or unknown",
+                "de": "female, male oder unknown"
+            },
+            {
+                "name": "person",
+                "en": "name of a person",
+                "de": "Personenname"
+            },
+            {
+                "name": "year",
+                "en": "number between 1890 and 2021",
+                "de": "Zahl zwischen 1890 und 2021"
+            }
+        ],
+        "title": {
+            "en" : "Films",
+            "de": "Filme"
+        },
+        "description": {
+            "en" : "Return the film data based on the parameters above.",
+            "de": "Gibt die Filmdaten basierend auf den obigen Parametern zurück."
+        }
     }
 }
