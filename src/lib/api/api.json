@@ -76,8 +76,52 @@
             "de": "Filme"
         },
         "description": {
-            "en" : "Return the film data based on the parameters above.",
-            "de": "Gibt die Filmdaten basierend auf den obigen Parametern zurück."
+            "en" : "If person-list or film-list is true, it returns a list off all persons working on a filmset or a list off all films. Else it returns the film data based on the parameters above.",
+            "de": "Wenn person-list oder film-list mit true angefragt werden, wird eine Liste aller Personen, die an einem Film beteiligt waren, bzw. eine Liste aller Filme zurückgegeben. Ansonsten werden die Filmdaten basierend auf den obigen Parametern zurückgegeben."
+        }
+    },
+    "genders-by-year-profession-location": {
+        "endpoint" : "/api/genders-by-year-profession-location",
+        "method" : "GET",
+        "parameters": [
+            {
+                "name": "profession-list",
+                "en": "true",
+                "de": "true"
+            },
+            {
+                "name": "location-list",
+                "en": "true",
+                "de": "true"
+            },
+            {
+                "name": "location",
+                "en": "filmset location",
+                "de": "Ort des Filmdrehs"
+            },
+            {
+                "name": "gender",
+                "en": "female, male or unknown",
+                "de": "female, male oder unknown"
+            },
+            {
+                "name": "profession",
+                "en": "profession on the filmset",
+                "de": "Tätigkeit am Filmset"
+            },
+            {
+                "name": "year",
+                "en": "number between 1890 and 2021",
+                "de": "Zahl zwischen 1890 und 2021"
+            }
+        ],
+        "title": {
+            "en" : "Genders by year, profession and location",
+            "de": "Geschlechter nach Jahr, Beruf und Ort"
+        },
+        "description": {
+            "en" : "If profession-list/location-list is true, then it returns a list of professions/locations. Else it returns the film data based on the parameters above.",
+            "de": "Wenn profession-list/location-list mit true angefragt wird, dann wird eine Liste mit allen Berufen bzw. Orten zurückgegeben. Ansonsten werden  die Filmdaten basierend auf den obigen Parametern zurückgegeben."
         }
     }
 }
