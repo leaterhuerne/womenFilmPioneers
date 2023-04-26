@@ -23,7 +23,7 @@
     export let countryHeatValues: {name: string; value: number}[] = [];
     export let state = false;               // for responsive behavior, if state changes, then europe SVG is rerendered
 
-    let europe: Europe;                     // europe SVG that is to be rendered
+    export let europe: Europe;                     // europe SVG that is to be rendered
 
     /**
      * The function calculates a rgb color that lays between the colorFrom and the colorTo variable.

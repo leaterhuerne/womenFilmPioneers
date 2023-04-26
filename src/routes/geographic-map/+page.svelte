@@ -24,19 +24,23 @@
     let countryAmount: {countryDE: string, countryEN: string, amount: number} = {countryDE: "", countryEN: "", amount: 0};
 
     // listener functionality of the HeatMap
-
+    let europe: Europe = new Europe();
     let countryFocused: {state: boolean, country: string} = {state: false, country: ""};
     function mouseClickAction(country) {
         mouseAction(country);
         // click on the fixed country
         if (countryFocused.state && countryFocused.country == country["key"]) {
             countryFocused = {state: false, country: ""};
+            europe[country["key"]]["stroke"] = "none";
         // click on a country but not the fixed one
         } else if (countryFocused.state && countryFocused.country != country["key"]) {
+            europe[countryFocused.country]["stroke"] = "none";
+            europe[country["key"]]["stroke"] = "red";
             countryFocused.country = country["key"];
-        // no country is fixed
+            // no country is fixed
         } else {
             countryFocused = {state: true, country: country["key"]};
+            europe[country["key"]]["stroke"] = "red";
         }
     }
     function mouseHoverAction(country) {
@@ -151,7 +155,6 @@
         console.log(countryPeopleAmount)
         heatMapColors = countryPeopleAmount;
     }
-
 
     /**
      * Finds the amount of persons that worked in a specific country at the specified year
@@ -274,6 +277,7 @@
         <!-- Map -->
         <HeatMap
                 className="relative p-2"
+                bind:europe="{europe}"
                 countryHeatValues={heatMapColors}
                 colorFrom={heatMapBoundColors[0].rgb}
                 colorTo={heatMapBoundColors[1].rgb}
@@ -347,7 +351,8 @@
     <!-- Detailed Information to Women -->
     <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
         Detaillierte Informationen:
-        <SidePanel genders={getChosenGenders()}
+        <SidePanel year={year}
+
                    state={sidePanelStatus}
         />
     </div>

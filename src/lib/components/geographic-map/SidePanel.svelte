@@ -3,7 +3,7 @@
 
     export let year: number = 1926;
     export let location = {de: "Europa", en: "Europe"};
-    export let genders: string[] = ["male", "female", "unknown"];
+    export let genders = new Array(3).fill("bla");
     export let state = false;               // for responsive behavior, if state changes, then SidePanel is rerendered
     export let className: string = "";
 
@@ -17,6 +17,7 @@
         state = state;
         genders = genders;
     }
+    Object.keys(genders).forEach(e => console.log(e));
 
 </script>
 
@@ -30,10 +31,6 @@
         Geschlechterverteilung
     </h2>
     {#each genders as gender}
-        <p>
-            <T de={displayGenders[gender]["de"]}
-               en={displayGenders[gender]["en"]}
-            />:
-        </p>
+        <p>{gender}</p>
     {/each}
 </div>
