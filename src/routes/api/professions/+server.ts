@@ -54,10 +54,26 @@ export function GET({ url }: { url:URL }) {
         }
     // if only parameter name is given
     } else if (name != undefined) {
-        return new Response(JSON.stringify(professions[name]));
+        return new Response(
+            JSON.stringify(professions[name]),
+            {
+                status: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            });
     // no parameters given
     } else {
-        return new Response(JSON.stringify(professions));
+        return new Response(
+            JSON.stringify(professions),
+            {
+                status: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            });
     }
 
 }

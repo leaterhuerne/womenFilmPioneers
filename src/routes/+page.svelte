@@ -1,8 +1,8 @@
 <script lang="ts">
+    import {onMount} from "svelte";
 
-    /** @type {import('./$types').PageData} */
-    export let data;
-
+    onMount(() => {
+        console.log("URL: "  + location.hostname + ":" + location.port);
+    })
 </script>
-
-Hello, women's world!
+Hello women's world!

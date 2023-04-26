@@ -21,14 +21,13 @@ export function GET({ url }: { url:URL }) {
     } else {
         content = data;
     }
-
-    //return Response with type json
     return new Response(
         JSON.stringify(content),
         {
             status: 200,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             }
         }
     );

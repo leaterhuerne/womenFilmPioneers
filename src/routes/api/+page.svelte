@@ -18,7 +18,7 @@
                     de="https://de.wikipedia.org/wiki/Programmierschnittstelle"
                     en="https://en.wikipedia.org/wiki/API"
             >
-                <InformationOutline color="#D2CAB3" />
+                <InformationOutline darkColor="#D2CAB3" />
             </ExternalLink>
         </div>
         {#each Object.keys(api) as endpoint}
