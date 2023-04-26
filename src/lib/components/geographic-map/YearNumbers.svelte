@@ -6,9 +6,9 @@
     import CheveronOutlineRight from "$lib/icons/components/CheveronOutlineRight.svelte";
     import T from "$lib/components/T.svelte";
 
-    export let year: string = "1892";           // default year for rendering
+    export let year: string = "1926";           // default year for rendering
     export let minYear: number = 1890;          // oldest data in database is from 1890
-    export let maxYear: number = 1955;          // end of early film industry (self defined)
+    export let maxYear: number = 1950;          // end of early film industry (self defined)
     export let className: string = "";          // styling of the outer div
     export let responsive: string = "";         // for responsive behavior
 

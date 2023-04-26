@@ -52,7 +52,7 @@
     };
 
     // Settings of the HeatMap
-    let year: string = "1917";                                                  // current year
+    let year: string = "1926";                                                  // current year
     let chosenGenders: {female: boolean, male: boolean, unknown: boolean} = {   // genders with boolean field...
         female: false, male: false, unknown: false                              // ...to mark as chosen
     };
