@@ -331,9 +331,7 @@ export function GET({ url }: { url:URL }) {
     function getPersonList() {
         const persons: Record<string, { "gender": string, "born": string, "died": string }> = {};
         for (const film in database) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            for (const person in database[film as filmTitle]["people"]) {
+            for (const person in database[film as filmTitle]["people"] as object) {
                 const personData = database[film as filmTitle]["people"][person]
                 persons[person] = {
                     "gender": personData["gender"],
@@ -342,7 +340,10 @@ export function GET({ url }: { url:URL }) {
                 };
             }
         }
-        json = persons;
+        const keys = Object.keys(persons).sort();
+        // @ts-ignore
+        keys.forEach(key => json[key] = persons[key]);
+
     }
 
 // Return list of all persons
@@ -350,7 +351,7 @@ export function GET({ url }: { url:URL }) {
         getPersonList();
         // Return list of all films
     } else if(filmList == "true") {
-        json = Object.keys(database);
+        json = Object.keys(database).sort();
     } else {
         //0000: all films, all genders, all persons, all years
         if(film == ALL && gender == ALL && person == ALL && year == ALL) {
