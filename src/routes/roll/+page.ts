@@ -69,8 +69,12 @@ export function load({fetch}) {
     const getProfessionLocation = (profession: string, location: string, consumer: Consumer<JSON>): void => {
         getData(ALL, ALL, ALL, ALL, location, profession).then(consumer);
     }
+    const getProfessionForYear = (year: number, consumer: Consumer<JSON>): void => {
+        return fetch("/api/professions?year=" + year).then((res: { json: () => any; }) => res.json()).then(consumer);
+    }
     
     return {
+        getProfessionForYear,
         getProfessionList,
         getLocationList,
         getProfessionLocation,

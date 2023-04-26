@@ -7,6 +7,9 @@
     import {CircularArrayList} from "$lib/utils/list/CircularArrayList";
     import {CircularArrayIterator} from "$lib/utils/list/CircularArrayIterator.js";
     import Roll from "$lib/components/roll/Roll.svelte";
+    import Reload from "$lib/icons/components/Reload.svelte";
+    import Refresh from "$lib/icons/components/Refresh.svelte";
+    import SidePanel from "$lib/components/roll/SidePanel.svelte";
 
     // =================================================================================================================
     //                                              Type definitions
@@ -57,13 +60,16 @@
 
     // content list and front side for the roll
     let content:  CircularArrayIterator<label>;
-    let frontLabelOnRoll: label =  {left: 0, year: 1890, right: 0};
+    let frontLabelOnRoll: label =  {left: 0, year: 1895, right: 0};
 
     // roll options
     let professionList;
     let countryList;
     let profession = "alle";
     let country = "alle";
+
+    //side panel
+    let professions: string[] = []
 
     // =================================================================================================================
     //                                                  Functions
@@ -243,6 +249,12 @@
 
     }
 
+    const getProfessionsOfYear = (amount: number) => {
+        data.getProfessionForYear(frontLabelOnRoll.year, json => {
+            professions = Object.keys(json).sort(() => 0.5 - Math.random()).slice(0, amount);
+        });
+    }
+
     // =================================================================================================================
     //                                      Initialization of component
     // =================================================================================================================
@@ -259,6 +271,11 @@
     }
     //Set colours on the roll
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}];
+
+    $: {
+        frontLabelOnRoll.year = frontLabelOnRoll.year;
+        getProfessionsOfYear(5)
+    }
 
 </script>
 
@@ -381,30 +398,10 @@
         </button>
     </div>
     <!-- Information -->
-    <div
-            class="
-                grow
-                lg:w-1/3
-                border-t lg:border-t-0 lg:border-l  border-firebrick-500 dark:border-firebrick-1000
-                p-2
-                flex flex-col gap-2
-            "
-    >
-        <h1 class="text-3xl font-semibold text-center">
-            <T de="Die Filmindustrie im Jahr" en="The film industry in the year"/> {frontLabelOnRoll.year}
-        </h1>
-        <div>
-            <h2 class="text-lg font-semibold"><T de="Geschlechterverteilung" en="Gender distribution" /></h2>
-            <p><T de={genderMap[leftGender].de} en={genderMap[leftGender].en} />: {frontLabelOnRoll.left}</p>
-            <p><T de={genderMap[rightGender].de} en={genderMap[rightGender].en} />: {frontLabelOnRoll.right}</p>
-        </div>
-        <div>
-            <h2 class="text-lg font-semibold"><T de="Berufe" en="Professions" /></h2>
-            {"TODO: Hier ausgeübte Berufe einfügen"}
-        </div>
-        <div>
-            <h2 class="text-lg font-semibold"><T de="Filme des Jahres" en="Professions" /></h2>
-            {"TODO: Hier Filme einfügen"}
-        </div>
-    </div>
+    <SidePanel
+            leftGender={{de: genderMap[leftGender].de, en: genderMap[leftGender].en, value: frontLabelOnRoll.left}}
+            rightGender={{de: genderMap[rightGender].de, en: genderMap[rightGender].en, value: frontLabelOnRoll.right}}
+            professions={professions}
+            year={frontLabelOnRoll.year}
+    />
 </div>
