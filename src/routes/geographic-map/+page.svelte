@@ -307,7 +307,7 @@
                         rounded-r-md
                         w-[20%]
                         h-10 md:h-20 2xl:hidden"
-                    on:mouseente={() => colorPickerVisibility = ""}
+                    on:mouseenter={() => colorPickerVisibility = ""}
                     style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%,
                                                              rgba(0,255,0,0.9) 50%,
                                                              rgba(0,0,255,0.9) 90%);
