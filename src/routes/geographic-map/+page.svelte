@@ -7,49 +7,11 @@
     import HeatMapSettings from "$lib/components/geographic-map/HeatMapSettings.svelte";
     import T from "$lib/components/T.svelte";
     import {Europe} from "$lib/utils/geographic-map/Europe";
+    import SidePanel from "$lib/components/geographic-map/SidePanel.svelte";
 
     /** @type {import('./$types').PageData} */
     export let data;    // data from load function in page.ts
     const ALLE = "";    // constant for "no specific profession is choosed"
-
-    // a map of country codes as key and name of the country as value
-    const countryCodesMap = {
-        DE: "germany",
-        UK: "unitedKingdom",
-        FR: "france",
-        IT: "italy",
-        ES: "spain",
-        UA: "ukraine",
-        PL: "poland",
-        RO: "romania",
-        NL: "netherlands",
-        BE: "belgium",
-        CZ: "czechia",
-        EL: "greece",
-        PT: "portugal",
-        SE: "sweden",
-        HU: "hungary",
-        BY: "belarus",
-        AT: "austria",
-        CH: "switzerland",
-        BG: "bulgaria",
-        DK: "denmark",
-        FI: "finland",
-        SK: "slovakia",
-        NO: "norway",
-        IE: "ireland",
-        HR: "croatia",
-        MD: "moldova",
-        BA: "bosniaAndHerzegovina",
-        AL: "albania",
-        LT: "lithuania",
-        MK: "northMacedonia",
-        SI: "slovenia",
-        LV: "latvia",
-        EE: "estonia",
-        LU: "luxembourg",
-        TR: "turkey"
-    };
 
     // Settings of the HeatMap
     let year: string = "1926";                                                  // current year
@@ -61,6 +23,27 @@
     let mapUpperBound: number = 0;                                      // upper bound of the map
     let countryAmount: {countryDE: string, countryEN: string, amount: number} = {countryDE: "", countryEN: "", amount: 0};
 
+    // listener functionality of the HeatMap
+
+    let countryFocused: {state: boolean, country: string} = {state: false, country: ""};
+    function mouseClickAction(country) {
+        mouseAction(country);
+        // click on the fixed country
+        if (countryFocused.state && countryFocused.country == country["key"]) {
+            countryFocused = {state: false, country: ""};
+        // click on a country but not the fixed one
+        } else if (countryFocused.state && countryFocused.country != country["key"]) {
+            countryFocused.country = country["key"];
+        // no country is fixed
+        } else {
+            countryFocused = {state: true, country: country["key"]};
+        }
+    }
+    function mouseHoverAction(country) {
+        if (!countryFocused.state) {
+            mouseAction(country);
+        }
+    }
     function mouseAction(country) {
         return countryAmount = {
             countryDE: country.de,
@@ -74,9 +57,9 @@
         onMouseEnter: (country) => void,
         onMouseLeave: (country) => void
     } = {
-        onClick: country => mouseAction(country),
-        onMouseEnter: country => mouseAction(country),
-        onMouseLeave: country => mouseAction(country)
+        onClick: country => mouseClickAction(country),
+        onMouseEnter: country => mouseHoverAction(country),
+        onMouseLeave: country => mouseHoverAction(country)
     };
     // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
     let germanyCounted: boolean = true;
@@ -170,6 +153,11 @@
     }
 
 
+    /**
+     * Finds the amount of persons that worked in a specific country at the specified year
+     * by searching in the heatMapColors object.
+     * @param country
+     */
     function calculatePersonsPerLocation(country: string): number {
         return heatMapColors.find(entry => entry.name === country).value;
     }
@@ -242,6 +230,8 @@
         mapUpperBound = mapUpperBound === 0 ? 1 : mapUpperBound;
     }
 
+    let sidePanelStatus: boolean = false;
+
     // if genders, profession or maximum-setting changes then maximum must be recalculated
     $: {
         // trigger re-rendering
@@ -264,6 +254,7 @@
     // reactive block: update Heat map on each change of year or settings
     $: {
         chosenGenders = chosenGenders; // reactivity for changed gender buttons
+        sidePanelStatus = !sidePanelStatus; // update SidePanel for changed year or genders
         chosenProfession = chosenProfession;
         year = year;
         updateMap();
@@ -353,12 +344,11 @@
             />
         </div>
     </div>
-
-
-
-
     <!-- Detailed Information to Women -->
     <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
         Detaillierte Informationen:
+        <SidePanel genders={getChosenGenders()}
+                   state={sidePanelStatus}
+        />
     </div>
 </div>

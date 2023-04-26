@@ -1,8 +1,7 @@
 <script lang="ts">
-    //object for the default color of every country of europe
-
     import PathInteractive from "$lib/components/geographic-map/PathInteractive.svelte";
 
+    //object for the default color of every country of europe
     export let countries = {
         // default color for each country is blue
         DE: {key: "DE", id: "germany", color: "#00008b", de: "Deutschland", en: "Germany"},
