@@ -23,7 +23,7 @@
     export let countryHeatValues: {name: string; value: number}[] = [];
     export let state = false;               // for responsive behavior, if state changes, then europe SVG is rerendered
 
-    export let europe: Europe;                     // europe SVG that is to be rendered
+    export let europe: Europe;              // europe SVG that is to be rendered
 
     /**
      * The function calculates a rgb color that lays between the colorFrom and the colorTo variable.
@@ -54,19 +54,20 @@
     /**
      * Returns a colored HeatMap of Europe. Each country is colored as defined in the countryHeatValues.
      */
-    function colorHeatMap(): Europe {
-        let europeRes = new Europe();
+    function colorHeatMap(): void {
+        //let europeRes = new Europe();
         for (const country of countryHeatValues) {
-            europeRes[country.name].color = mapColor(country.value);
+            europe[country.name].color = mapColor(country.value);
+            //europeRes[country.name].color = mapColor(country.value);
         }
-        return europeRes;
+        europe; // europeRes;
     }
 
     // if the colorFrom and colorTo change, then the europe SVG is rendered new
     $: {
         state = state;
         countryHeatValues = countryHeatValues;
-        europe = colorHeatMap();
+        colorHeatMap();
     }
 </script>
 

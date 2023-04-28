@@ -25,7 +25,7 @@
      * all countries
      */
     function getGenderData() {
-        genders = Object.keys(genderDistribution["DE"]);
+        //genders = Object.keys(genderDistribution["DE"]);
         displayGendersDistribution = {};            // clear object
         if (country === EUROPA) {                   // no country is focused -> sum up all europe countries
             for (const gender in genderDistribution["DE"]) {
