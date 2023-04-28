@@ -158,12 +158,7 @@
         heatMapColors = countryPeopleAmount;
     }
 
-    /*TODO
-        für SidePanel: Array erstellen: {gender: string, amount: number}[]
-        Darin sollen für ein bestimmtes Land oder für ganz Europa die entsprechenden Werte gespeichert werden.
-        - Werte müssen erst berechnet werden (Funktion?)
-        - Bisher werden die Personenanzahlen von männlich, weiblich unbekannt nicht unterschieden
-     */
+
     function calculateGenderDistribution(json:JSON) {
         let countryGenderDist = {};
         for(const location of Object.keys(new Europe())) {

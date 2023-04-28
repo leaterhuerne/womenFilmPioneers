@@ -25,6 +25,7 @@
      * all countries
      */
     function getGenderData() {
+        //TODO genders ist beim Laden der Webseite undefined/ null -> internal error
         //genders = Object.keys(genderDistribution["DE"]);
         displayGendersDistribution = {};            // clear object
         if (country === EUROPA) {                   // no country is focused -> sum up all europe countries
