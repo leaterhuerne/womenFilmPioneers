@@ -70,6 +70,7 @@
 
     //side panel
     let professions: string[] = []
+    let locations: string[] = []
 
     // =================================================================================================================
     //                                                  Functions
@@ -249,12 +250,6 @@
 
     }
 
-    const getProfessionsOfYear = (amount: number) => {
-        data.getProfessionForYear(frontLabelOnRoll.year, json => {
-            professions = Object.keys(json).sort(() => 0.5 - Math.random()).slice(0, amount);
-        });
-    }
-
     // =================================================================================================================
     //                                      Initialization of component
     // =================================================================================================================
@@ -271,12 +266,6 @@
     }
     //Set colours on the roll
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}];
-
-    $: {
-        frontLabelOnRoll.year = frontLabelOnRoll.year;
-        getProfessionsOfYear(5)
-    }
-
 </script>
 
 <div
@@ -399,9 +388,9 @@
     </div>
     <!-- Information -->
     <SidePanel
+            data={data}
             leftGender={{de: genderMap[leftGender].de, en: genderMap[leftGender].en, value: frontLabelOnRoll.left}}
             rightGender={{de: genderMap[rightGender].de, en: genderMap[rightGender].en, value: frontLabelOnRoll.right}}
-            professions={professions}
             year={frontLabelOnRoll.year}
     />
 </div>

@@ -7,7 +7,6 @@ interface Consumer<T> {
 
 const ALL = undefined;
 
-
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -70,10 +69,15 @@ export function load({fetch}) {
         getData(ALL, ALL, ALL, ALL, location, profession).then(consumer);
     }
     const getProfessionForYear = (year: number, consumer: Consumer<JSON>): void => {
-        return fetch("/api/professions?year=" + year).then((res: { json: () => any; }) => res.json()).then(consumer);
+        return fetch("/api/professions?year=" + year).then((res: Response) => res.json()).then(consumer);
     }
-    
+
+    const getFilmsForYear = (year: number, consumer: Consumer<JSON>): void => {
+        return fetch("/api/films?year=" + year).then((response: Response) => response.json()).then(consumer);
+    }
+
     return {
+        getFilmsForYear,
         getProfessionForYear,
         getProfessionList,
         getLocationList,

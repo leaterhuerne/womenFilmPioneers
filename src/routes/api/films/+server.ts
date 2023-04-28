@@ -341,6 +341,7 @@ export function GET({ url }: { url:URL }) {
             }
         }
         const keys = Object.keys(persons).sort();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         keys.forEach(key => json[key] = persons[key]);
 
@@ -352,7 +353,8 @@ export function GET({ url }: { url:URL }) {
         // Return list of all films
     } else if(filmList == "true") {
         json = Object.keys(database).sort();
-    } else {
+    }
+    else {
         //0000: all films, all genders, all persons, all years
         if(film == ALL && gender == ALL && person == ALL && year == ALL) {
             json = database;
