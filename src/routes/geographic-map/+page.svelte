@@ -11,7 +11,7 @@
 
     /** @type {import('./$types').PageData} */
     export let data;    // data from load function in page.ts
-    const ALLE = "";    // constant for "no specific profession is choosed"
+    const ALLE = "";    // constant for "no specific profession is chosen" and "no country is chosen"
 
     // Settings of the HeatMap
     let year: string = "1926";                                                  // current year
@@ -22,15 +22,16 @@
     let heatMapColors: {name: string; value: number}[] = [];            // country with values between min and max
     let mapUpperBound: number = 0;                                      // upper bound of the map
     let countryAmount: {countryDE: string, countryEN: string, amount: number} = {countryDE: "", countryEN: "", amount: 0};
+    let countryGenderDistribution = {};     // distribution of all genders per year in each country
 
     // listener functionality of the HeatMap
     let europe: Europe = new Europe();
-    let countryFocused: {state: boolean, country: string} = {state: false, country: ""};
+    let countryFocused: {state: boolean, country: string} = {state: false, country: ALLE};
     function mouseClickAction(country) {
         mouseAction(country);
         // click on the fixed country
         if (countryFocused.state && countryFocused.country == country["key"]) {
-            countryFocused = {state: false, country: ""};
+            countryFocused = {state: false, country: ALLE};
             europe[country["key"]]["stroke"] = "none";
         // click on a country but not the fixed one
         } else if (countryFocused.state && countryFocused.country != country["key"]) {
@@ -45,6 +46,7 @@
     }
     function mouseHoverAction(country) {
         if (!countryFocused.state) {
+            countryFocused = {state: false, country: country["key"]};
             mouseAction(country);
         }
     }
@@ -152,7 +154,7 @@
                 }
             }
         }
-        console.log(countryPeopleAmount)
+        //console.log(countryPeopleAmount)
         heatMapColors = countryPeopleAmount;
     }
 
@@ -163,7 +165,31 @@
         - Bisher werden die Personenanzahlen von männlich, weiblich unbekannt nicht unterschieden
      */
     function calculateGenderDistribution(json:JSON) {
-
+        let countryGenderDist = {};
+        for(const location of Object.keys(new Europe())) {
+            countryGenderDist[location] = {};
+            for (const gender of getChosenGenders()) {
+                countryGenderDist[location][gender] = 0;
+            }
+        }
+        for (const gender of getChosenGenders()) {
+            for (const country in json[year][gender]) {
+                if (chosenProfession === ALLE && json[year] != undefined) {         // all professions chosen
+                    if (Object.keys(countryGenderDist).includes(country)) {
+                        countryGenderDist[country][gender] += json[year][gender][country];
+                    }
+                } else {                                                            // specific profession
+                    if (json[year] != undefined) {
+                        if (Object.keys(countryGenderDist).includes(country)) {
+                            countryGenderDist[country][gender] +=
+                                json[year][gender][country][chosenProfession] ?? 0;
+                        }
+                    }
+                }
+            }
+        }
+        //console.log(countryGenderDist);
+        countryGenderDistribution = countryGenderDist;
     }
 
     /**
@@ -243,8 +269,6 @@
         mapUpperBound = mapUpperBound === 0 ? 1 : mapUpperBound;
     }
 
-    let sidePanelStatus: boolean = false;
-
     // if genders, profession or maximum-setting changes then maximum must be recalculated
     $: {
         // trigger re-rendering
@@ -258,16 +282,17 @@
         // no specific profession
         if (chosenProfession === ALLE) {
             data.getPersonData(fillMap, year);
+            data.getPersonData(calculateGenderDistribution, year);
             // specific profession
         } else {
             data.getDataSpecificYearAndProfession(fillMap, year, chosenProfession);
+            data.getDataSpecificYearAndProfession(calculateGenderDistribution, year, chosenProfession);
         }
     }
 
     // reactive block: update Heat map on each change of year or settings
     $: {
         chosenGenders = chosenGenders; // reactivity for changed gender buttons
-        sidePanelStatus = !sidePanelStatus; // update SidePanel for changed year or genders
         chosenProfession = chosenProfession;
         year = year;
         updateMap();
@@ -362,8 +387,9 @@
     <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
         Detaillierte Informationen:
         <SidePanel year={year}
+                   country={countryFocused.country}
+                   genderDistribution={countryGenderDistribution}
 
-                   state={sidePanelStatus}
         />
     </div>
 </div>
