@@ -12,13 +12,16 @@
     };
     export let year: number = 1926;
     export let country: string = EUROPA;
-    export let genderDistribution = {};                     // gender distribution data for each country
+    export let genderDistribution = {                       // gender distribution data for each country
+        DE: {female: "", male: "", unknown: ""}
+    };
     export let className: string = "";
 
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
 
+    console.log(genderDistribution)
     /**
      * Extracts the currently needed data from the genderDistribution object.
      * Result is either a gender distribution of the clicked country or the gender distribution of
@@ -26,7 +29,7 @@
      */
     function getGenderData() {
         //TODO genders ist beim Laden der Webseite undefined/ null -> internal error
-        //genders = Object.keys(genderDistribution["DE"]);
+        genders = Object.keys(genderDistribution["DE"]);
         displayGendersDistribution = {};            // clear object
         if (country === EUROPA) {                   // no country is focused -> sum up all europe countries
             for (const gender in genderDistribution["DE"]) {

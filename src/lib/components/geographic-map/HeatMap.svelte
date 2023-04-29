@@ -38,7 +38,7 @@
             lowerBound = upperBound;
             upperBound = temp;
         }
-        if (value < lowerBound) {
+        if (value < lowerBound || upperBound === 0) {
             return "rgb(" + colorFrom.red + ", " + colorFrom.green + ", " + colorFrom.blue + ")";
         } else if (value > upperBound) {
             return "rgb(" + colorTo.red + ", " + colorTo.green + ", " + colorTo.blue + ")";

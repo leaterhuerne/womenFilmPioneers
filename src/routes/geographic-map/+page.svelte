@@ -21,14 +21,14 @@
     let chosenProfession: string = ALLE;                                          // chosen profession
     let heatMapColors: {name: string; value: number}[] = [];            // country with values between min and max
     let mapUpperBound: number = 0;                                      // upper bound of the map
-    let countryAmount: {countryDE: string, countryEN: string, amount: number} = {countryDE: "", countryEN: "", amount: 0};
-    let countryGenderDistribution = {};     // distribution of all genders per year in each country
+    let countryGenderDistribution = {                                // distribution of all genders per year in each country
+        DE: {female: "", male: "", unknown: ""}
+    };
 
     // listener functionality of the HeatMap
     let europe: Europe = new Europe();
     let countryFocused: {state: boolean, country: string} = {state: false, country: ALLE};
     function mouseClickAction(country) {
-        mouseAction(country);
         // click on the fixed country
         if (countryFocused.state && countryFocused.country == country["key"]) {
             countryFocused = {state: false, country: ALLE};
@@ -46,17 +46,12 @@
     }
     function mouseHoverAction(country) {
         if (!countryFocused.state) {
-            countryFocused = {state: false, country: country["key"]};
-            mouseAction(country);
+            countryFocused = countryFocused.country === ALLE ?
+                {state: false, country: country["key"]} :
+                {state: false, country: ALLE};
         }
     }
-    function mouseAction(country) {
-        return countryAmount = {
-            countryDE: country.de,
-            countryEN: country.en,
-            amount: calculatePersonsPerLocation(country["key"])
-        };
-    }
+
 
     let svgListeners: {                                                 // listener for action on country
         onClick: (country) => void,
@@ -137,15 +132,15 @@
         for (const country in europe) {
             countryPeopleAmount.push({name: country, value: 0});
         }
-        for (const gender of getChosenGenders()) {
-            for (const country in json[year][gender]) {
-                if (chosenProfession === ALLE && json[year] != undefined) {         // all professions chosen
-                    if (Object.keys(europe).includes(country)) {
-                        let index = countryPeopleAmount.findIndex(entry => entry.name === country);
-                        countryPeopleAmount[index].value += json[year][gender][country];
-                    }
-                } else {                                                            // specific profession
-                    if (json[year] != undefined) {
+        if (json[year] != undefined) {
+            for (const gender of getChosenGenders()) {
+                for (const country in json[year][gender]) {
+                    if (chosenProfession === ALLE) {         // all professions chosen
+                        if (Object.keys(europe).includes(country)) {
+                            let index = countryPeopleAmount.findIndex(entry => entry.name === country);
+                            countryPeopleAmount[index].value += json[year][gender][country];
+                        }
+                    } else {                                                            // specific profession
                         if (Object.keys(europe).includes(country)) {
                             let index = countryPeopleAmount.findIndex(entry => entry.name === country);
                             countryPeopleAmount[index].value += json[year][gender][country][chosenProfession] ?? 0;
@@ -167,17 +162,19 @@
                 countryGenderDist[location][gender] = 0;
             }
         }
-        for (const gender of getChosenGenders()) {
-            for (const country in json[year][gender]) {
-                if (chosenProfession === ALLE && json[year] != undefined) {         // all professions chosen
-                    if (Object.keys(countryGenderDist).includes(country)) {
-                        countryGenderDist[country][gender] += json[year][gender][country];
-                    }
-                } else {                                                            // specific profession
-                    if (json[year] != undefined) {
+        if (json[year] != undefined) {
+            for (const gender of getChosenGenders()) {
+                for (const country in json[year][gender]) {
+                    if (chosenProfession === ALLE && json[year] != undefined) {         // all professions chosen
                         if (Object.keys(countryGenderDist).includes(country)) {
-                            countryGenderDist[country][gender] +=
-                                json[year][gender][country][chosenProfession] ?? 0;
+                            countryGenderDist[country][gender] += json[year][gender][country];
+                        }
+                    } else {                                                            // specific profession
+                        if (json[year] != undefined) {
+                            if (Object.keys(countryGenderDist).includes(country)) {
+                                countryGenderDist[country][gender] +=
+                                    json[year][gender][country][chosenProfession] ?? 0;
+                            }
                         }
                     }
                 }
@@ -347,11 +344,7 @@
                en="A maximum colored country equals {mapUpperBound} persons."
             />
         </p>
-        <p>
-            <T de="In {countryAmount.countryDE} waren {countryAmount.amount} Personen beschäftigt."
-               en="In {countryAmount.countryEN} worked {countryAmount.amount} persons."
-            />
-        </p>
+
         <!-- SCREEN: Year numbers on top right side in the map -->
         {#if windowWidth >= MD}
             <div class="mt-2 mr-2
