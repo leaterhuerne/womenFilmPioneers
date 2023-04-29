@@ -190,15 +190,6 @@
     }
 
     /**
-     * Finds the amount of persons that worked in a specific country at the specified year
-     * by searching in the heatMapColors object.
-     * @param country
-     */
-    function calculatePersonsPerLocation(country: string): number {
-        return heatMapColors.find(entry => entry.name === country).value;
-    }
-
-    /**
      * Calculates the maximum amount of all persons per year
      * @param json database
      */
@@ -244,7 +235,7 @@
         if (germanyCounted) {
             data.getDataProfession(calculateMaximumOfAllYears, chosenProfession);
         } else {
-            data.getDataProfession(calculateMaximumExcludingGermany, chosenProfession);
+            data.getDataProfession(calculateMaximumPerYear, chosenProfession);
         }
     }
 
@@ -343,21 +334,6 @@
                 <CheveronRight size={windowWidth < 768 ? 2 : 4} darkColor="black"/>
             </button>
         </div>
-        <!-- Information to amount of persons per country -->
-        <p>
-            <T de="Ein maximal eingefärbtes Land entspricht {mapUpperBound} Personen."
-               en="A maximum colored country equals {mapUpperBound} persons."
-            />
-        </p>
-        <p>
-            <T de="Gestreifte Länder: Hier gibt es keine Filmdaten vom DFF für das ausgewählte Jahr.
-                   Dies bedeutet aber nicht, dass hier keine Filme gedreht worden wäre. Das DFF hat lediglich keine
-                   Daten darüber."
-               en="Striped countries: The DFF has no film data for these countries for the chosen year.
-                   This does not mean that no films were shot here. The DFF just doesn't have any
-                   data about it."
-            />
-        </p>
         <!-- SCREEN: Year numbers on top right side in the map -->
         {#if windowWidth >= MD}
             <div class="mt-2 mr-2
@@ -383,10 +359,34 @@
                     bind:absoluteMap={germanyCounted}
             />
         </div>
+        <!-- Information to amount of persons per country -->
+        <div class="my-4 text-sm p-2">
+            <p>
+                <T de="Ein maximal eingefärbtes Land entspricht {mapUpperBound} Personen, die an Filmen aus der Datenbank beteiligt waren."
+                   en="A maximum colored country corresponds to {mapUpperBound} people involved in films of the database."
+                />
+            </p>
+            <p class="my-2">
+                <T de="Gestreifte Länder: Hier gibt es keine Filmdaten vom DFF für das ausgewählte Jahr.
+                       Dies bedeutet aber nicht, dass hier keine Filme gedreht worden wäre. Das DFF hat lediglich keine
+                       Daten darüber."
+                   en="Striped countries: The DFF has no film data for these countries for the chosen year.
+                       This does not mean that no films were shot here. The DFF just doesn't have any
+                       data about it."
+                />
+            </p>
+            <p class="italic">
+                <T de="Hinweis Maximum: 'alle Jahre' bedeutet, dass 100% Färbung auf der Karte der Personenzahl in dem Jahr
+                       entspricht, in der am meisten Personen tätig waren."
+                   en="Note Maximum: 'all years' means 100% coloring on the map of the number of people in that year
+                       corresponds to the one in which the most people were employed."
+                />
+            </p>
+        </div>
     </div>
     <!-- Detailed Information to Women -->
-    <div class="md:border-l p-2 border-firebrick-500 dark:border-firebrick-1000 h-full">
-        Detaillierte Informationen:
+    <div class="border-t-2 md:border-l border-firebrick-500 dark:border-firebrick-1000
+                p-2 h-full">
         <SidePanel year={year}
                    country={countryFocused.country}
                    genderDistribution={countryGenderDistribution}

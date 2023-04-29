@@ -120,12 +120,12 @@
             <button class="w-full {currentButtonStyles.absolute}"
                     on:click={toggleAbsoluteRelativeButtons}
             >
-                <T en="including germany" de="Mit Deutschland" />
+                <T en="Maximum all years" de="Maximum alle Jahre" />
             </button>
             <button class="w-full {currentButtonStyles.relative}"
                     on:click={toggleAbsoluteRelativeButtons}
             >
-                <T en="excluding germany" de="Ohne Deutschland" />
+                <T en="Maximum per year" de="Maximum pro Jahr" />
             </button>
         </div>
         <!-- Gender Button: female -->
