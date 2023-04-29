@@ -31,7 +31,7 @@
     function mouseClickAction(country) {
         // click on the fixed country
         if (countryFocused.state && countryFocused.country == country["key"]) {
-            countryFocused = {state: false, country: ALLE};
+            countryFocused.state = false;
             europe[country["key"]]["stroke"] = "none";
         // click on a country but not the fixed one
         } else if (countryFocused.state && countryFocused.country != country["key"]) {
@@ -44,11 +44,16 @@
             europe[country["key"]]["stroke"] = "red";
         }
     }
-    function mouseHoverAction(country) {
+
+    function mouseEnterAction(country) {
         if (!countryFocused.state) {
-            countryFocused = countryFocused.country === ALLE ?
-                {state: false, country: country["key"]} :
-                {state: false, country: ALLE};
+            countryFocused = {state: false, country: country["key"]};
+        }
+    }
+
+    function mouseLeaveAction(country) {
+        if (!countryFocused.state) {
+            countryFocused = {state: false, country: ALLE};
         }
     }
 
@@ -59,8 +64,8 @@
         onMouseLeave: (country) => void
     } = {
         onClick: country => mouseClickAction(country),
-        onMouseEnter: country => mouseHoverAction(country),
-        onMouseLeave: country => mouseHoverAction(country)
+        onMouseEnter: country => mouseEnterAction(country),
+        onMouseLeave: country => mouseLeaveAction(country)
     };
     // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
     let germanyCounted: boolean = true;
@@ -344,7 +349,15 @@
                en="A maximum colored country equals {mapUpperBound} persons."
             />
         </p>
-
+        <p>
+            <T de="Gestreifte Länder: Hier gibt es keine Filmdaten vom DFF für das ausgewählte Jahr.
+                   Dies bedeutet aber nicht, dass hier keine Filme gedreht worden wäre. Das DFF hat lediglich keine
+                   Daten darüber."
+               en="Striped countries: The DFF has no film data for these countries for the chosen year.
+                   This does not mean that no films were shot here. The DFF just doesn't have any
+                   data about it."
+            />
+        </p>
         <!-- SCREEN: Year numbers on top right side in the map -->
         {#if windowWidth >= MD}
             <div class="mt-2 mr-2

@@ -1,6 +1,6 @@
 <script lang="ts">
     import PathInteractive from "$lib/components/geographic-map/PathInteractive.svelte";
-
+    type rgb = {red: number, green: number, blue: number};
     //object for the default color of every country of europe
     export let countries = {
         // default color for each country is blue
@@ -60,6 +60,30 @@
     <metadata>
         Created by potrace 1.15, written by Peter Selinger 2001-2017
     </metadata>
+    <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#36413E" stop-opacity="1" />
+            <stop offset="10%" stop-color="#36413E" stop-opacity="1" />
+            <stop offset="10%" stop-color="#36413E" stop-opacity="1" />
+            <stop offset="20%" stop-color="#36413E" stop-opacity="1" />
+            <stop offset="20%" stop-color="#5D5E60" stop-opacity="1" />
+            <stop offset="30%" stop-color="#5D5E60" stop-opacity="1" />
+            <stop offset="30%" stop-color="#5D5E60" stop-opacity="1" />
+            <stop offset="40%" stop-color="#5D5E60" stop-opacity="1" />
+            <stop offset="40%" stop-color="#8D8D92" stop-opacity="1" />
+            <stop offset="50%" stop-color="#8D8D92" stop-opacity="1" />
+            <stop offset="50%" stop-color="#8D8D92" stop-opacity="1" />
+            <stop offset="60%" stop-color="#8D8D92" stop-opacity="1" />
+            <stop offset="60%" stop-color="#BEB2C8 " stop-opacity="1" />
+            <stop offset="70%" stop-color="#BEB2C8" stop-opacity="1" />
+            <stop offset="70%" stop-color="#BEB2C8" stop-opacity="1" />
+            <stop offset="80%" stop-color="#BEB2C8" stop-opacity="1" />
+            <stop offset="80%" stop-color="#7C668F" stop-opacity="1" />
+            <stop offset="90%" stop-color="#7C668F" stop-opacity="1" />
+            <stop offset="90%" stop-color="#7C668F" stop-opacity="1" />
+            <stop offset="100%" stop-color="#7C668F" stop-opacity="1" />
+        </linearGradient>
+    </defs>
     <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
     fill-opacity={opacity}>
         <PathInteractive
