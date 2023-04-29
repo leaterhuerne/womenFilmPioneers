@@ -63,11 +63,13 @@
     }
 
     // Initialization of the component
-    setHex();
-    for(let i = 0; i < colors.length; i++) {
-        setColour(i);
+    $: {
+        setHex();
+        for(let i = 0; i < colors.length; i++) {
+            setColour(i);
+        }
+        highlightColorField[activeColorField] = "scale-100";
     }
-    highlightColorField[activeColorField] = "scale-100";
 </script>
 
 <style>

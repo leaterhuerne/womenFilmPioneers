@@ -30,6 +30,7 @@ function getLocationList() {
 }
 
 function checkIfGenderInDatabase(gender: string | null) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if(!(gender == "male" || gender == "female" || gender == "unknown")) {
         throw error(406, "Gender \"" + gender + "\" does not exist in the database.");
@@ -186,6 +187,8 @@ export function GET({ url }: { url:URL }) {
             content[year] = {}
             const gen = data[year as dataKey][gender as genderKey];
             if (gen != undefined) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 content[year][gender] = {}
                 for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -201,6 +204,8 @@ export function GET({ url }: { url:URL }) {
             content[year] = {}
             const gen = data[year as dataKey][gender as genderKey];
             if (gen != undefined) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 content[year][gender] = {}
                 for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -293,10 +298,15 @@ export function GET({ url }: { url:URL }) {
             if (data[year as dataKey][gender as genderKey] != undefined) {
                 content[year as dataKey][gender as genderKey] = {}
                 for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     content[year][gender][location] = {}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     const pro = data[year as dataKey][gender as genderKey]["locations"][location]["professions"][profession];
                     if (pro != undefined) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         content[year][gender][location][profession] = pro;
                     }
                 }
@@ -312,6 +322,8 @@ export function GET({ url }: { url:URL }) {
             if (data[year as dataKey][gender as genderKey] != undefined) {
                 content[year as dataKey][gender as genderKey] = {}
                 for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     content[year][gender][location] = {}
                     for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -330,12 +342,19 @@ export function GET({ url }: { url:URL }) {
         if (data[year as dataKey] != undefined) {
             content[year as dataKey] = {}
             for (const gender of Object.keys(data[year as dataKey])) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 content[year][gender] = {}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const loc = data[year as dataKey][gender as genderKey]["locations"][location];
                 if (loc != undefined) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     content[year][gender][location] = {}
                     if (loc["professions"][profession] != undefined) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         content[year][gender][location][profession] = loc["professions"][profession];
                     }
                 }
@@ -349,6 +368,8 @@ export function GET({ url }: { url:URL }) {
         if (data[year as dataKey] != undefined) {
             content[year as dataKey] = {}
             for (const gender of Object.keys(data[year as dataKey])) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 content[year][gender] = {}
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -368,12 +389,19 @@ export function GET({ url }: { url:URL }) {
         if (data[year as dataKey] != undefined) {
             content[year as dataKey] = {}
             for (const gender of Object.keys(data[year as dataKey])) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 content[year][gender] = {}
                 for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     content[year][gender][location] = {}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     const pro = data[year as dataKey][gender as genderKey]["locations"][location]["professions"][profession];
                     if (pro != undefined) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         content[year][gender][location][profession] = pro;
                     }
                 }
@@ -386,10 +414,15 @@ export function GET({ url }: { url:URL }) {
         if (data[year as dataKey] != undefined) {
             content[year as dataKey] = {}
             for (const gender of Object.keys(data[year as dataKey])) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 content[year][gender] = {}
                 for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     content[year][gender][location] = {}
                     for (const location of Object.keys(data[year as dataKey][gender as genderKey]["locations"])) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         content[year][gender][location] = data[year as dataKey][gender as genderKey]["locations"][location]["occurences"]
                     }
@@ -480,7 +513,8 @@ export function GET({ url }: { url:URL }) {
         {
             status: 200,
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             }
         }
     );

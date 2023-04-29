@@ -10,9 +10,9 @@ export function GET({ url }: { url:URL }) {
         JSON.stringify(content),
         {
             status: 200,
-            statusText: "Filmhistory is okay.",
             headers: {
-                'Content-Type' : 'application/json'
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             }
         }
     );

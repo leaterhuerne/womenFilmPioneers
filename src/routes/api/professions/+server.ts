@@ -1,63 +1,46 @@
-import professions from "$lib/data/professions.json";
-import {error} from "@sveltejs/kit";
+import data from "$lib/data/genders_by_year_profession_location.json";
 
-type professionKey = keyof typeof professions;
-type genderKey = keyof typeof professions.Adaption;
+type year = keyof typeof data;
+type gender = "female" | "male" | "unknown";
 
-/**
- * Helper function for GET handling cthe case that only the gender argument was given. The function returns a smaller
- * json that only contains all professions with the specified gender.
- * @param gender gender key
- * @return a Response containing a json with professions as keys and the frequency of the given gender as value.
- */
-function onlyGender(gender: genderKey) {
-    const result: { [key: string]: number } = {};
-    const keys = Object.keys(professions) as professionKey[];
-    for (let i = 0; i < keys.length; i++) {
-        if (professions[keys[i]][gender as genderKey] > 0) {
-            result[keys[i]] = professions[keys[i]][gender as genderKey];
-        }
-    }
-    return new Response(JSON.stringify(result));
-}
 
-/**
- * Helper function for GET to throw different errors, if the given arguments don't exist in the database.
- * @param name profession key
- * @param gender gender key
- */
-function errorIfwrongArgument(name: professionKey, gender: genderKey) {
-    if (professions[name] == undefined) {
-        throw error(400, "The profession \"" + String(name) + "\" does not exist in the database.");
-    } else if (String(gender) != "male" || String(gender) != "female" || String(gender) != "unknown") {
-        throw error(400, "The gender \"" + String(gender) + "\" does not exist in the database.");
-    }
-}
+export function GET({ url, fetch} : {url:URL, fetch: any}) {
+    const content: any = {};
+    const year = url.searchParams.get("year") ?? "";
+    const gender = url.searchParams.get("gender") ?? "";
+    const location = url.searchParams.get("location") ?? "";
+    const professionList = url.searchParams.get("list");
 
-/**
- * Returns a json containing the professions as key and the frequency of genders as value.
- * @param url URL coming from GET request
- */
-export function GET({ url }: { url:URL }) {
-    const gender = url.searchParams.get("gender") as genderKey;
-    const name = url.searchParams.get("name") as professionKey;
-    // if parameter gender is given
-    if (gender != undefined) {
-        // if parameters name and gender are given
-        if (name != undefined) {
-            // if profession or gender is not in the database
-            errorIfwrongArgument(name, gender);
-            return new Response(String(professions[name][gender as genderKey]));
-        // if only parameter gender is given
-        } else {
-            return onlyGender(gender);
-        }
-    // if only parameter name is given
-    } else if (name != undefined) {
-        return new Response(JSON.stringify(professions[name]));
-    // no parameters given
+    if(professionList === "true") {
+        return fetch("/api/genders-by-year-profession-location?profession-list=true");
     } else {
-        return new Response(JSON.stringify(professions));
+        // all genders and locations, specific year
+        if(year != "" && gender == "" && location == "") {
+            for(const gender in data[year as year]) {
+                for(const profession in data[year as year][gender as gender].professions) {
+                    if(!(profession in content)) {
+                        content[profession] = {
+                            female: 0,
+                            male: 0,
+                            unknown: 0
+                        }
+                    }
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    content[profession][gender] = data[year as year][gender as gender].professions[profession];
+                }
+            }
+        }
     }
 
+    return new Response(
+        JSON.stringify(content),
+        {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        }
+    );
 }
