@@ -10,25 +10,27 @@
         male: {de: "Männlich", en: "Male"},
         unknown: {de: "Divers/Unbekannt", en: "Queer/Unknown"}
     };
+
+    export let data;
     export let year: number = 1926;
     export let country: string = EUROPA;
     export let genderDistribution = {                       // gender distribution data for each country
         DE: {female: "", male: "", unknown: ""}
     };
+    export let profession: string = "";
     export let className: string = "";
 
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
+    let people: {name: string, profession: string}[] = new Array(3).fill({name: "name", profession: "profession"});
 
-    console.log(genderDistribution)
     /**
      * Extracts the currently needed data from the genderDistribution object.
      * Result is either a gender distribution of the clicked country or the gender distribution of
      * all countries
      */
     function getGenderData() {
-        //TODO genders ist beim Laden der Webseite undefined/ null -> internal error
         genders = Object.keys(genderDistribution["DE"]);
         displayGendersDistribution = {};            // clear object
         if (country === EUROPA) {                   // no country is focused -> sum up all europe countries
@@ -59,12 +61,54 @@
         }
     }
 
+    function getPersons() {
+        data.getPersonPerYear((json) => {
+                const res = new Set();
+                /*for (const film in json) {
+                    for (const person in json[film]["people"]) {
+                        if (country == "") {        // all countries
+                            for (const gender of genders) {
+                                if (json[film]["people"][person]["gender"] == gender) {
+                                    res.add({name: person, profession: json[film]["people"][person]["profession"]});
+                                }
+                            }
+                        } else {                    // specific country
+                            for (const location of json[film]["location"]) {
+                                if (location == country) {
+                                    for (const gender of genders) {
+                                        if (json[film]["people"][person]["gender"] == gender) {
+                                            res.add({name: person, profession: json[film]["people"][person]["profession"]});
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }*/
+                for(const film in json) {
+                    for(const person in json[film]["people"]) {
+                        if(
+                            (country == "" || json[film]["location"].includes(country))
+                            && genders.includes(json[film]["people"][person]["gender"])
+                            && (profession === "" || profession === json[film]["people"][person]["profession"])
+                        ) {
+                            res.add({name: person, profession: json[film]["people"][person]["profession"]});
+                        }
+                    }
+                }
+                people = Array.from(res).sort(() => 0.5 - Math.random());
+            },
+            year
+        );
+    }
+
     $: {
         year = year;
         country = country;
         genderDistribution = genderDistribution;
         getGenderData();
         getCountryNamesLang();
+        getPersons();
     }
 
 </script>
@@ -76,7 +120,7 @@
         />
     </h1>
     <h2 class="text-lg font-semibold">
-        Geschlechterverteilung
+        <T de="Geschlechterverteilung" en="Gender Distribution" />
     </h2>
     {#each genders as gender}
         <p>
@@ -84,5 +128,18 @@
                 en={displayGenders[gender].en}
             />: {displayGendersDistribution[gender]}
         </p>
+    {/each}
+    <h2 class="mt-4 text-lg font-semibold">
+        <T de="Personen" en="People" />
+    </h2>
+    {#each people as person}
+        <div class="grid grid-cols-2">
+            <p>
+                {person.name}
+            </p>
+            <p>
+                {person.profession}
+            </p>
+        </div>
     {/each}
 </div>

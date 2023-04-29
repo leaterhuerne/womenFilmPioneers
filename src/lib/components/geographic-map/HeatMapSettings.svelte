@@ -132,19 +132,19 @@
         <button class="col-span-3 w-full {currentButtonStyles.female}"
                 on:click={() => activateGenderButton("female")}
         >
-            <T en="female" de="weiblich" />
+            <T en="Female" de="Weiblich" />
         </button>
         <!-- Gender Button: male -->
         <button class="col-span-3 w-full {currentButtonStyles.male}"
                 on:click={() => activateGenderButton("male")}
         >
-            <T en="male" de="männlich" />
+            <T en="Male" de="Männlich" />
         </button>
         <!-- Gender Button: unknown -->
         <button class="col-span-3 w-full {currentButtonStyles.unknown}"
                 on:click={() => activateGenderButton("unknown")}
         >
-            <T en="unknown" de="unbekannt" />
+            <T en="Queer/Unknown" de="Divers/Unbekannt" />
         </button>
         <!-- PROFESSIONS -->
         <!-- previous profession button -->

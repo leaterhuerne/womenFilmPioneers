@@ -51,7 +51,7 @@
         }
     }
 
-    function mouseLeaveAction(country) {
+    function mouseLeaveAction() {
         if (!countryFocused.state) {
             countryFocused = {state: false, country: ALLE};
         }
@@ -65,7 +65,7 @@
     } = {
         onClick: country => mouseClickAction(country),
         onMouseEnter: country => mouseEnterAction(country),
-        onMouseLeave: country => mouseLeaveAction(country)
+        onMouseLeave: () => mouseLeaveAction()
     };
     // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
     let germanyCounted: boolean = true;
@@ -129,7 +129,7 @@
 
     /**
      * Method to calculate for each country the amount of persons who worked there.
-     * @param json database
+     * @param json database snapshot
      */
     function fillMap(json: JSON) {
         let countryPeopleAmount: {name: string, value: number}[] = [];
@@ -154,11 +154,14 @@
                 }
             }
         }
-        //console.log(countryPeopleAmount)
         heatMapColors = countryPeopleAmount;
     }
 
 
+    /**
+     * Calculates the gender distribution of the current year
+     * @param json database snapshot
+     */
     function calculateGenderDistribution(json:JSON) {
         let countryGenderDist = {};
         for(const location of Object.keys(new Europe())) {
@@ -185,7 +188,6 @@
                 }
             }
         }
-        //console.log(countryGenderDist);
         countryGenderDistribution = countryGenderDist;
     }
 
@@ -203,27 +205,6 @@
                         amountPerYear += json[yearEntry][gender][country] ?? 0;
                     } else {                                // specific profession
                         amountPerYear += json[yearEntry][gender][country][chosenProfession]?? 0;
-                    }
-                }
-            }
-            mapUpperBound = Math.max(mapUpperBound, amountPerYear);
-        }
-    }
-
-    function calculateMaximumExcludingGermany(json): void {
-        mapUpperBound = 0;      // reset upper bound
-        for (const yearEntry in json) {
-            let amountPerYear: number = 0;
-            for (const gender of getChosenGenders()) {
-                for (const country in json[yearEntry][gender]) {
-                    // don't count germany
-                    if (country === "(DE)" || country === "DE" || country === "DE(" || country === "De") {
-                        continue;
-                    }
-                    if (chosenProfession === ALLE) {        // all professions chosen
-                        amountPerYear += json[yearEntry][gender][country] ?? 0;
-                    } else {                                // specific profession
-                        amountPerYear += json[yearEntry][gender][country][chosenProfession] ?? 0;
                     }
                 }
             }
@@ -290,7 +271,7 @@
 
     let colorPickerVisibility: string = "-translate-x-[84%] 2xl:translate-x-0";
     let windowWidth = 0;    // current width of the window
-    const MD = 768;         // constant for windowWidth of tailwind md: property
+    const LG = 1024;         // constant for windowWidth of tailwind md: property
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -335,7 +316,7 @@
             </button>
         </div>
         <!-- SCREEN: Year numbers on top right side in the map -->
-        {#if windowWidth >= MD}
+        {#if windowWidth >= LG}
             <div class="mt-2 mr-2
                         absolute right-0 top-0
                         sm:scale-100
@@ -345,7 +326,7 @@
             </div>
         {/if}
         <!-- MOBILE: Year number on bottom of the map -->
-        {#if windowWidth < MD}
+        {#if windowWidth < LG}
             <div class="m-2">
                 <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-firebrick-800" />
             </div>
@@ -387,9 +368,11 @@
     <!-- Detailed Information to Women -->
     <div class="border-t-2 md:border-l border-firebrick-500 dark:border-firebrick-1000
                 p-2 h-full">
-        <SidePanel year={year}
+        <SidePanel data={data}
+                   year={year}
                    country={countryFocused.country}
                    genderDistribution={countryGenderDistribution}
+                   profession={chosenProfession}
 
         />
     </div>
