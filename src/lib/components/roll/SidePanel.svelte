@@ -4,6 +4,8 @@
 
     export let data;
     export let year = 1895;
+
+    export let country = "alle";
     export let leftGender: {de: string, en: string, value: number};
     export let rightGender: {de: string, en: string, value: number};
 
@@ -12,16 +14,22 @@
     export let refreshProfessions: () => void = () => 
         data.getProfessionForYear(year, json => professions = Object.keys(json).sort(() => 0.5 - Math.random()).slice(0, 5));
 
-    export let refreshLocations: () => void = () => 
-        data.getFilmsForYear(year, json => locations = Object.keys(json).sort(() => 0.5 - Math.random()).slice(0, 5));
+    export let refreshFilms: () => void = () =>
+        data.getFilmsForYear(year, json => {
+            locations = Object.keys(json).filter(film => country != "alle"? json[film].location == country: true).sort(() => 0.5 - Math.random()).slice(0, 5)
+        });
 
     let lastYearChange = Date.now();
     let changedYear = false;
 
     //Initialize component
     refreshProfessions();
-    refreshLocations();
+    refreshFilms();
 
+    $: {
+        country = country;
+        refreshFilms();
+    }
     $: {
         year = year;
         lastYearChange = Date.now();
@@ -31,7 +39,7 @@
     setInterval(() => {
         if(changedYear && Date.now() - lastYearChange > 100) {
             refreshProfessions();
-            refreshLocations();
+            refreshFilms();
             changedYear = false;
         }
     }, 10);
@@ -78,7 +86,7 @@
     <div>
         <div class="flex gap-4">
             <h2 class="text-lg font-semibold"><T de="Filme aus diesem Jahr" en="Films from this year" /></h2>
-            <button on:click={refreshLocations}><Refresh darkColor="#D2CAB3" /></button>
+            <button on:click={refreshFilms}><Refresh darkColor="#D2CAB3" /></button>
         </div>
         <ul class="list-disc ml-4">
             {#each locations as location}

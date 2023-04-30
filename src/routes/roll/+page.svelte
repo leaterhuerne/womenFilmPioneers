@@ -392,5 +392,6 @@
             leftGender={{de: genderMap[leftGender].de, en: genderMap[leftGender].en, value: frontLabelOnRoll.left}}
             rightGender={{de: genderMap[rightGender].de, en: genderMap[rightGender].en, value: frontLabelOnRoll.right}}
             year={frontLabelOnRoll.year}
+            country={country}
     />
 </div>
