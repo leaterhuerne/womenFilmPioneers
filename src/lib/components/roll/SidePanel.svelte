@@ -16,7 +16,7 @@
 
     export let refreshFilms: () => void = () =>
         data.getFilmsForYear(year, json => {
-            locations = Object.keys(json).filter(film => country != "alle"? json[film].location == country: true).sort(() => 0.5 - Math.random()).slice(0, 5)
+            locations = Object.keys(json).filter(film => country != "alle"? json[film].location.includes(country) : true).sort(() => 0.5 - Math.random()).slice(0, 5)
         });
 
     let lastYearChange = Date.now();
