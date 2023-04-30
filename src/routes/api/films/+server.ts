@@ -6,7 +6,7 @@ import {error} from "@sveltejs/kit";
 type filmTitle = keyof typeof database;
 type person = {gender: string, profession: string, born: string, died:string};
 type people = Record<string, person>;
-type film = {year: string, location: string[], people: people}
+type film = {year: string[], location: string[], people: people}
 
 export function GET({ url }: { url:URL }) {
 
@@ -73,7 +73,7 @@ export function GET({ url }: { url:URL }) {
      * @param currentFilm film to check
      */
     const yearEquals = (currentFilm: film) => {
-        if (year != currentFilm.year) {
+        if (!currentFilm.year.includes(year ?? "")) {
             throw error(406, "There is no film \"" + film + "  from " + year + " in the database. Try \"" + currentFilm.year + "\" instead.");
         }
     };
@@ -196,7 +196,7 @@ export function GET({ url }: { url:URL }) {
         const films: Record<string, { location: string[] }> = {}
         for (const film in database) {
             const currentFilm: film = database[film as filmTitle];
-            if (currentFilm.year == year) {
+            if (currentFilm.year.includes(year ?? "")) {
                 for (const per in currentFilm.people) {
                     if (per == person) {
                         const currentPerson: person = currentFilm.people[per];
@@ -241,7 +241,7 @@ export function GET({ url }: { url:URL }) {
         const films: Record<string, object> = {};
         for (const film in database) {
             const currentFilm = database[film as filmTitle];
-            if (currentFilm["year"] == year) {
+            if ((currentFilm["year"] as string[]).includes(year ?? "")) {
                 const filmSnap: Record<string, string[] | object> = {
                     location: database[film as filmTitle]["location"],
                     people: {}
@@ -289,7 +289,7 @@ export function GET({ url }: { url:URL }) {
         checkIfYearInDatabase();
         const films: Record<string, { location: string[], people: people }> = {};
         for (const film in database) {
-            if (database[film as filmTitle]["year"] == year && (person ?? " ") in database[film as filmTitle]["people"]) {
+            if ((database[film as filmTitle]["year"] as string[]).includes(year ?? "") && (person ?? " ") in database[film as filmTitle]["people"]) {
                 films[film] = {
                     location: database[film as filmTitle]["location"],
                     people: database[film as filmTitle]["people"]
@@ -315,7 +315,9 @@ export function GET({ url }: { url:URL }) {
         checkIfYearInDatabase();
         const films: Record<string, { people: people, location: string[] }> = {}
         for (const film in database) {
-            if (database[film as filmTitle]["year"] == year) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (database[film as filmTitle]["year"].includes(year)) {
                 films[film] = {
                     people: database[film as filmTitle]["people"],
                     location: database[film as filmTitle]["location"]
@@ -341,6 +343,7 @@ export function GET({ url }: { url:URL }) {
             }
         }
         const keys = Object.keys(persons).sort();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         keys.forEach(key => json[key] = persons[key]);
 

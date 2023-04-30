@@ -275,9 +275,58 @@ def films():
         file.write(json.dumps(films, indent=4))
     print("JSON written.")
 
+def films2():
+    print("Loading database...")
+    database = get_database("database.json")
+    print("Database loaded.")
+
+    print("Creating JSON from film data...")
+    films = {}
+    for entry in database:
+        for film in database[entry]["filme"]:
+            film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
+            name = database[entry]["person"]["IDName"]
+            person = {
+                "gender": mapGender(database[entry]["person"]["Geschlecht"]),
+                "profession": database[entry]["filme"][film]["rel"],
+                "born": database[entry]["person"]["Geburtsdatum"],
+                "died": database[entry]["person"]["Sterbedatum"]
+            }
+            if film_title not in films:
+                years = database[entry]["filme"][film]["Jahr"].split("/")
+                film_years = []
+                for year in years:
+                    if year.isdigit() and (1890 <= int(year) <= 2021):
+                        film_years.append(year)
+                films[film_title] = {
+                    "year": "unknown" if len(film_years) == 0 else film_years,
+                    "location": database[entry]["filme"][film]["Region"],
+                    "people": {
+                        name: person
+                    }
+                }
+            else:
+                films[film_title]["people"][name] = person
+
+    print("JSON created.")
+
+    print("Writing JSON to file...")
+    with open("films.json", "w") as file:
+        file.write(json.dumps(films, indent=4))
+    print("JSON written.")
+
+def scanIL():
+    database = get_database("films2.json")
+    locations = []
+    for film in database:
+        if database[film]["year"] == "1947":
+            for location in database[film]["location"]:
+                locations.append(location)
+    print(list(set(locations)))
+
 
 def main():
-    films()
+    films2()
 
 
 if __name__ == "__main__":
