@@ -64,35 +64,14 @@
     function getPersons() {
         data.getPersonPerYear((json) => {
                 const res = new Set();
-                /*for (const film in json) {
-                    for (const person in json[film]["people"]) {
-                        if (country == "") {        // all countries
-                            for (const gender of genders) {
-                                if (json[film]["people"][person]["gender"] == gender) {
-                                    res.add({name: person, profession: json[film]["people"][person]["profession"]});
-                                }
-                            }
-                        } else {                    // specific country
-                            for (const location of json[film]["location"]) {
-                                if (location == country) {
-                                    for (const gender of genders) {
-                                        if (json[film]["people"][person]["gender"] == gender) {
-                                            res.add({name: person, profession: json[film]["people"][person]["profession"]});
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }*/
-                for(const film in json) {
-                    for(const person in json[film]["people"]) {
+                for(const filmId in json) {
+                    for(const person in json[filmId]["people"]) {
                         if(
-                            (country == "" || json[film]["location"].includes(country))
-                            && genders.includes(json[film]["people"][person]["gender"])
-                            && (profession === "" || profession === json[film]["people"][person]["profession"])
+                            (country == "" || json[filmId]["location"].includes(country))
+                            && genders.includes(json[filmId]["people"][person]["gender"])
+                            && (profession === "" || profession === json[filmId]["people"][person]["profession"])
                         ) {
-                            res.add({name: person, profession: json[film]["people"][person]["profession"]});
+                            res.add({name: person, profession: json[filmId]["people"][person]["profession"]});
                         }
                     }
                 }
