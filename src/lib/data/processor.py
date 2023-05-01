@@ -288,16 +288,14 @@ def films2():
             film_id = film
             name = database[entry]["person"]["IDName"]
             person = {
-                "gender": mapGender(database[entry]["person"]["Geschlecht"]),
-                "profession": database[entry]["filme"][film]["rel"],
-                "born": database[entry]["person"]["Geburtsdatum"],
-                "died": database[entry]["person"]["Sterbedatum"]
+                "gen": mapGender(database[entry]["person"]["Geschlecht"]),
+                "pro": database[entry]["filme"][film]["rel"],
             }
             if film_id not in films:
                 years = database[entry]["filme"][film]["Jahr"].split("/")
                 film_years = []
                 for year in years:
-                    if year.isdigit() and (1890 <= int(year) <= 2021):
+                    if year.isdigit() and (1890 <= int(year) <= 1950):
                         film_years.append(year)
                 films[film_id] = {
                     "title": film_title,

@@ -68,10 +68,10 @@
                     for(const person in json[filmId]["people"]) {
                         if(
                             (country == "" || json[filmId]["location"].includes(country))
-                            && genders.includes(json[filmId]["people"][person]["gender"])
-                            && (profession === "" || profession === json[filmId]["people"][person]["profession"])
+                            && genders.includes(json[filmId]["people"][person]["gen"])
+                            && (profession === "" || profession === json[filmId]["people"][person]["pro"])
                         ) {
-                            res.add({name: person, profession: json[filmId]["people"][person]["profession"]});
+                            res.add({name: person, profession: json[filmId]["people"][person]["pro"]});
                         }
                     }
                 }
