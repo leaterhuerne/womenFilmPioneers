@@ -1,8 +1,5 @@
-// noinspection TypeScriptExplicitMemberType
-
 import database from "$lib/data/films.json";
 import {error} from "@sveltejs/kit";
-import {data} from "autoprefixer";
 
 type filmId = keyof typeof database;
 type person = {gender: string, profession: string, born: string, died:string};
