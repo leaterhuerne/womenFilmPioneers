@@ -44,8 +44,8 @@
         <div class={selectorStyle}>
             <p class={selectorLabelStyle} >{professionLabel}</p>
             <div class={buttonStyle}>
-                <button on:click={professionUp}><CheveronUp /></button>
-                <button on:click={professionDown}><CheveronDown /></button>
+                <button on:click={professionUp}><CheveronUp darkColor="#D2CAB3"/></button>
+                <button on:click={professionDown}><CheveronDown darkColor="#D2CAB3"/></button>
             </div>
         </div>
     </div>
@@ -55,8 +55,8 @@
         <div class={selectorStyle}>
             <p class={selectorLabelStyle}>{countryLabel}</p>
             <div class={buttonStyle}>
-                <button on:click={countryUp}><CheveronUp /></button>
-                <button on:click={countryDown}><CheveronDown /></button>
+                <button on:click={countryUp}><CheveronUp darkColor="#D2CAB3"/></button>
+                <button on:click={countryDown}><CheveronDown darkColor="#D2CAB3"/></button>
             </div>
         </div>
     </div>

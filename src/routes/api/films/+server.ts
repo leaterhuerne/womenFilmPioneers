@@ -2,11 +2,12 @@
 
 import database from "$lib/data/films.json";
 import {error} from "@sveltejs/kit";
+import {data} from "autoprefixer";
 
-type filmTitle = keyof typeof database;
+type filmId = keyof typeof database;
 type person = {gender: string, profession: string, born: string, died:string};
 type people = Record<string, person>;
-type film = {year: string, location: string[], people: people}
+type film = {title: string, year: string[], location: string[], people: people}
 
 export function GET({ url }: { url:URL }) {
 
@@ -63,9 +64,12 @@ export function GET({ url }: { url:URL }) {
      * Checks if film in database.
      */
     const checkIfFilmInDatabase = () => {
-        if (film != null && !(film in database)) {
-            throw error(406, "The film \"" + film + "\" is not in the database.");
+        for(const filmId in database) {
+            if (film != null && database[filmId as filmId]["title"] == film) {
+               return;
+            }
         }
+        throw error(406, "The film \"" + film + "\" is not in the database.");
     };
 
     /**
@@ -73,16 +77,31 @@ export function GET({ url }: { url:URL }) {
      * @param currentFilm film to check
      */
     const yearEquals = (currentFilm: film) => {
-        if (year != currentFilm.year) {
+        if (!currentFilm.year.includes(year ?? "")) {
             throw error(406, "There is no film \"" + film + "  from " + year + " in the database. Try \"" + currentFilm.year + "\" instead.");
         }
     };
+
+    const getCurrentFilm = () => {
+        for(const id in database) {
+            if(database[id as filmId]["title"] == film) {
+                return database[id as filmId];
+            }
+        }
+    }
 
     function getSpecificFilmSpecificGenderSpecificPersonSpecificYear() {
         checkIfFilmInDatabase();
         checkIfGenderInDatabase();
         checkIfYearInDatabase();
-        const currentFilm: film = database[film as filmTitle];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        let currentFilm: film = {};
+        for(const id in database) {
+            if(database[id as filmId]["title"] == film && (database[id as filmId] as string[]).includes(year ?? "")) {
+                currentFilm = database[id as filmId];
+            }
+        }
         yearEquals(currentFilm);
         const result = {
             location: currentFilm.location,
@@ -103,19 +122,17 @@ export function GET({ url }: { url:URL }) {
     function getSpecificFilmSpecificGenderSpecificPersonAllYears() {
         checkIfFilmInDatabase();
         checkIfGenderInDatabase();
-        const currentFilm: film = database[film as filmTitle];
-        const result = {
-            location: currentFilm.location,
-            year: currentFilm.year
-        }
-        for (const per in currentFilm.people) {
-            const currentPerson = currentFilm.people[per];
-            if (per == person) {
-                if (currentPerson.gender != gender) {
-                    throw error(406, person + " is not " + gender + ". Try \"" + currentPerson.gender + "\" instead.")
+        const result = {}
+        for(const filmId in database) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if(database[filmId as filmId]["title"] == film && person in database[filmId as filmId]["people"] && database[filmId as filmId]["people"][person]["gender"] == gender) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                result[film] = {
+                    location: database[filmId as filmId]["location"],
+                    year: database[filmId as filmId]["year"]
                 }
-            } else {
-                throw error(406, person + " was not involved in \"" + film + "\".");
             }
         }
         json = result;
@@ -137,71 +154,113 @@ export function GET({ url }: { url:URL }) {
                 }
             }
         }
-        json = result;
+        return result;
     }
 
     function getSpecificFilmSpecificGenderAllPersonsSpecificYear() {
         checkIfFilmInDatabase();
         checkIfGenderInDatabase();
         checkIfYearInDatabase();
-        checkIfFilmInDatabase();
-        checkIfGenderInDatabase();
-        const currentFilm: film = database[film as filmTitle];
-        yearEquals(currentFilm);
-        createResultForSpecificFilmSpecificGender(currentFilm);
+        const result: any = {}
+        for(const filmId in database) {
+            if(database[filmId as filmId]["title"] == film && (database[filmId as filmId]["year"] as string[]).includes(year ?? "")) {
+                result[filmId] = createResultForSpecificFilmSpecificGender(database[filmId as filmId])
+            }
+        }
+        //yearEquals(currentFilm); -> adapt for multiple films
+        json = result;
     }
 
     function getSpecificFilmSpecificGenderAllPersonsAllYears() {
         checkIfFilmInDatabase();
         checkIfGenderInDatabase();
-        createResultForSpecificFilmSpecificGender(database[film as filmTitle]);
+        const result: any = {}
+        for(const filmId in database) {
+            if(database[filmId as filmId]["title"] == film) {
+                result[filmId] = createResultForSpecificFilmSpecificGender(database[filmId as filmId])
+            }
+        }
+        json = result;
     }
 
     function getSpecificFilmAllGendersSpecificPersonSpecificYear() {
         checkIfFilmInDatabase();
         checkIfYearInDatabase();
-        const currentFilm: film = database[film as filmTitle];
-        yearEquals(currentFilm);
-        if (person ?? " " in currentFilm.people) {
-            json = {location: currentFilm.location}
-        } else {
-            throw error(406, person + " was not involved in \"" + film + "\".");
+        const result: any = {}
+        for(const filmId in database) {
+            if(database[filmId as filmId]["title"] == film && (person ?? "" in database[filmId as filmId]["people"]) && (database[filmId as filmId]["year"] as string[]).includes(year ?? "")) {
+                result[filmId] = {
+                    location: database[filmId as filmId]["location"],
+                }
+                for(const per in database[filmId as filmId]["people"] as object) {
+                    if(per == person) {
+                        result[filmId][person] = database[filmId as filmId]["people"][person]
+                    }
+                }
+            }
         }
+        json = result;
     }
 
     function getSpecificFilmAllGendersSpecificPersonAllYears() {
         checkIfFilmInDatabase();
-        const currentFilm: film = database[film as filmTitle];
-        if (person ?? " " in currentFilm.people) {
-            json = {location: currentFilm.location}
-        } else {
-            throw error(406, person + " was not involved in \"" + film + "\".");
+        const result: any = {}
+        for(const filmId in database) {
+            if(database[filmId as filmId]["title"] == film && (person ?? "" in database[filmId as filmId]["people"])) {
+                for(const per in database[filmId as filmId]["people"] as object) {
+                    if(per == person) {
+                        result[filmId] = {
+                            location: database[filmId as filmId]["location"],
+                            year: database[filmId as filmId]["year"],
+                        }
+                        result[filmId][person] = database[filmId as filmId]["people"][person];
+                    }
+                }
+            }
         }
+        json = result;
     }
 
     function getSpecificFilmAllGendersAllPersonsSpecificYear() {
         checkIfFilmInDatabase();
-        yearEquals(database[film as filmTitle]);
-        json = database[film as filmTitle];
+        const result: any = {}
+        for(const filmId in database) {
+            if(database[filmId as filmId]["title"] == film && (database[filmId as filmId]["year"] as string[]).includes(year ?? "")) {
+                result[filmId] = {
+                    location: database[filmId as filmId]["location"],
+                    year: database[filmId as filmId]["year"],
+                    people: database[filmId as filmId]["people"]
+                }
+            }
+        }
+        json = result;
     }
 
     function getSpecificFilmAllGendersAllPersonsAllYears() {
         checkIfFilmInDatabase();
-        json = database[film as filmTitle];
+        const result: any = {}
+        for(const filmId in database) {
+            if(database[filmId as filmId]["title"] == film) {
+                result[filmId] = database[filmId as filmId]
+            }
+        }
+        json = result;
+
     }
 
     function getAllFilmsSpecificGenderSpecificPersonSpecificYear() {
         checkIfGenderInDatabase();
         checkIfYearInDatabase();
-        const films: Record<string, { location: string[] }> = {}
-        for (const film in database) {
-            const currentFilm: film = database[film as filmTitle];
-            if (currentFilm.year == year) {
+        const films: Record<string, { title: string, location: string[] }> = {}
+        for (const filmId in database) {
+            const currentFilm: film = database[filmId as filmId];
+            if (currentFilm.year.includes(year ?? "")) {
                 for (const per in currentFilm.people) {
                     if (per == person) {
                         const currentPerson: person = currentFilm.people[per];
                         if (currentPerson.gender == gender) {
-                            films[film] = {
+                            films[filmId] = {
+                                title: currentFilm.title,
                                 location: currentFilm.location
                             }
                         } else {
@@ -215,36 +274,35 @@ export function GET({ url }: { url:URL }) {
     }
 
     function getAllFilmsSpecificGenderSpecificPersonAllYears() {
-        checkIfFilmInDatabase();
         checkIfGenderInDatabase();
-        const currentFilm: film = database[film as filmTitle];
-        const resultfilm = {
-            year: currentFilm.year,
-            people: {} as Record<string, { profession: string, born: string, died: string }>
-        };
-        for (const person in currentFilm.people) {
-            const currentPerson: person = currentFilm.people[person];
-            if (currentPerson.gender == gender) {
-                resultfilm.people[person] = {
-                    profession: currentPerson.profession,
-                    born: currentPerson.born,
-                    died: currentPerson.died
+        const films: Record<string, { title: string, location: string[], year: string[] }> = {}
+        for (const filmId in database) {
+            const currentFilm: film = database[filmId as filmId];
+            for (const per in currentFilm.people) {
+                if (per == person) {
+                    const currentPerson: person = currentFilm.people[per];
+                    if (currentPerson.gender == gender) {
+                        films[filmId] = {
+                            title: currentFilm.title,
+                            location: currentFilm.location,
+                            year: currentFilm.year
+                        }
+                    }
                 }
             }
         }
-        if (!isEmpty(resultfilm.people)) {
-            json = resultfilm;
-        }
+        json = films;
     }
 
     function getAllFilmsSpecificGendersAllPersonsSpecificYear() {
         const films: Record<string, object> = {};
         for (const film in database) {
-            const currentFilm = database[film as filmTitle];
-            if (currentFilm["year"] == year) {
-                const filmSnap: Record<string, string[] | object> = {
-                    location: database[film as filmTitle]["location"],
-                    people: {}
+            const currentFilm: film = database[film as filmId];
+            if ((currentFilm["year"] as string[]).includes(year ?? "")) {
+                const filmSnap: any = {
+                    title: currentFilm.title,
+                    location: currentFilm.location,
+                    people: {} as people
                 }
                 for (const person in currentFilm["people"] as object) {
                     const currentPerson: person = currentFilm["people"][person]
@@ -267,19 +325,20 @@ export function GET({ url }: { url:URL }) {
     function getAllFilmsSpecificGenderAllPersonsAllYears() {
         checkIfGenderInDatabase();
         const films: Record<string, object> = {};
-        for (const filmTitle in database) {
+        for (const filmId in database) {
             const film: Record<string, object | number> = {
                 "people": {}
             }
-            for (const person in database[filmTitle as filmTitle]["people"] as object) {
-                if (database[filmTitle as filmTitle]["people"][person]["gender"] == gender) {
-                    (film["people"] as Record<string, never>)[person] = database[filmTitle as filmTitle]["people"][person]
+            for (const person in database[filmId as filmId]["people"] as object) {
+                if (database[filmId as filmId]["people"][person]["gender"] == gender) {
+                    (film["people"] as Record<string, never>)[person] = database[filmId as filmId]["people"][person]
                 }
             }
             if (Object.keys(film["people"]).length > 0) {
-                film["year"] = Number(database[filmTitle as filmTitle]["year"]);
-                film["location"] = database[filmTitle as filmTitle]["location"];
-                films[filmTitle] = film;
+                film["title"] = database[filmId as filmId]["title"]
+                film["year"] = Number(database[filmId as filmId]["year"]);
+                film["location"] = database[filmId as filmId]["location"];
+                films[filmId] = film;
             }
         }
         json = films;
@@ -287,13 +346,16 @@ export function GET({ url }: { url:URL }) {
 
     function getAllFilmsAllGendersSpecificPersonSpecificYear() {
         checkIfYearInDatabase();
-        const films: Record<string, { location: string[], people: people }> = {};
-        for (const film in database) {
-            if (database[film as filmTitle]["year"] == year && (person ?? " ") in database[film as filmTitle]["people"]) {
-                films[film] = {
-                    location: database[film as filmTitle]["location"],
-                    people: database[film as filmTitle]["people"]
+        const films: Record<string, { title: string, location: string[]}> = {};
+        for (const filmId in database) {
+            if ((database[filmId as filmId]["year"] as string[]).includes(year ?? "") && (person ?? " ") in database[filmId as filmId]["people"]) {
+                films[filmId] = {
+                    title: database[filmId as filmId]["title"],
+                    location: database[filmId as filmId]["location"],
                 };
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                films[filmId][person] = database[filmId as filmId]["people"][person];
             }
         }
         checkIfPersonInDatabase(films);
@@ -302,9 +364,9 @@ export function GET({ url }: { url:URL }) {
 
     function getAllFilmsAllGendersSpecificPersonAllYears() {
         const films: Record<string, film> = {};
-        for (const film in database) {
-            if (person ?? "" in database[film as filmTitle]["people"]) {
-                films[film] = database[film as filmTitle];
+        for (const filmId in database) {
+            if (person != null && person in database[filmId as filmId]["people"]) {
+                films[filmId] = database[filmId as filmId];
             }
         }
         checkIfPersonInDatabase(films);
@@ -313,12 +375,13 @@ export function GET({ url }: { url:URL }) {
 
     function getAllFilmsAllGendersAllPersonsSpecificYears() {
         checkIfYearInDatabase();
-        const films: Record<string, { people: people, location: string[] }> = {}
-        for (const film in database) {
-            if (database[film as filmTitle]["year"] == year) {
-                films[film] = {
-                    people: database[film as filmTitle]["people"],
-                    location: database[film as filmTitle]["location"]
+        const films: Record<string, { title: string, people: people, location: string[] }> = {}
+        for (const filmId in database) {
+            if ((database[filmId as filmId]["year"] as string[]).includes(year ?? "")) {
+                films[filmId] = {
+                    title:  database[filmId as filmId]["title"],
+                    people: database[filmId as filmId]["people"],
+                    location: database[filmId as filmId]["location"]
                 }
             }
         }
@@ -331,8 +394,8 @@ export function GET({ url }: { url:URL }) {
     function getPersonList() {
         const persons: Record<string, { "gender": string, "born": string, "died": string }> = {};
         for (const film in database) {
-            for (const person in database[film as filmTitle]["people"] as object) {
-                const personData = database[film as filmTitle]["people"][person]
+            for (const person in database[film as filmId]["people"] as object) {
+                const personData = database[film as filmId]["people"][person]
                 persons[person] = {
                     "gender": personData["gender"],
                     "born": personData["born"],
@@ -341,6 +404,7 @@ export function GET({ url }: { url:URL }) {
             }
         }
         const keys = Object.keys(persons).sort();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         keys.forEach(key => json[key] = persons[key]);
 
@@ -352,7 +416,8 @@ export function GET({ url }: { url:URL }) {
         // Return list of all films
     } else if(filmList == "true") {
         json = Object.keys(database).sort();
-    } else {
+    }
+    else {
         //0000: all films, all genders, all persons, all years
         if(film == ALL && gender == ALL && person == ALL && year == ALL) {
             json = database;
