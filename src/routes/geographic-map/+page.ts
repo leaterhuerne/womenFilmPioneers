@@ -12,7 +12,7 @@ export function load({ fetch }) {
      * @param year parameter for endpoint request
      * @param gender parameter for endpoint request
      * @param profession parameter for endpoint request
-     * @location location parameter for endpoint request
+     * @param location parameter for endpoint request
      */
     function getPersonData(
         consumer: (json: JSON) => void,
@@ -35,6 +35,13 @@ export function load({ fetch }) {
             url += "location=" + profession;
         }
         fetch(url).then((e: Response) => e.json()).then(consumer);
+    }
+
+    function getPersonPerYear(
+        consumer: (json: JSON) => void,
+        year?: number | string
+    ) {
+        fetch("/api/films?year=" + year).then((response: Response) => response.json()).then(consumer);
     }
 
     /**
@@ -72,6 +79,7 @@ export function load({ fetch }) {
 
     return {
         getPersonData,
+        getPersonPerYear,
         getDataProfession,
         getDataSpecificYearAndProfession,
         getProfessionList,

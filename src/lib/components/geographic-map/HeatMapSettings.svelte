@@ -60,13 +60,13 @@
         " hover:bg-firebrick-500 hover:dark:bg-firebrick-800 dark:hover:border border-firebrick-700";
 
     // initial styling of all gender buttons
-    let initialButtonStyle: string = "text-md font-bold" +
+    let initialButtonStyle: string = "text-sm sm:text-md font-bold" +
         " border border-amber-500 dark:border-none rounded" +
         " bg-amber-400 dark:bg-firebrick-800" +
         " h-8";
 
     // style of an activated button
-    let activatedButtonStyle: string = "text-lg font-bold" +
+    let activatedButtonStyle: string = "text-md sm:text-lg font-bold" +
         " ring-2 ring-amber-500 rounded dark:bg-firebrick-700 dark:ring-firebrick-600" +
         " bg-amber-400 dark:bg-firebrick-800" +
         " h-8";
@@ -120,31 +120,31 @@
             <button class="w-full {currentButtonStyles.absolute}"
                     on:click={toggleAbsoluteRelativeButtons}
             >
-                <T en="including germany" de="Mit Deutschland" />
+                <T en="Maximum all years" de="Maximum alle Jahre" />
             </button>
             <button class="w-full {currentButtonStyles.relative}"
                     on:click={toggleAbsoluteRelativeButtons}
             >
-                <T en="excluding germany" de="Ohne Deutschland" />
+                <T en="Maximum per year" de="Maximum pro Jahr" />
             </button>
         </div>
         <!-- Gender Button: female -->
         <button class="col-span-3 w-full {currentButtonStyles.female}"
                 on:click={() => activateGenderButton("female")}
         >
-            <T en="female" de="weiblich" />
+            <T en="Female" de="Weiblich" />
         </button>
         <!-- Gender Button: male -->
         <button class="col-span-3 w-full {currentButtonStyles.male}"
                 on:click={() => activateGenderButton("male")}
         >
-            <T en="male" de="männlich" />
+            <T en="Male" de="Männlich" />
         </button>
         <!-- Gender Button: unknown -->
         <button class="col-span-3 w-full {currentButtonStyles.unknown}"
                 on:click={() => activateGenderButton("unknown")}
         >
-            <T en="unknown" de="unbekannt" />
+            <T en="Queer/Unknown" de="Divers/Unbekannt" />
         </button>
         <!-- PROFESSIONS -->
         <!-- previous profession button -->
