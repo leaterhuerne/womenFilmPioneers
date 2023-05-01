@@ -285,6 +285,7 @@ def films2():
     for entry in database:
         for film in database[entry]["filme"]:
             film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
+            film_id = film
             name = database[entry]["person"]["IDName"]
             person = {
                 "gender": mapGender(database[entry]["person"]["Geschlecht"]),
@@ -292,13 +293,14 @@ def films2():
                 "born": database[entry]["person"]["Geburtsdatum"],
                 "died": database[entry]["person"]["Sterbedatum"]
             }
-            if film_title not in films:
+            if film_id not in films:
                 years = database[entry]["filme"][film]["Jahr"].split("/")
                 film_years = []
                 for year in years:
                     if year.isdigit() and (1890 <= int(year) <= 2021):
                         film_years.append(year)
-                films[film_title] = {
+                films[film_id] = {
+                    "title": film_title,
                     "year": "unknown" if len(film_years) == 0 else film_years,
                     "location": database[entry]["filme"][film]["Region"],
                     "people": {
@@ -306,7 +308,7 @@ def films2():
                     }
                 }
             else:
-                films[film_title]["people"][name] = person
+                films[film_id]["people"][name] = person
 
     print("JSON created.")
 
@@ -316,10 +318,10 @@ def films2():
     print("JSON written.")
 
 def scanIL():
-    database = get_database("films2.json")
+    database = get_database("films.json")
     locations = []
     for film in database:
-        if database[film]["year"] == "1947":
+        if database[film]["year"] == "1923":
             for location in database[film]["location"]:
                 locations.append(location)
     print(list(set(locations)))
