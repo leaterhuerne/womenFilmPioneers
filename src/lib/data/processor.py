@@ -279,44 +279,58 @@ def films2():
     print("Loading database...")
     database = get_database("database.json")
     print("Database loaded.")
+
     print("Creating JSON from film data...")
-    for data_year in range(1890, 2022):
-        films = {}
-        for entry in database:
-            for film in database[entry]["filme"]:
-                film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
-                film_id = film
-                name = database[entry]["person"]["IDName"]
-                person = {
-                    "gender": mapGender(database[entry]["person"]["Geschlecht"]),
-                    "profession": database[entry]["filme"][film]["rel"],
-                    "born": database[entry]["person"]["Geburtsdatum"],
-                    "died": database[entry]["person"]["Sterbedatum"]
+    films = {}
+    for entry in database:
+        for film in database[entry]["filme"]:
+            film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
+            film_id = film
+            name = database[entry]["person"]["IDName"]
+            if film_id not in films:
+                years = database[entry]["filme"][film]["Jahr"].split("/")
+                film_years = []
+                for year in years:
+                    if year.isdigit() and (1890 <= int(year) <= 1950):
+                        film_years.append(year)
+                films[film_id] = {
+                    "title": film_title,
+                    "year": "unknown" if len(film_years) == 0 else film_years,
+                    "location": database[entry]["filme"][film]["Region"],
+                    "people": {
+                        entry: name
+                    }
                 }
-                if film_id not in films:
-                    years = database[entry]["filme"][film]["Jahr"].split("/")
-                    film_years = []
-                    for year in years:
-                        if year.isdigit() and (1890 <= int(year) <= 2021):
-                            film_years.append(year)
-                    if str(data_year) in film_years:
-                        films[film_id] = {
-                            "title": film_title,
-                            "year": "unknown" if len(film_years) == 0 else film_years,
-                            "location": database[entry]["filme"][film]["Region"],
-                            "people": {
-                                name: person
-                            }
-                        }
-                else:
-                    films[film_id]["people"][name] = person
+            else:
+                films[film_id]["people"][entry] = name
 
-        print("JSON created.")
+    print("JSON created.")
 
-        print("Writing " + str(data_year) + " to file...")
-        with open("films_" + str(data_year) + ".json", "w") as file:
-            file.write(json.dumps(films, indent=4))
-    print("JSON files written.")
+    print("Writing JSON to file...")
+    with open("films.json", "w") as file:
+        file.write(json.dumps(films, indent=4))
+    print("JSON written.")
+
+def persons():
+    print("Loading database...")
+    database = get_database("database.json")
+    print("Database loaded.")
+    print("Creating JSON from film data...")
+    persons = {
+        "female" : [],
+        "male": [],
+        "unknown": []
+    }
+    for person in database:
+        entry = database[person]["person"]
+        gender = "female" if entry["Geschlecht"] == "W" else ("male" if entry["Geschlecht"] == "M" else "unknown")
+        persons[gender].append(person)
+    print("JSON created.")
+
+    print("Writing JSON to file...")
+    with open("persons.json", "w") as file:
+        file.write(json.dumps(persons, indent=4))
+    print("JSON written.")
 
 def scanIL():
     database = get_database("films.json")
@@ -327,14 +341,9 @@ def scanIL():
                 locations.append(location)
     print(list(set(locations)))
 
-def generateImports():
-    res = "const database = ["
-    for year in range(1890, 2022):
-        res += "films_" + str(year) + ", "
-    print(res + "]")
 
 def main():
-    generateImports()
+    persons()
 
 
 if __name__ == "__main__":

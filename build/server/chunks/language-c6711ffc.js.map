@@ -1,1 +1,0 @@
-{"version":3,"file":"language-c6711ffc.js","sources":["../../../.svelte-kit/adapter-node/chunks/language.js"],"sourcesContent":["import { w as writable } from \"./index3.js\";\nconst language = writable(\"de\");\nexport {\n  language as l\n};\n"],"names":[],"mappings":";;AACK,MAAC,QAAQ,GAAG,QAAQ,CAAC,IAAI;;;;"}

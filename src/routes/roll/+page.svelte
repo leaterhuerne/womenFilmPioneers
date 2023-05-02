@@ -193,7 +193,6 @@
          * @param bars bar values
          */
         const specificProfessionSpecificLocation = (json: JSON, year: string, gender: string, bars: bar) => {
-            console.log(year + ", " + gender + ", " + country + ", " + profession);
             if (gender == leftGender && json[year][gender][country] != undefined) {
                 bars.left += json[year][gender][country][profession] ?? 0;
             }

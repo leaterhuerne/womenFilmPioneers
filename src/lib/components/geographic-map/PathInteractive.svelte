@@ -5,11 +5,11 @@
         key: string,
         id: string,
         color: string,
+        stroke: string,
         de: string,
         en: string
-    } = {key: "", id: "", color: "", de: "", en: ""};
+    } = {key: "", id: "", color: "", stroke: "none", de: "", en: ""};
     export let d: string = "";
-    export let stroke: string = "none";
     export let listeners: {                     // listener to make a path reactive for mouse action
         onClick: (country) => void,
         onMouseEnter: (country) => void,
@@ -27,7 +27,8 @@
     <path class={className}
         d={d}
         fill={countryData.color}
-        stroke={stroke}
+        stroke={countryData.stroke}
+        stroke-width="2%"
         on:click={() => listeners.onClick(countryData)}
         on:mouseenter={() => listeners.onMouseEnter(countryData)}
         on:mouseleave={() => listeners.onMouseLeave(countryData)}
