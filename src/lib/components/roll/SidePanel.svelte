@@ -20,7 +20,7 @@
             Object.keys(json)
                 .filter(film => country != "alle"? json[film].location.includes(country) : true)
                 .sort(() => 0.5 - Math.random()).slice(0, 5)
-                .forEach(film => locations.push(json[film]["title"]));
+                .forEach(film => locations.push(film));
         });
 
     let lastYearChange = Date.now();

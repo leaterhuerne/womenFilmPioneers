@@ -376,10 +376,13 @@ export function GET({ url }: { url:URL }) {
         for (const filmId in database) {
             if ((database[filmId as filmId]["year"] as string[]).includes(year ?? "")) {
                 films[filmId] = {
-                    title:  database[filmId as filmId]["title"],
+                    title: database[filmId as filmId]["title"],
                     people: database[filmId as filmId]["people"],
                     location: database[filmId as filmId]["location"]
                 }
+                fetch("http://frauen-filmgeschichte.de:3004/api/persons?ids=[%2207EDB55102A643CF8927E165E7E3D1A1%22]&genders=[%22male%22,%20%22female%22,%20%22unknown%22]")
+                    .then(res => res.json())
+                    .then(json => films[filmId]["data"] = json);
             }
         }
         json = films;
