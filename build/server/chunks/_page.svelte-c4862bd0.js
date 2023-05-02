@@ -896,40 +896,43 @@ const SVGEurope = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   )}</g></svg>`;
 });
 class Europe {
-  constructor() {
-    this.DE = { key: "DE", id: "germany", color: "#00008b", stroke: "none", de: "Deutschland", en: "Germany" };
-    this.UK = { key: "UK", id: "unitedKingdom", color: "#00008b", stroke: "none", de: "Großbritannien", en: "United Kingdom" };
-    this.FR = { key: "FR", id: "france", color: "#00008b", stroke: "none", de: "Frankreich", en: "France" };
-    this.IT = { key: "IT", id: "italy", color: "#00008b", stroke: "none", de: "Italien", en: "Italy" };
-    this.ES = { key: "ES", id: "spain", color: "#00008b", stroke: "none", de: "Spanien", en: "Spain" };
-    this.UA = { key: "UA", id: "ukraine", color: "#00008b", stroke: "none", de: "Ukraine", en: "Ukraine" };
-    this.PL = { key: "PL", id: "poland", color: "#00008b", stroke: "none", de: "Polen", en: "Poland" };
-    this.RO = { key: "RO", id: "romania", color: "#00008b", stroke: "none", de: "Rumänien", en: "Romania" };
-    this.NL = { key: "NL", id: "netherlands", color: "#00008b", stroke: "none", de: "Niederlande", en: "Netherlands" };
-    this.BE = { key: "BE", id: "belgium", color: "#00008b", stroke: "none", de: "Belgien", en: "Belgium" };
-    this.CS = { key: "CS", id: "czechoslovakia", color: "#00008b", stroke: "none", de: "Tschechoslowakei", en: "Czechoslovakia" };
-    this.CZ = { key: "CZ", id: "czechia", color: "#00008b", stroke: "none", de: "Tschechien", en: "Czechia" };
-    this.EL = { key: "EL", id: "greece", color: "#00008b", stroke: "none", de: "Griechenland", en: "Greece" };
-    this.PT = { key: "PT", id: "portugal", color: "#00008b", stroke: "none", de: "Portugal", en: "Portugal" };
-    this.SE = { key: "SE", id: "sweden", color: "#00008b", stroke: "none", de: "Schweden", en: "Sweden" };
-    this.HU = { key: "HU", id: "hungary", color: "#00008b", stroke: "none", de: "Ungarn", en: "Hungary" };
-    this.BY = { key: "BY", id: "belarus", color: "#00008b", stroke: "none", de: "Belarus", en: "Belarus" };
-    this.AT = { key: "AT", id: "austria", color: "#00008b", stroke: "none", de: "Österreich", en: "Austria" };
-    this.CH = { key: "CH", id: "switzerland", color: "#00008b", stroke: "none", de: "Schweiz", en: "Switzerland" };
-    this.BG = { key: "BG", id: "bulgaria", color: "#00008b", stroke: "none", de: "Bulgarien", en: "Bulgaria" };
-    this.DK = { key: "DK", id: "denmark", color: "#00008b", stroke: "none", de: "Dänemark", en: "Denmark" };
-    this.FI = { key: "FI", id: "finland", color: "#00008b", stroke: "none", de: "Finland", en: "Finland" };
-    this.NO = { key: "NO", id: "norway", color: "#00008b", stroke: "none", de: "Norwegen", en: "Norway" };
-    this.IE = { key: "IE", id: "ireland", color: "#00008b", stroke: "none", de: "Irland", en: "Ireland" };
-    this.MD = { key: "MD", id: "moldova", color: "#00008b", stroke: "none", de: "Moldawien", en: "Moldova" };
-    this.AL = { key: "AL", id: "albania", color: "#00008b", stroke: "none", de: "Albanien", en: "Albania" };
-    this.LT = { key: "LT", id: "lithuania", color: "#00008b", stroke: "none", de: "Litauen", en: "Lithuania" };
-    this.YU = { key: "YU", id: "Yugoslavia", color: "#00008b", stroke: "none", de: "Jugoslawien", en: "Yugoslavia" };
-    this.LV = { key: "LV", id: "latvia", color: "#00008b", stroke: "none", de: "Lettland", en: "Latvia" };
-    this.EE = { key: "EE", id: "estonia", color: "#00008b", stroke: "none", de: "Estland", en: "Estonia" };
-    this.LU = { key: "LU", id: "luxembourg", color: "#00008b", stroke: "none", de: "Luxemburg", en: "Luxembourg" };
-    this.TR = { key: "TR", id: "turkey", color: "#00008b", stroke: "none", de: "Türkei", en: "Turkey" };
-  }
+  /**
+   * This class describes the continent Europe by having a field
+   * with a color for each country.
+   * Default color is dark blue saved in value.
+   */
+  DE = { key: "DE", id: "germany", color: "#00008b", stroke: "none", de: "Deutschland", en: "Germany" };
+  UK = { key: "UK", id: "unitedKingdom", color: "#00008b", stroke: "none", de: "Großbritannien", en: "United Kingdom" };
+  FR = { key: "FR", id: "france", color: "#00008b", stroke: "none", de: "Frankreich", en: "France" };
+  IT = { key: "IT", id: "italy", color: "#00008b", stroke: "none", de: "Italien", en: "Italy" };
+  ES = { key: "ES", id: "spain", color: "#00008b", stroke: "none", de: "Spanien", en: "Spain" };
+  UA = { key: "UA", id: "ukraine", color: "#00008b", stroke: "none", de: "Ukraine", en: "Ukraine" };
+  PL = { key: "PL", id: "poland", color: "#00008b", stroke: "none", de: "Polen", en: "Poland" };
+  RO = { key: "RO", id: "romania", color: "#00008b", stroke: "none", de: "Rumänien", en: "Romania" };
+  NL = { key: "NL", id: "netherlands", color: "#00008b", stroke: "none", de: "Niederlande", en: "Netherlands" };
+  BE = { key: "BE", id: "belgium", color: "#00008b", stroke: "none", de: "Belgien", en: "Belgium" };
+  CS = { key: "CS", id: "czechoslovakia", color: "#00008b", stroke: "none", de: "Tschechoslowakei", en: "Czechoslovakia" };
+  CZ = { key: "CZ", id: "czechia", color: "#00008b", stroke: "none", de: "Tschechien", en: "Czechia" };
+  EL = { key: "EL", id: "greece", color: "#00008b", stroke: "none", de: "Griechenland", en: "Greece" };
+  PT = { key: "PT", id: "portugal", color: "#00008b", stroke: "none", de: "Portugal", en: "Portugal" };
+  SE = { key: "SE", id: "sweden", color: "#00008b", stroke: "none", de: "Schweden", en: "Sweden" };
+  HU = { key: "HU", id: "hungary", color: "#00008b", stroke: "none", de: "Ungarn", en: "Hungary" };
+  BY = { key: "BY", id: "belarus", color: "#00008b", stroke: "none", de: "Belarus", en: "Belarus" };
+  AT = { key: "AT", id: "austria", color: "#00008b", stroke: "none", de: "Österreich", en: "Austria" };
+  CH = { key: "CH", id: "switzerland", color: "#00008b", stroke: "none", de: "Schweiz", en: "Switzerland" };
+  BG = { key: "BG", id: "bulgaria", color: "#00008b", stroke: "none", de: "Bulgarien", en: "Bulgaria" };
+  DK = { key: "DK", id: "denmark", color: "#00008b", stroke: "none", de: "Dänemark", en: "Denmark" };
+  FI = { key: "FI", id: "finland", color: "#00008b", stroke: "none", de: "Finland", en: "Finland" };
+  NO = { key: "NO", id: "norway", color: "#00008b", stroke: "none", de: "Norwegen", en: "Norway" };
+  IE = { key: "IE", id: "ireland", color: "#00008b", stroke: "none", de: "Irland", en: "Ireland" };
+  MD = { key: "MD", id: "moldova", color: "#00008b", stroke: "none", de: "Moldawien", en: "Moldova" };
+  AL = { key: "AL", id: "albania", color: "#00008b", stroke: "none", de: "Albanien", en: "Albania" };
+  LT = { key: "LT", id: "lithuania", color: "#00008b", stroke: "none", de: "Litauen", en: "Lithuania" };
+  YU = { key: "YU", id: "Yugoslavia", color: "#00008b", stroke: "none", de: "Jugoslawien", en: "Yugoslavia" };
+  LV = { key: "LV", id: "latvia", color: "#00008b", stroke: "none", de: "Lettland", en: "Latvia" };
+  EE = { key: "EE", id: "estonia", color: "#00008b", stroke: "none", de: "Estland", en: "Estonia" };
+  LU = { key: "LU", id: "luxembourg", color: "#00008b", stroke: "none", de: "Luxemburg", en: "Luxembourg" };
+  TR = { key: "TR", id: "turkey", color: "#00008b", stroke: "none", de: "Türkei", en: "Turkey" };
 }
 const HeatMap = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { className = "" } = $$props;
@@ -1823,4 +1826,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-c95c8f60.js.map
+//# sourceMappingURL=_page.svelte-c4862bd0.js.map
