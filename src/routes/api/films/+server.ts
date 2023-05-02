@@ -372,15 +372,24 @@ export function GET({ url }: { url:URL }) {
 
     function getAllFilmsAllGendersAllPersonsSpecificYears() {
         checkIfYearInDatabase();
-        const films: Record<string, { title: string, people: people, location: string[] }> = {}
+        const films: Record<string, { title: string, people: any, location: string[] }> = {}
         for (const filmId in database) {
             if ((database[filmId as filmId]["year"] as string[]).includes(year ?? "")) {
                 films[filmId] = {
                     title:  database[filmId as filmId]["title"],
-                    people: database[filmId as filmId]["people"],
+                    people: {},
                     location: database[filmId as filmId]["location"]
                 }
+                for(const pers in database[filmId as filmId]["people"] as object) {
+                    const data = (database[filmId as filmId]["people"][pers] as string).split(";");
+                    films[filmId]["people"][pers] = {
+                        name: data[0],
+                        gender: data[1] == "W" ? "female" : (data[1] == "M" ? "male" : "unknown"),
+                        profession: data[2]
+                    }
+                }
             }
+
         }
         json = films;
     }
