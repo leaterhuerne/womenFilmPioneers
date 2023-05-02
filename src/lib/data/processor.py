@@ -348,7 +348,7 @@ def scanIL():
 
 
 def main():
-    persons()
+    films2()
 
 
 if __name__ == "__main__":
