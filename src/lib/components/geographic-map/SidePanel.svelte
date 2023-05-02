@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" crossorigin="anonymous">
     import T from "$lib/components/T.svelte";
     import {Europe} from "$lib/utils/geographic-map/Europe";
     type language = {de: string, en: string};
@@ -23,7 +23,7 @@
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
-    let people: {name: string, profession: string}[] = new Array(3).fill({name: "name", profession: "profession"});
+    let people: {name: string, film: string}[] = new Array(3).fill({name: "name", profession: "film"});
 
     /**
      * Extracts the currently needed data from the genderDistribution object.
@@ -62,20 +62,42 @@
     }
 
     function getPersons() {
-        data.getPersonPerYear((json) => {
-                const res = new Set();
-                for(const filmId in json) {
-                    for(const person in json[filmId]["people"]) {
-                        if(
-                            (country == "" || json[filmId]["location"].includes(country))
-                            && genders.includes(json[filmId]["people"][person]["gen"])
-                            && (profession === "" || profession === json[filmId]["people"][person]["pro"])
-                        ) {
-                            res.add({name: person, profession: json[filmId]["people"][person]["pro"]});
+        /*const personFilmIds: {personId: {name: string, filmId: string, profession: string}} = {};
+        data.getPersonsPerYearExternResource(
+            (films) => {
+                const personQueryObj: {ids: string[], genders: string[], profession: string}
+                    = {ids: [], genders: genders, profession: ""};
+                for(const filmId in films) {
+                    for(const personId in films[filmId]["people"]) {
+                        if (country == "" || films[filmId]["location"].includes(country)) {
+                            personFilmIds[personId] = {name: films[filmId]["people"][personId], filmId: filmId};
+                            personQueryObj.ids.push(personId);
                         }
                     }
                 }
-                people = Array.from(res).sort(() => 0.5 - Math.random());
+                return personQueryObj;
+            },
+            (persons) => {
+                console.log("consumer");
+            },
+            year
+        );*/
+
+        data.getPersonPerYear((json) => {
+                const peoplePerLocation = {};
+                for(const filmId in json) {
+                    for(const personId in json[filmId]["people"]) {
+                        if(
+                            (country == "" || json[filmId]["location"].includes(country))
+                            //&& genders.includes(json[filmId]["people"][personId]["gen"])
+                            //&& (profession === "" || profession === json[filmId]["people"][personId]["pro"])
+                        ) {
+                            //people.push({name: })
+                            peoplePerLocation[personId] = json[filmId]["people"][personId];
+                        }
+                    }
+                }
+                //people = Array.from(peoplePerLocation).sort(() => 0.5 - Math.random());
             },
             year
         );
@@ -117,7 +139,7 @@
                 {person.name}
             </p>
             <p>
-                {person.profession}
+                {person.film}
             </p>
         </div>
     {/each}

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" crossorigin="anonymous">
     import {language} from "$lib/stores/language";
     import HeatMap from "$lib/components/geographic-map/HeatMap.svelte";
     import ColorPicker from "$lib/components/ColorPicker.svelte";
