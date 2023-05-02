@@ -37,11 +37,17 @@ export function load({ fetch }) {
         fetch(url).then((e: Response) => e.json()).then(consumer);
     }
 
-    function getPersonPerYear(
+    function getFilmsPerYear(
         consumer: (json: JSON) => void,
         year?: number | string
     ) {
         fetch("/api/films?year=" + year).then((response: Response) => response.json()).then(consumer);
+    }
+
+    function getPersonIdsByGender(consumer: (json: JSON) => void, genders: string[]) {
+        fetch("/api/persons?genders=" + JSON.stringify(genders))
+            .then((response: Response) => response.json())
+            .then(consumer);
     }
 
     function getPersonsInFilms(
@@ -119,9 +125,10 @@ export function load({ fetch }) {
 
     return {
         getPersonData,
-        getPersonPerYear,
-        getPersonsInFilms,
-        getPersonsPerYearExternResource,
+        getFilmsPerYear,
+        getPersonIdsByGender,
+        //getPersonsInFilms,
+        //getPersonsPerYearExternResource,
         getDataProfession,
         getDataSpecificYearAndProfession,
         getProfessionList,

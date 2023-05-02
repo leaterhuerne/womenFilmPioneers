@@ -21,9 +21,10 @@
     export let className: string = "";
 
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
+    let personIds: string[] = [];                           // all persons IDs of the currently chosen genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
-    let people: {name: string, film: string}[] = new Array(3).fill({name: "name", film: "film"});
+    let filmData: {film: {name: string, people: string[]}} = {film: {name: "", people: [""]}};
 
     /**
      * Extracts the currently needed data from the genderDistribution object.
@@ -61,49 +62,36 @@
         }
     }
 
-    function getPersons() {
-        const personByFilms: {filmId: {name: string, persons: {id: string, name: string}[]}} = {};
-        const personFilmIds: {personId: {name: string, filmId: string, profession: string}} = {};
-        data.getPersonsPerYearExternResource(
-            (films) => {
-                const personQueryObj: {ids: string[], genders: string[], profession: string}
-                    = {ids: [], genders: genders, profession: ""};
-                for(const filmId in films) {
-                    for(const personId in films[filmId]["people"]) {
-                        if (country == "" || films[filmId]["location"].includes(country)) {
-                            personFilmIds[personId] = {name: films[filmId]["people"][personId], filmId: filmId};
-                            personQueryObj.ids.push(personId);
-                        }
+    function getPersonIds() {
+        data.getPersonIdsByGender(
+            (json) => {
+                for (const gender in json) {
+                    for (const id of json[gender]) {
+                        personIds.push(id);
                     }
                 }
-                return personQueryObj;
             },
-            (persons) => {
-                console.log("consumer");
-            },
-            year
+            genders
         );
-        /*
-        data.getPersonPerYear((json) => {
-                const peoplePerLocation = {};
-                for(const filmId in json) {
-                    for(const personId in json[filmId]["people"]) {
-                        if(
-                            (country == "" || json[filmId]["location"].includes(country))
-                            //&& genders.includes(json[filmId]["people"][personId]["gen"])
-                            //&& (profession === "" || profession === json[filmId]["people"][personId]["pro"])
-                        ) {
-                            //people.push({name: })
-                            peoplePerLocation[personId] = json[filmId]["people"][personId];
-                        }
-                    }
-                }
-                //people = Array.from(peoplePerLocation).sort(() => 0.5 - Math.random());
-            },
-            year
-        );
+    }
 
-         */
+    function getPersonFilmData() {
+        data.getFilmsPerYear((json) => {
+            filmData = {}; //clear object
+            for(const filmId in json) {
+                for(const personId in json[filmId]["people"]) {
+                    if((country == "" || json[filmId]["location"].includes(country)) && personIds.includes(personId)) {
+                        if (!Object.keys(filmData).includes(filmId)) {
+                            filmData[filmId] = {name: json[filmId]["title"], people: [json[filmId]["people"][personId]]};
+                        } else {
+                            filmData[filmId]["people"].push(json[filmId]["people"][personId]);
+                        }
+                    }
+                }
+            }
+        },
+        year
+        );
     }
 
     $: {
@@ -112,18 +100,19 @@
         genderDistribution = genderDistribution;
         getGenderData();
         getCountryNamesLang();
-        getPersons();
+        getPersonIds();
+        getPersonFilmData();
     }
 
 </script>
 
 <div class="{className}">
-    <h1 class="text-3xl font-semibold text-center">
+    <h1 class="mb-4 text-3xl font-semibold text-center">
         <T de="Die Filmindustrie in {countryLanguages.de} im Jahr {year}"
            en="The film industry of {countryLanguages.en} in {year}"
         />
     </h1>
-    <h2 class="text-lg font-semibold">
+    <h2 class="mb-2 text-xl font-semibold">
         <T de="Geschlechterverteilung" en="Gender Distribution" />
     </h2>
     {#each genders as gender}
@@ -133,17 +122,21 @@
             />: {displayGendersDistribution[gender]}
         </p>
     {/each}
-    <h2 class="mt-4 text-lg font-semibold">
-        <T de="Personen" en="People" />
+    <h2 class="mt-4 text-xl font-semibold">
+        <T de="Filme und Personen" en="Films and People" />
     </h2>
-    {#each people as person}
-        <div class="grid grid-cols-2">
-            <p>
-                {person.name}
+    {#each Object.keys(filmData) as filmId}
+        <div class="">
+            <p class="mt-2 text-md font-semibold italic text-firebrick-700 dark:text-firebrick-500">
+                {filmData[filmId].name}
             </p>
-            <p>
-                {person.film}
-            </p>
+            <ul class="ml-4 list-disc">
+                {#each filmData[filmId]["people"] as person}
+                    <li >
+                        {person}
+                    </li>
+                {/each}
+            </ul>
         </div>
     {/each}
 </div>
