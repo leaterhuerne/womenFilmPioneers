@@ -251,28 +251,26 @@ def films():
             film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
             name = database[entry]["person"]["IDName"]
             person = {
-                "gender": mapGender(database[entry]["person"]["Geschlecht"]),
-                "profession": database[entry]["filme"][film]["rel"],
-                "born": database[entry]["person"]["Geburtsdatum"],
-                "died": database[entry]["person"]["Sterbedatum"]
+                "g": database[entry]["person"]["Geschlecht"],
+                "p": database[entry]["filme"][film]["rel"],
             }
             if film_title not in films:
                 year = database[entry]["filme"][film]["Jahr"]
                 films[film_title] = {
-                    "year": "unknown" if ((not year.isdigit()) or (not (1890 <= int(year) <= 2021))) else year,
-                    "location": database[entry]["filme"][film]["Region"],
-                    "people": {
+                    "y": "unknown" if ((not year.isdigit()) or (not (1890 <= int(year) <= 2021))) else year,
+                    "l": database[entry]["filme"][film]["Region"],
+                    "p": {
                         name: person
                     }
                 }
             else:
-                films[film_title]["people"][name] = person
+                films[film_title]["p"][name] = person
 
     print("JSON created.")
 
     print("Writing JSON to file...")
     with open("films.json", "w") as file:
-        file.write(json.dumps(films, indent=4))
+        file.write(json.dumps(films))
     print("JSON written.")
 
 def films2():
@@ -298,17 +296,17 @@ def films2():
                     "year": "unknown" if len(film_years) == 0 else film_years,
                     "location": database[entry]["filme"][film]["Region"],
                     "people": {
-                        entry: name
+                        entry: name + ";"  + database[entry]["person"]["Geschlecht"] + ";" +  database[entry]["filme"][film]["rel"]
                     }
                 }
             else:
-                films[film_id]["people"][entry] = name
+                films[film_id]["people"][entry] = name + ";"  + database[entry]["person"]["Geschlecht"] + ";" +  database[entry]["filme"][film]["rel"]
 
     print("JSON created.")
 
     print("Writing JSON to file...")
     with open("films.json", "w") as file:
-        file.write(json.dumps(films, indent=4))
+        file.write(json.dumps(films))
     print("JSON written.")
 
 def persons():
@@ -343,7 +341,7 @@ def scanIL():
 
 
 def main():
-    persons()
+    films2()
 
 
 if __name__ == "__main__":
