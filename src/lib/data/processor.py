@@ -316,20 +316,15 @@ def persons():
     database = get_database("database.json")
     print("Database loaded.")
     print("Creating JSON from film data...")
-    persons = {}
+    persons = {
+        "female" : [],
+        "male": [],
+        "unknown": []
+    }
     for person in database:
         entry = database[person]["person"]
-        if person not in persons:
-            persons[person] = {
-                "name": entry["IDName"],
-                "gender": "female" if entry["Geschlecht"] == "W" else ("male" if entry["Geschlecht"] == "M" else "unknown"),
-                "born": entry["Geburtsdatum"],
-                "died": entry["Sterbedatum"],
-                "born_in": entry["Geburtsort"],
-                "professions": {}
-            }
-            for film in database[person]["filme"]:
-                persons[person]["professions"][film] = database[person]["filme"][film]["rel"]
+        gender = "female" if entry["Geschlecht"] == "W" else ("male" if entry["Geschlecht"] == "M" else "unknown")
+        persons[gender].append(person)
     print("JSON created.")
 
     print("Writing JSON to file...")
@@ -348,7 +343,7 @@ def scanIL():
 
 
 def main():
-    films2()
+    persons()
 
 
 if __name__ == "__main__":
