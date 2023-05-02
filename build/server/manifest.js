@@ -4,14 +4,14 @@ const manifest = {
 	assets: new Set(["favicon.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		client: {"start":"_app/immutable/entry/start.4742c9fd.js","app":"_app/immutable/entry/app.5f099320.js","imports":["_app/immutable/entry/start.4742c9fd.js","_app/immutable/chunks/index.9c0150a3.js","_app/immutable/chunks/singletons.df7522cd.js","_app/immutable/chunks/index.1ac1a48e.js","_app/immutable/entry/app.5f099320.js","_app/immutable/chunks/index.9c0150a3.js"],"stylesheets":[],"fonts":[]},
+		client: {"start":"_app/immutable/entry/start.537ece7c.js","app":"_app/immutable/entry/app.0685018d.js","imports":["_app/immutable/entry/start.537ece7c.js","_app/immutable/chunks/index.9c0150a3.js","_app/immutable/chunks/singletons.905289a4.js","_app/immutable/chunks/index.1ac1a48e.js","_app/immutable/entry/app.0685018d.js","_app/immutable/chunks/index.9c0150a3.js"],"stylesheets":[],"fonts":[]},
 		nodes: [
 			() => import('./chunks/0-0389745d.js'),
-			() => import('./chunks/1-c2ee64a4.js'),
+			() => import('./chunks/1-32db5970.js'),
 			() => import('./chunks/2-2afc6d6e.js'),
 			() => import('./chunks/3-f986d25c.js'),
 			() => import('./chunks/4-10a11149.js'),
-			() => import('./chunks/5-d944d1b6.js')
+			() => import('./chunks/5-c46a9c20.js')
 		],
 		routes: [
 			{
@@ -33,7 +33,7 @@ const manifest = {
 				pattern: /^\/api\/films\/?$/,
 				params: [],
 				page: null,
-				endpoint: () => import('./chunks/_server.ts-670c717b.js')
+				endpoint: () => import('./chunks/_server.ts-f07402c1.js')
 			},
 			{
 				id: "/api/genders-by-year-profession-location",
@@ -48,13 +48,6 @@ const manifest = {
 				params: [],
 				page: null,
 				endpoint: () => import('./chunks/_server.ts-8caa842a.js')
-			},
-			{
-				id: "/api/persons",
-				pattern: /^\/api\/persons\/?$/,
-				params: [],
-				page: null,
-				endpoint: () => import('./chunks/_server.ts-5775e4c2.js')
 			},
 			{
 				id: "/api/professions",
