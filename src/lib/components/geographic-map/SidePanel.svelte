@@ -63,6 +63,7 @@
     }
 
     function getPersonIds() {
+        personIds = []; // clear array
         data.getPersonIdsByGender(
             (json) => {
                 for (const gender in json) {
