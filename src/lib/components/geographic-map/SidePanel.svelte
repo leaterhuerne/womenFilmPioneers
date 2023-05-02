@@ -23,7 +23,7 @@
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
-    let people: {name: string, film: string}[] = new Array(3).fill({name: "name", profession: "film"});
+    let people: {name: string, film: string}[] = new Array(3).fill({name: "name", film: "film"});
 
     /**
      * Extracts the currently needed data from the genderDistribution object.
@@ -62,7 +62,8 @@
     }
 
     function getPersons() {
-        /*const personFilmIds: {personId: {name: string, filmId: string, profession: string}} = {};
+        const personByFilms: {filmId: {name: string, persons: {id: string, name: string}[]}} = {};
+        const personFilmIds: {personId: {name: string, filmId: string, profession: string}} = {};
         data.getPersonsPerYearExternResource(
             (films) => {
                 const personQueryObj: {ids: string[], genders: string[], profession: string}
@@ -81,8 +82,8 @@
                 console.log("consumer");
             },
             year
-        );*/
-
+        );
+        /*
         data.getPersonPerYear((json) => {
                 const peoplePerLocation = {};
                 for(const filmId in json) {
@@ -101,6 +102,8 @@
             },
             year
         );
+
+         */
     }
 
     $: {

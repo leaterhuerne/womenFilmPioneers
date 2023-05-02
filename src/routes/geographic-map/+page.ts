@@ -44,6 +44,24 @@ export function load({ fetch }) {
         fetch("/api/films?year=" + year).then((response: Response) => response.json()).then(consumer);
     }
 
+    function getPersonsInFilms(
+        buildPersonQueryObj: (filmsJson: JSON) => {ids: string[], genders: string[]},
+        consumer: (personsJson: JSON) => void,
+        year?: number | string
+    ) {
+        fetch("/api/films?year=" + year)
+            .then((response: Response) => response.json())
+            .then((films: JSON) => {
+                const requestObj = buildPersonQueryObj(films);
+                const url = "/api/persons?ids=" + JSON.stringify(requestObj.ids)
+                    + "&genders=" + JSON.stringify(requestObj.genders);
+                console.log(url);
+                fetch(url)
+                    .then((response: Response) => response.json())
+                    .then(consumer)
+            });
+    }
+
     function getPersonsPerYearExternResource(
         buildPersonQueryObj: (filmsJson: JSON) => {ids: string[], genders: string[], profession: string},
         consumer: (personsJson: JSON) => void,
@@ -102,6 +120,7 @@ export function load({ fetch }) {
     return {
         getPersonData,
         getPersonPerYear,
+        getPersonsInFilms,
         getPersonsPerYearExternResource,
         getDataProfession,
         getDataSpecificYearAndProfession,
