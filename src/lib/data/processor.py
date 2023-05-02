@@ -287,34 +287,54 @@ def films2():
             film_title = database[entry]["filme"][film]["IDTitel_P"].replace("_", "")
             film_id = film
             name = database[entry]["person"]["IDName"]
-            person = {
-                "gender": mapGender(database[entry]["person"]["Geschlecht"]),
-                "profession": database[entry]["filme"][film]["rel"],
-                "born": database[entry]["person"]["Geburtsdatum"],
-                "died": database[entry]["person"]["Sterbedatum"]
-            }
             if film_id not in films:
                 years = database[entry]["filme"][film]["Jahr"].split("/")
                 film_years = []
                 for year in years:
-                    if year.isdigit() and (1890 <= int(year) <= 2021):
+                    if year.isdigit() and (1890 <= int(year) <= 1950):
                         film_years.append(year)
                 films[film_id] = {
                     "title": film_title,
                     "year": "unknown" if len(film_years) == 0 else film_years,
                     "location": database[entry]["filme"][film]["Region"],
                     "people": {
-                        name: person
+                        entry: name
                     }
                 }
             else:
-                films[film_id]["people"][name] = person
+                films[film_id]["people"][entry] = name
 
     print("JSON created.")
 
     print("Writing JSON to file...")
     with open("films.json", "w") as file:
         file.write(json.dumps(films, indent=4))
+    print("JSON written.")
+
+def persons():
+    print("Loading database...")
+    database = get_database("database.json")
+    print("Database loaded.")
+    print("Creating JSON from film data...")
+    persons = {}
+    for person in database:
+        entry = database[person]["person"]
+        if person not in persons:
+            persons[person] = {
+                "name": entry["IDName"],
+                "gender": "female" if entry["Geschlecht"] == "W" else ("male" if entry["Geschlecht"] == "M" else "unknown"),
+                "born": entry["Geburtsdatum"],
+                "died": entry["Sterbedatum"],
+                "born_in": entry["Geburtsort"],
+                "professions": {}
+            }
+            for film in database[person]["filme"]:
+                persons[person]["professions"][film] = database[person]["filme"][film]["rel"]
+    print("JSON created.")
+
+    print("Writing JSON to file...")
+    with open("persons.json", "w") as file:
+        file.write(json.dumps(persons, indent=4))
     print("JSON written.")
 
 def scanIL():
