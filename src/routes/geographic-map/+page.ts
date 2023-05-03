@@ -1,6 +1,6 @@
 import {domainString} from "$lib/stores/domain";
 
-type genderKey = "female" | "male" | "unknown"
+type genderKey = "female" | "male" | "unknown";
 
 /** @type {import('../../../.svelte-kit/types/src/routes').PageLoad} */
 // @ts-ignore
@@ -37,7 +37,7 @@ export function load({ fetch }) {
         fetch(url).then((e: Response) => e.json()).then(consumer);
     }
 
-    function getPersonPerYear(
+    function getFilmsPerYear(
         consumer: (json: JSON) => void,
         year?: number | string
     ) {
@@ -79,7 +79,7 @@ export function load({ fetch }) {
 
     return {
         getPersonData,
-        getPersonPerYear,
+        getFilmsPerYear,
         getDataProfession,
         getDataSpecificYearAndProfession,
         getProfessionList,
