@@ -21,7 +21,6 @@
     export let className: string = "";
 
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
-    let personIds: string[] = [];                           // all persons IDs of the currently chosen genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
     let filmData: {film: {name: string, people: {name: string, profession: string}[]}}
@@ -47,7 +46,6 @@
         } else {                                    // a country is focused
             displayGendersDistribution = genderDistribution[country];
         }
-        //console.log(displayGendersDistribution);
     }
 
     /**
@@ -61,20 +59,6 @@
         } else {
             countryLanguages = {de: europe[country].de, en: europe[country].en};
         }
-    }
-
-    function getPersonIds() {
-        personIds = []; // clear array
-        data.getPersonIdsByGender(
-            (json) => {
-                for (const gender in json) {
-                    for (const id of json[gender]) {
-                        personIds.push(id);
-                    }
-                }
-            },
-            genders
-        );
     }
 
     function getPersonFilmData() {
@@ -111,7 +95,6 @@
         genderDistribution = genderDistribution;
         getGenderData();
         getCountryNamesLang();
-        getPersonIds();
         getPersonFilmData();
     }
 
@@ -149,7 +132,7 @@
                             <span>{person.profession}</span>
                         </li>
                     {:else}
-                        <li class="grid grid-cols-2 gap-2 py-2 border-b-2 border-warm-gray-900 dark:border-warm-gray-600 ">
+                        <li class="grid grid-cols-2 gap-2 pt-2 pb-4 border-b-2 border-warm-gray-900 dark:border-warm-gray-600 ">
                             <span>{person.name}</span>
                             <span>{person.profession}</span>
                         </li>

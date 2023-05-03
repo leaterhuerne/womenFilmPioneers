@@ -44,52 +44,6 @@ export function load({ fetch }) {
         fetch("/api/films?year=" + year).then((response: Response) => response.json()).then(consumer);
     }
 
-    function getPersonIdsByGender(consumer: (json: JSON) => void, genders: string[]) {
-        fetch("/api/persons?genders=" + JSON.stringify(genders))
-            .then((response: Response) => response.json())
-            .then(consumer);
-    }
-
-    function getPersonsInFilms(
-        buildPersonQueryObj: (filmsJson: JSON) => {ids: string[], genders: string[]},
-        consumer: (personsJson: JSON) => void,
-        year?: number | string
-    ) {
-        fetch("/api/films?year=" + year)
-            .then((response: Response) => response.json())
-            .then((films: JSON) => {
-                const requestObj = buildPersonQueryObj(films);
-                const url = "/api/persons?ids=" + JSON.stringify(requestObj.ids)
-                    + "&genders=" + JSON.stringify(requestObj.genders);
-                console.log(url);
-                fetch(url)
-                    .then((response: Response) => response.json())
-                    .then(consumer)
-            });
-    }
-
-    function getPersonsPerYearExternResource(
-        buildPersonQueryObj: (filmsJson: JSON) => {ids: string[], genders: string[], profession: string},
-        consumer: (personsJson: JSON) => void,
-        year?: number | string
-    ) {
-        fetch("/api/films?year=" + year)
-            .then((response: Response) => response.json())
-            .then((films: JSON) => {
-                const requestObj = buildPersonQueryObj(films);
-                const url = "http://frauen-filmgeschichte.de:3004/api/persons";
-                fetch(url, {
-                    method: "POST",
-                    body: JSON.stringify(requestObj),
-                    headers: {
-                        "content-type": "application/json",
-                    }
-                })
-                    .then((response: Response) => response.json())
-                    .then((json: JSON) => console.log(json))
-            });
-    }
-
     /**
      * Requests an internal endpoint for information of the amount of persons working in movies
      * for all genders, years and a specific profession
@@ -126,9 +80,6 @@ export function load({ fetch }) {
     return {
         getPersonData,
         getFilmsPerYear,
-        getPersonIdsByGender,
-        //getPersonsInFilms,
-        //getPersonsPerYearExternResource,
         getDataProfession,
         getDataSpecificYearAndProfession,
         getProfessionList,
