@@ -24,7 +24,8 @@
     let personIds: string[] = [];                           // all persons IDs of the currently chosen genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
-    let filmData: {film: {name: string, people: string[]}} = {film: {name: "", people: [""]}};
+    let filmData: {film: {name: string, people: {name: string, profession: string}[]}}
+        = {film: {name: "", people: [{name: "", profession: ""}]}};
 
     /**
      * Extracts the currently needed data from the genderDistribution object.
@@ -81,11 +82,20 @@
             filmData = {}; //clear object
             for(const filmId in json) {
                 for(const personId in json[filmId]["people"]) {
-                    if((country == "" || json[filmId]["location"].includes(country)) && personIds.includes(personId)) {
+                    if((country == "" || json[filmId]["location"].includes(country))
+                        && genders.includes(json[filmId]["people"][personId]["gender"])
+                        && (profession == "" || profession == json[filmId]["people"][personId]["profession"])) {
+                        const person = {
+                            name: json[filmId]["people"][personId]["name"],
+                            profession: json[filmId]["people"][personId]["profession"]
+                        };
                         if (!Object.keys(filmData).includes(filmId)) {
-                            filmData[filmId] = {name: json[filmId]["title"], people: [json[filmId]["people"][personId]]};
+                            filmData[filmId] = {
+                                name: json[filmId]["title"],
+                                people: [person]
+                            };
                         } else {
-                            filmData[filmId]["people"].push(json[filmId]["people"][personId]);
+                            filmData[filmId]["people"].push(person);
                         }
                     }
                 }
@@ -128,14 +138,22 @@
     </h2>
     {#each Object.keys(filmData) as filmId}
         <div class="">
-            <p class="mt-2 text-md font-semibold italic text-firebrick-700 dark:text-firebrick-500">
+            <h3 class="mt-2 text-md font-semibold text-firebrick-700 dark:text-firebrick-500">
                 {filmData[filmId].name}
-            </p>
-            <ul class="ml-4 list-disc">
-                {#each filmData[filmId]["people"] as person}
-                    <li >
-                        {person}
-                    </li>
+            </h3>
+            <ul class="">
+                {#each filmData[filmId]["people"] as person, personIndex}
+                    {#if personIndex < filmData[filmId]["people"].length - 1}
+                        <li class="grid grid-cols-2 gap-2 border-b border-warm-gray-700 dark:border-warm-gray-800 py-2">
+                            <span>{person.name}</span>
+                            <span>{person.profession}</span>
+                        </li>
+                    {:else}
+                        <li class="grid grid-cols-2 gap-2 py-2 border-b-2 border-warm-gray-900 dark:border-warm-gray-600 ">
+                            <span>{person.name}</span>
+                            <span>{person.profession}</span>
+                        </li>
+                    {/if}
                 {/each}
             </ul>
         </div>
