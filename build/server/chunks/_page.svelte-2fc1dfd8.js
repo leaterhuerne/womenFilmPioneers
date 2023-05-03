@@ -1380,7 +1380,12 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   let genders = ["female", "male", "unknown"];
   let displayGendersDistribution = {};
   let countryLanguages = EUROPE_NAMES;
-  let people = new Array(3).fill({ name: "name", profession: "profession" });
+  let filmData = {
+    film: {
+      name: "",
+      people: [{ name: "", profession: "" }]
+    }
+  };
   function getGenderData() {
     genders = Object.keys(genderDistribution["DE"]);
     displayGendersDistribution = {};
@@ -1408,21 +1413,28 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       };
     }
   }
-  function getPersons() {
-    data.getPersonPerYear(
+  function getPersonFilmData() {
+    data.getFilmsPerYear(
       (json) => {
-        const res = /* @__PURE__ */ new Set();
+        filmData = {};
         for (const filmId in json) {
-          for (const person in json[filmId]["people"]) {
-            if ((country == "" || json[filmId]["location"].includes(country)) && genders.includes(json[filmId]["people"][person]["gen"]) && (profession === "" || profession === json[filmId]["people"][person]["pro"])) {
-              res.add({
-                name: person,
-                profession: json[filmId]["people"][person]["pro"]
-              });
+          for (const personId in json[filmId]["people"]) {
+            if ((country == "" || json[filmId]["location"].includes(country)) && genders.includes(json[filmId]["people"][personId]["gender"]) && (profession == "" || profession == json[filmId]["people"][personId]["profession"])) {
+              const person = {
+                name: json[filmId]["people"][personId]["name"],
+                profession: json[filmId]["people"][personId]["profession"]
+              };
+              if (!Object.keys(filmData).includes(filmId)) {
+                filmData[filmId] = {
+                  name: json[filmId]["title"],
+                  people: [person]
+                };
+              } else {
+                filmData[filmId]["people"].push(person);
+              }
             }
           }
         }
-        people = Array.from(res).sort(() => 0.5 - Math.random());
       },
       year
     );
@@ -1446,10 +1458,10 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       genderDistribution = genderDistribution;
       getGenderData();
       getCountryNamesLang();
-      getPersons();
+      getPersonFilmData();
     }
   }
-  return `<div${add_attribute("class", className, 0)}><h1 class="text-3xl font-semibold text-center">${validate_component(T, "T").$$render(
+  return `<div${add_attribute("class", className, 0)}><h1 class="mb-4 text-3xl font-semibold text-center">${validate_component(T, "T").$$render(
     $$result,
     {
       de: "Die Filmindustrie in " + countryLanguages.de + " im Jahr " + year,
@@ -1458,7 +1470,7 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     {},
     {}
   )}</h1>
-    <h2 class="text-lg font-semibold">${validate_component(T, "T").$$render(
+    <h2 class="mb-2 text-xl font-semibold">${validate_component(T, "T").$$render(
     $$result,
     {
       de: "Geschlechterverteilung",
@@ -1479,10 +1491,24 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     )}: ${escape(displayGendersDistribution[gender])}
         </p>`;
   })}
-    <h2 class="mt-4 text-lg font-semibold">${validate_component(T, "T").$$render($$result, { de: "Personen", en: "People" }, {}, {})}</h2>
-    ${each(people, (person) => {
-    return `<div class="grid grid-cols-2"><p>${escape(person.name)}</p>
-            <p>${escape(person.profession)}</p>
+    <h2 class="mt-4 text-xl font-semibold">${validate_component(T, "T").$$render(
+    $$result,
+    {
+      de: "Filme und Personen",
+      en: "Films and People"
+    },
+    {},
+    {}
+  )}</h2>
+    ${each(Object.keys(filmData), (filmId) => {
+    return `<div class=""><h3 class="mt-2 text-md font-semibold text-firebrick-700 dark:text-firebrick-500">${escape(filmData[filmId].name)}</h3>
+            <ul class="">${each(filmData[filmId]["people"], (person, personIndex) => {
+      return `${personIndex < filmData[filmId]["people"].length - 1 ? `<li class="grid grid-cols-2 gap-2 border-b border-warm-gray-700 dark:border-warm-gray-800 py-2"><span>${escape(person.name)}</span>
+                            <span>${escape(person.profession)}</span>
+                        </li>` : `<li class="grid grid-cols-2 gap-2 pt-2 pb-4 border-b-2 border-warm-gray-900 dark:border-warm-gray-600 "><span>${escape(person.name)}</span>
+                            <span>${escape(person.profession)}</span>
+                        </li>`}`;
+    })}</ul>
         </div>`;
   })}</div>`;
 });
@@ -1826,4 +1852,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-c4862bd0.js.map
+//# sourceMappingURL=_page.svelte-2fc1dfd8.js.map
