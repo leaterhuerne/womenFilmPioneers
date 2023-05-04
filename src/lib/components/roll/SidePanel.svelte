@@ -10,17 +10,13 @@
     export let rightGender: {de: string, en: string, value: number};
 
     export let professions: string[] = new Array(5).fill("");
-    export let locations: string[] = new Array(5).fill("");
-    export let refreshProfessions: () => void = () => 
+    export let films: string[] = new Array(5).fill("");
+    export let refreshProfessions: () => void = () =>
         data.getProfessionForYear(year, json => professions = Object.keys(json).sort(() => 0.5 - Math.random()).slice(0, 5));
 
     export let refreshFilms: () => void = () =>
-        data.getFilmsForYear(year, json => {
-            locations = []
-            Object.keys(json)
-                .filter(film => country != "alle"? json[film].location.includes(country) : true)
-                .sort(() => 0.5 - Math.random()).slice(0, 5)
-                .forEach(film => locations.push(json[film]["title"]));
+        data.getFilmsForYear(year, country,  json => {
+            films = Object.values(json);
         });
 
     let lastYearChange = Date.now();
@@ -69,11 +65,11 @@
         <p><T de={rightGender.de} en={rightGender.en} />: {rightGender.value}</p>
     </div>
     <p
-        class="flex gap-2 place-items-center justify-center text-sm italic mt-4"
+            class="flex gap-2 place-items-center justify-center text-sm italic mt-4"
     >
         <T
-            de="Die folgenden Beispiele sind eine zufällige Auswahl. Für weitere klicken sie auf den Butten neben der Kategorie."
-            en="The following examples are randomly chosen. For more, click on the button next to the category."
+                de="Die folgenden Beispiele sind eine zufällige Auswahl. Für weitere klicken sie auf den Butten neben der Kategorie."
+                en="The following examples are randomly chosen. For more, click on the button next to the category."
         />
     </p>
     <div>
@@ -93,8 +89,8 @@
             <button on:click={refreshFilms}><Refresh darkColor="#D2CAB3" /></button>
         </div>
         <ul class="list-disc ml-4">
-            {#each locations as location}
-                <li>{location}</li>
+            {#each films as film}
+                <li>{film}</li>
             {/each}
         </ul>
     </div>
