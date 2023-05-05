@@ -1,7 +1,6 @@
 import { c as create_ssr_component, v as validate_component, e as escape, d as add_attribute, a as subscribe, b as each } from './index3-11153cb5.js';
-import { b as CheveronLeft, a as CheveronRight, C as ColorPicker } from './CheveronLeft-06fc1ccf.js';
-import { T } from './T-1170b724.js';
 import { I as InformationOutline, a as Icon } from './InformationOutline-45dd4ddc.js';
+import { T } from './T-1170b724.js';
 import { w as writable } from './index2-d2b5300f.js';
 import './language-fc716440.js';
 
@@ -325,8 +324,18 @@ const Roll = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         <p>${validate_component(T, "T").$$render(
     $$result,
     {
-      de: "100% auf der Rolle entsprechen " + max + " Personen.",
-      en: "100% on roll equals " + max + " people."
+      de: "Die auf der Rolle abgebildeten Ergebnisse basieren auf den durch das",
+      en: "The results shown on the roll are based on the data collected by the"
+    },
+    {},
+    {}
+  )}
+            <a class="italic hover:text-firebrick-500" href="https://www.dff.film/">DFF</a>
+            ${validate_component(T, "T").$$render(
+    $$result,
+    {
+      de: "erfassten Daten zu insgesamt " + max + " Personen im Zeitraum von 1895 bis 1950.",
+      en: "total " + max + " people in the period 1895-1950."
     },
     {},
     {}
@@ -431,7 +440,7 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       changedYear = true;
     }
   }
-  return `<div class="grow lg:w-1/3 border-t lg:border-t-0 lg:border-l border-firebrick-500 dark:border-firebrick-1000 p-2 flex flex-col gap-2 "><h1 class="text-3xl font-semibold text-center">${validate_component(T, "T").$$render(
+  return `<div class="grow border-t lg:border-t-0 lg:border-l border-firebrick-500 dark:border-firebrick-1000 p-2 flex flex-col gap-2 "><h1 class="text-3xl font-semibold text-center">${validate_component(T, "T").$$render(
     $$result,
     {
       de: "Die Filmindustrie im Jahr",
@@ -454,8 +463,8 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     <p class="flex gap-2 place-items-center justify-center text-sm italic mt-4">${validate_component(T, "T").$$render(
     $$result,
     {
-      de: "Die folgenden Beispiele sind eine zufällige Auswahl. Für weitere klicken sie auf den Butten neben der Kategorie.",
-      en: "The following examples are randomly chosen. For more, click on the button next to the category."
+      de: "Die Film- und Berufsbeispiele folgen einer zufälligen Auswahl. Für weitere klicken Sie auf den\r\n                jeweiligen Button neben der Kategorie.",
+      en: "The film and profession examples follow a random selection. For more click on the respective button next\r\n                to the category."
     },
     {},
     {}
@@ -503,8 +512,6 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let leftGender = genderPairs[0].left;
   let rightGender = genderPairs[0].right;
   let genderPairPosition = 0;
-  let optionsVisible = "-translate-x-[95%]";
-  let buttonRotation;
   let coloursOnRoll;
   let content;
   let frontLabelOnRoll = { left: 0, year: 1895, right: 0 };
@@ -630,8 +637,9 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         populateRoll();
       }
     }
-    $$rendered = `<div class="relative flex flex-col lg:flex-row grow ">
-    <div class="flex flex-col lg:w-2/3">
+    $$rendered = `
+<div class="relative flex flex-col lg:flex-row 3xl:flex-col 2xl:gap-4 grow ">
+    <div class="flex flex-col lg:w-2/3 3xl:w-full">
         ${validate_component(Roll, "Roll").$$render(
       $$result,
       {
@@ -664,7 +672,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       {}
     )}
         
-        <div class="flex flex-col justify-between grow p-2 border-t border-firebrick-500 dark:border-firebrick-1000"><div><h1 class="text-center text-xl font-semibold">${validate_component(T, "T").$$render(
+        <div class="flex flex-col justify-start grow p-2 border-t border-firebrick-500 dark:border-firebrick-1000"><div><h1 class="text-center text-xl font-semibold">${validate_component(T, "T").$$render(
       $$result,
       {
         de: "Anpassung der Daten auf der Rolle",
@@ -697,49 +705,16 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             <p class="text-sm italic">${validate_component(T, "T").$$render(
       $$result,
       {
-        de: "Hinweis: Werden alle Berufe und Länder ausgewählt, so werden hier die alle Personen gezählt, die\r\n                        laut Datenbank in diesem Zeitraum tätig waren. Hier tritt eine Abweichung von den Daten zu\r\n                        speziellen Berufen bei den Filmen auf (Data Bias): In manchen Jahren sind Personen tätig gewesen,\r\n                        obwohl sie in diesem Jahr laut Datenbank an keinem Film beteiligt waren.",
-        en: "Notice: If all professions and countries are selected, all persons are counted, which were -\r\n                        according to the database - working in this year. Here we see a deviation from the data for\r\n                        single professions and countries (so called data bias): According to the database, in some years\r\n                        people were working in the film industry without being associated to a film."
+        de: "In der zentralen Datenbank des DFF sind sowohl film- als auch personenbezogene Daten erfasst,\r\n                    welche für die Erstellung von Visualisierungen zusammengeführt wurden. Die personenbezogenen Daten\r\n                    enthalten Tätigkeitszeiträume der einzelnen Personen, während die filmwerksbezogenen Daten die\r\n                    jeweiligen Berufe aufzeigen, welche die einzelnen Personen je nach Filmproduktion ausgeübt haben.\r\n                    Dabei kann es jedoch vorkommen, dass in manchen Jahren berufstätige Personen angezeigt werden,\r\n                    obwohl die spezifische Tätigkeit nicht in den filmwerksbezogenen Daten erfasst wurde, was zu einer\r\n                    Datenabweichung (Data Bias) führt.",
+        en: "Both film and personal data are recorded in the central database of the DFF.\r\n                    which were brought together to create visualizations. The personal data\r\n                    contain periods of activity of the individual persons, while the film work-related data\r\n                    show the respective professions that the individual people have practiced depending on the film production.\r\n                    However, it can happen that in some years working people are reported,\r\n                    although the specific activity was not recorded in the film work-related data, resulting in a\r\n                    data bias."
       },
       {},
       {}
     )}</p></div></div>
     
-    <div class="${"absolute w-full max-w-[30rem] mt-2 flex duration-500 " + escape(optionsVisible, true)}"><div class="bg-paper-100 dark:bg-warm-gray-900 opactity-90 rounded-br-xl dark:border dark:border-warm-gray-700 shadow-lg dark:shadow-none w-[95%] "><div class="relative flex justify-between px-2"><button class="flex grow w-1/2"><span class="absolute left-2 ">${validate_component(CheveronLeft, "CheveronLeft").$$render($$result, { size: "2", darkColor: "#D2CAB3" }, {}, {})}</span>
-                    <span class="font-semibold w-full text-end">${validate_component(T, "T").$$render(
-      $$result,
-      {
-        de: leftGender === "male" ? "Männlich" : leftGender === "female" ? "Weiblich" : "Divers/Unbekannt",
-        en: leftGender === "male" ? "Male" : leftGender === "female" ? "Female" : "Queer/Unknown"
-      },
-      {},
-      {}
-    )}</span></button>
-                <p class="font-semibold text-xl mx-2">|</p>
-                <button class="flex grow w-1/2"><span class="font-semibold w-full text-start">${validate_component(T, "T").$$render(
-      $$result,
-      {
-        de: rightGender === "male" ? "Männlich" : rightGender === "female" ? "Weiblich" : "Divers/Unbekannt",
-        en: rightGender === "male" ? "Male" : rightGender === "female" ? "Female" : "Queer/Unknown"
-      },
-      {},
-      {}
-    )}</span>
-                    <span class="absolute right-2">${validate_component(CheveronRight, "CheveronRight").$$render($$result, { size: "2", darkColor: "#D2CAB3" }, {}, {})}</span></button></div>
-            ${validate_component(ColorPicker, "ColorPicker").$$render(
-      $$result,
-      { className: "", colors: coloursOnRoll },
-      {
-        colors: ($$value) => {
-          coloursOnRoll = $$value;
-          $$settled = false;
-        }
-      },
-      {}
-    )}
-            <div class="p-2"></div></div>
-        <button class="${"duration-500 w-[5%] h-10 bg-firebrick-500 dark:bg-firebrick-1000 grid place-items-center " + escape(buttonRotation, true) + " rounded-r-xl"}">${validate_component(CheveronRight, "CheveronRight").$$render($$result, { color: "#D2CAB3" }, {}, {})}</button></div>
+    ${``}
     
-    ${validate_component(SidePanel, "SidePanel").$$render(
+    <div class="lg:w-1/3 3xl:w-full flex justify-between">${validate_component(SidePanel, "SidePanel").$$render(
       $$result,
       {
         data,
@@ -758,10 +733,11 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       },
       {},
       {}
-    )}</div>`;
+    )}
+        ${``}</div></div>`;
   } while (!$$settled);
   return $$rendered;
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-7a43f6ec.js.map
+//# sourceMappingURL=_page.svelte-146bfaf6.js.map
