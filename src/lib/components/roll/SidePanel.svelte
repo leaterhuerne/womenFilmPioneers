@@ -68,8 +68,10 @@
             class="flex gap-2 place-items-center justify-center text-sm italic mt-4"
     >
         <T
-                de="Die folgenden Beispiele sind eine zufällige Auswahl. Für weitere klicken sie auf den Butten neben der Kategorie."
-                en="The following examples are randomly chosen. For more, click on the button next to the category."
+                de="Die Film- und Berufsbeispiele folgen einer zufälligen Auswahl. Für weitere klicken Sie auf den
+                jeweiligen Button neben der Kategorie."
+                en="The film and profession examples follow a random selection. For more click on the respective button next
+                to the category."
         />
     </p>
     <div>

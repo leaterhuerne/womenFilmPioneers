@@ -10,6 +10,8 @@
     import Reload from "$lib/icons/components/Reload.svelte";
     import Refresh from "$lib/icons/components/Refresh.svelte";
     import SidePanel from "$lib/components/roll/SidePanel.svelte";
+    import Cog from "$lib/icons/components/Cog.svelte";
+    import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
 
     // =================================================================================================================
     //                                              Type definitions
@@ -304,14 +306,20 @@
             </div>
             <p class="text-sm italic">
                 <T
-                    de="Hinweis: Werden alle Berufe und Länder ausgewählt, so werden hier die alle Personen gezählt, die
-                        laut Datenbank in diesem Zeitraum tätig waren. Hier tritt eine Abweichung von den Daten zu
-                        speziellen Berufen bei den Filmen auf (Data Bias): In manchen Jahren sind Personen tätig gewesen,
-                        obwohl sie in diesem Jahr laut Datenbank an keinem Film beteiligt waren."
-                    en="Notice: If all professions and countries are selected, all persons are counted, which were -
-                        according to the database - working in this year. Here we see a deviation from the data for
-                        single professions and countries (so called data bias): According to the database, in some years
-                        people were working in the film industry without being associated to a film."
+                    de="In der zentralen Datenbank des DFF sind sowohl film- als auch personenbezogene Daten erfasst,
+                    welche für die Erstellung von Visualisierungen zusammengeführt wurden. Die personenbezogenen Daten
+                    enthalten Tätigkeitszeiträume der einzelnen Personen, während die filmwerksbezogenen Daten die
+                    jeweiligen Berufe aufzeigen, welche die einzelnen Personen je nach Filmproduktion ausgeübt haben.
+                    Dabei kann es jedoch vorkommen, dass in manchen Jahren berufstätige Personen angezeigt werden,
+                    obwohl die spezifische Tätigkeit nicht in den filmwerksbezogenen Daten erfasst wurde, was zu einer
+                    Datenabweichung (Data Bias) führt."
+                    en="Both film and personal data are recorded in the central database of the DFF.
+                    which were brought together to create visualizations. The personal data
+                    contain periods of activity of the individual persons, while the film work-related data
+                    show the respective professions that the individual people have practiced depending on the film production.
+                    However, it can happen that in some years working people are reported,
+                    although the specific activity was not recorded in the film work-related data, resulting in a
+                    data bias."
                 />
             </p>
         </div>
@@ -368,21 +376,40 @@
                     bind:colors={coloursOnRoll}
             />
             <div class="p-2">
-
+                <p>
+                    <T
+                        de="Die Walze kann durch Scrollen und durch die Pfeiltasten nach oben bzw. unten rotiert werden."
+                        en="The roll kann be rotated by scrolling oder using the arrow keys up and down."
+                    />
+                </p>
+                <p>
+                    <T
+                            de="Die Auswahl der angezeigten Geschlechter erfolgt oben durch klicken, alle Kombinationen sind möglich."
+                            en="The shown genders kann be adjusted by clicking above, all combinations are possible."
+                    />
+                </p>
+                <p>
+                    <T
+                            de="Die Farben der Balken sind durch Verschieben der Slider frei einstellbar, die Anfangsfarbe ist zufällig."
+                            en="The bar colours can be adjusted by moving the sliders, the default colours are random."
+                    />
+                </p>
             </div>
         </div>
         <button
                 class="
                     duration-500
-                    w-[5%] h-10
+                    w-[5%] h-full
                     bg-firebrick-500 dark:bg-firebrick-1000
-                    grid place-items-center
+                    grid place-items-center grid-cols-1 gap-2
                     {buttonRotation}
                     rounded-r-xl
+                    py-2
                 "
                 on:mouseenter={() => optionsVisible = "translate-x-0"}
         >
-            <CheveronRight color="#D2CAB3" />
+            <Cog darkColor="#D2CAB3" />
+            <InformationOutline darkColor="#D2CAB3" />
         </button>
     </div>
     <!-- Information -->
