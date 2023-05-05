@@ -50,7 +50,6 @@
 <div
         class="
                 grow
-                lg:w-1/3
                 border-t lg:border-t-0 lg:border-l  border-firebrick-500 dark:border-firebrick-1000
                 p-2
                 flex flex-col gap-2
