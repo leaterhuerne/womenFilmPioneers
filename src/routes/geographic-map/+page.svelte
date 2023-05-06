@@ -271,7 +271,7 @@
 
     let colorPickerVisibility: string = "-translate-x-[84%] 2xl:translate-x-0";
     let windowWidth = 0;    // current width of the window
-    const LG = 1024;         // constant for windowWidth of tailwind md: property
+    const XL = 1280;         // constant for windowWidth of tailwind md: property
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -316,7 +316,7 @@
             </button>
         </div>
         <!-- SCREEN: Year numbers on top right side in the map -->
-        {#if windowWidth >= LG}
+        {#if windowWidth >= XL}
             <div class="mt-2 mr-2
                         absolute right-0 top-0
                         sm:scale-100
@@ -326,7 +326,7 @@
             </div>
         {/if}
         <!-- MOBILE: Year number on bottom of the map -->
-        {#if windowWidth < LG}
+        {#if windowWidth < XL}
             <div class="m-2">
                 <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-firebrick-800" />
             </div>
