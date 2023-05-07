@@ -271,17 +271,18 @@
 
     let colorPickerVisibility: string = "-translate-x-[84%] 2xl:translate-x-0";
     let windowWidth = 0;    // current width of the window
-    const XL = 1280;         // constant for windowWidth of tailwind md: property
+    const MD = 768;         // constant for windowWidth of tailwind md: property
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
+{windowWidth}
 <div class="grid grid-cols-1 grow md:grid-cols-3">
     <!-- Map with ColorPicker and YearNumbers -->
     <div class="relative w-full md:col-span-2">
         <!-- Map -->
         <div class="grid place-items-center">
             <HeatMap
-                    className="relative p-2 2xl:w-[600px] 3xl:w-[800px]"
+                    className="relative p-2 max-w-[600px]  3xl:w-[800px]"
                     bind:europe="{europe}"
                     countryHeatValues={heatMapColors}
                     colorFrom={heatMapBoundColors[0].rgb}
@@ -318,7 +319,7 @@
             </button>
         </div>
         <!-- SCREEN: Year numbers on top right side in the map -->
-        {#if windowWidth >= XL}
+        {#if windowWidth >= MD}
             <div class="mt-2 mr-2
                         absolute right-0 top-0
                         sm:scale-100
@@ -328,7 +329,7 @@
             </div>
         {/if}
         <!-- MOBILE: Year number on bottom of the map -->
-        {#if windowWidth < XL}
+        {#if windowWidth < MD}
             <div class="m-2">
                 <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-firebrick-800" />
             </div>
@@ -345,24 +346,29 @@
         <!-- Information to amount of persons per country -->
         <div class="my-4 text-sm p-2">
             <p>
-                <T de="Ein maximal eingefärbtes Land entspricht {mapUpperBound} Personen, die an Filmen aus der Datenbank beteiligt waren."
-                   en="A maximum colored country corresponds to {mapUpperBound} people involved in films of the database."
+                <T de="Ein 'maximal eingefärbtes Land' repräsentiert {mapUpperBound} Personen, die an in der Datenbank
+                        des DFF erfassten Filmen in dem ausgewählten Jahr beteiligt waren."
+                   en="A 'maximum colored country' represents {mapUpperBound} people involved in films recorded in
+                        the DFF's database in the selected year."
                 />
             </p>
             <p class="my-2">
-                <T de="Gestreifte Länder: Hier gibt es keine Filmdaten vom DFF für das ausgewählte Jahr.
-                       Dies bedeutet aber nicht, dass hier keine Filme gedreht worden wäre. Das DFF hat lediglich keine
-                       Daten darüber."
-                   en="Striped countries: The DFF has no film data for these countries for the chosen year.
-                       This does not mean that no films were shot here. The DFF just doesn't have any
-                       data about it."
+                <T de="Gestreifte Flächen zeigen an, dass das DFF keine Daten für das jeweilige Land im ausgewählten
+                        Jahr vorhält. Dies bedeutet nicht, dass in dem Land in diesem Zeitraum keine Filme gedreht
+                        worden sind."
+                   en="Striped areas indicate that the DFF does not hold any data for the respective country in the
+                        selected year. This does not mean that no films were made in the country during this period."
                 />
             </p>
             <p class="italic">
-                <T de="Hinweis Maximum: 'alle Jahre' bedeutet, dass 100% Färbung auf der Karte der Personenzahl in dem Jahr
-                       entspricht, in der am meisten Personen tätig waren."
-                   en="Note Maximum: 'all years' means 100% coloring on the map of the number of people in that year
-                       corresponds to the one in which the most people were employed."
+                <T de="Hinweis Maximum: 'Maximum alle Jahre' bedeutet, im Jahr, in dem am meisten Personen tätig waren,
+                        werden alle diese Personen gezählt. Von dieser Zahl ausgehend wird die Heatmap eingefärbt.
+                        'Maximum pro Jahr' zählt analog die Personen, die im aktuell ausgewählten Jahr tätig waren."
+                   en="Note Maximum: 'Maximum all years' means that all of these people are counted in the year in
+                        which the most people were active. The heat map is colored based on this number.
+                        'Maximum per year' counts the people who were active in the currently selected year.
+
+"
                 />
             </p>
         </div>

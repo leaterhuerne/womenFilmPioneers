@@ -1,8 +1,8 @@
 <script lang="ts">
     import T from "$lib/components/T.svelte";
-    import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
+    import AddOutline from "$lib/icons/components/AddOutline.svelte";
 
     // data from load function in +page.ts, data of endpoint genders-by-year-profession-location
     export let data: {getData, getProfessionList, getLocationList} = {};
@@ -106,7 +106,7 @@
      */
     function showProfessions(): void {
         professionVisibility = professionVisibility === "" ? "hidden" : "";
-        informationButtonStyle = informationButtonStyle === "" ? "rotate-180" : "";
+        informationButtonStyle = informationButtonStyle === "" ? "rotate-45" : "";
 
     }
 
@@ -180,7 +180,7 @@
                     "
                 on:click={showProfessions}
         >
-            <InformationOutline darkColor="#D2CAB3" />
+            <AddOutline darkColor="#D2CAB3" />
         </button>
 
         <!-- next profession button -->
