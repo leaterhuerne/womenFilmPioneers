@@ -54,7 +54,7 @@
      */
     function getCountryNamesLang() {
         let europe = new Europe();
-        if (country ===EUROPA) {
+        if (country === EUROPA) {
             countryLanguages = EUROPE_NAMES;
         } else {
             countryLanguages = {de: europe[country].de, en: europe[country].en};
@@ -64,11 +64,15 @@
     function getPersonFilmData() {
         data.getFilmsPerYear((json) => {
             filmData = {}; //clear object
-            for(const filmId in json) {
+            Object.values(json)
+                .map(e => {title = e.title; return e})
+
+
+            /*for(const filmId in json) {
                 for(const personId in json[filmId]["people"]) {
-                    if((country == "" || json[filmId]["location"].includes(country))
-                        && genders.includes(json[filmId]["people"][personId]["gender"])
-                        && (profession == "" || profession == json[filmId]["people"][personId]["profession"])) {
+                    //if((country == "" || json[filmId]["location"].includes(country))
+                        //&& genders.includes(json[filmId]["people"][personId]["gender"])
+                        //&& (profession == "" || profession == json[filmId]["people"][personId]["profession"])) {
                         const person = {
                             name: json[filmId]["people"][personId]["name"],
                             profession: json[filmId]["people"][personId]["profession"]
@@ -81,10 +85,11 @@
                         } else {
                             filmData[filmId]["people"].push(person);
                         }
-                    }
+                    //}
                 }
-            }
+            }*/
         },
+        country,
         year
         );
     }
