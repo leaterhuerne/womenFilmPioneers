@@ -46,7 +46,7 @@ export function load({ fetch }) {
         let loc: string = location == "" ? "" : "&location=" + location;
         fetch("/api/films?random=1&year=" + year + "&genders=" + JSON.stringify(genders) + loc)
             .then((response: Response) => response.json())
-            .then((json: JSON) => {consumer(json); console.log(json)});
+            .then((json: JSON) => {consumer(json)});
     }
 
     /**
