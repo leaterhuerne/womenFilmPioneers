@@ -39,9 +39,14 @@ export function load({ fetch }) {
 
     function getFilmsPerYear(
         consumer: (json: JSON) => void,
-        year?: number | string
+        year: number | string,
+        location = "",
+        genders = ["male", "female", "unknown"]
     ) {
-        fetch("/api/films?year=" + year).then((response: Response) => response.json()).then(consumer);
+        let loc: string = location == "" ? "" : "&location=" + location;
+        fetch("/api/films?random=1&year=" + year + "&genders=" + JSON.stringify(genders) + loc)
+            .then((response: Response) => response.json())
+            .then((json: JSON) => {consumer(json)});
     }
 
     /**

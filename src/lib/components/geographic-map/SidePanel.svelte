@@ -1,6 +1,7 @@
 <script lang="ts" crossorigin="anonymous">
     import T from "$lib/components/T.svelte";
     import {Europe} from "$lib/utils/geographic-map/Europe";
+    import Refresh from "$lib/icons/components/Refresh.svelte";
     type language = {de: string, en: string};
 
     const EUROPA = "";
@@ -23,8 +24,7 @@
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
-    let filmData: {film: {name: string, people: {name: string, profession: string}[]}}
-        = {film: {name: "", people: [{name: "", profession: ""}]}};
+    //let filmData: {film: {name: string, people: {name: string, profession: string}[]}} = {film: {name: "", people: [{name: "", profession: ""}]}};
 
     /**
      * Extracts the currently needed data from the genderDistribution object.
@@ -54,21 +54,34 @@
      */
     function getCountryNamesLang() {
         let europe = new Europe();
-        if (country ===EUROPA) {
+        if (country === EUROPA) {
             countryLanguages = EUROPE_NAMES;
         } else {
             countryLanguages = {de: europe[country].de, en: europe[country].en};
         }
     }
-
+    let filmData: {"title": string, people: {name: string, gender:string, profession: string}[]}[]
+        = [{"title": "title", people: [{name: "name", gender: "gender", profession: "profession"}]}];
     function getPersonFilmData() {
         data.getFilmsPerYear((json) => {
-            filmData = {}; //clear object
-            for(const filmId in json) {
+            filmData = []; //clear object
+            Object.values(json)
+                .map(e => {
+                    const film = {
+                        title: e["title"] as string,
+                        people: e["people"] as {name: string, gender:string, profession: string}[]
+                    };
+                    filmData.push(film);
+                    console.log(filmData)
+                })
+
+
+
+            /*for(const filmId in json) {
                 for(const personId in json[filmId]["people"]) {
-                    if((country == "" || json[filmId]["location"].includes(country))
-                        && genders.includes(json[filmId]["people"][personId]["gender"])
-                        && (profession == "" || profession == json[filmId]["people"][personId]["profession"])) {
+                    //if((country == "" || json[filmId]["location"].includes(country))
+                        //&& genders.includes(json[filmId]["people"][personId]["gender"])
+                        //&& (profession == "" || profession == json[filmId]["people"][personId]["profession"])) {
                         const person = {
                             name: json[filmId]["people"][personId]["name"],
                             profession: json[filmId]["people"][personId]["profession"]
@@ -81,11 +94,13 @@
                         } else {
                             filmData[filmId]["people"].push(person);
                         }
-                    }
+                    //}
                 }
-            }
+            }*/
         },
-        year
+        year,
+        country,
+        genders
         );
     }
 
@@ -116,17 +131,24 @@
             />: {displayGendersDistribution[gender]}
         </p>
     {/each}
-    <h2 class="mt-4 text-xl font-semibold">
-        <T de="Filme und Personen" en="Films and People" />
-    </h2>
-    {#each Object.keys(filmData) as filmId}
+    <div class="mt-4 flex place-items-center">
+        <h2 class="text-xl font-semibold">
+            <T de="Filme und Personen" en="Films and People" />
+        </h2>
+        <button class="pl-2"
+                on:click={getPersonFilmData}
+        >
+            <Refresh darkColor="#D2CAB3"/>
+        </button>
+    </div>
+    {#each Object.keys(filmData) as film}
         <div class="">
             <h3 class="mt-2 text-md font-semibold text-firebrick-700 dark:text-firebrick-500">
-                {filmData[filmId].name}
+                {filmData[film].title}
             </h3>
             <ul class="">
-                {#each filmData[filmId]["people"] as person, personIndex}
-                    {#if personIndex < filmData[filmId]["people"].length - 1}
+                {#each filmData[film]["people"] as person, personIndex}
+                    {#if personIndex < filmData[film]["people"].length - 1}
                         <li class="grid grid-cols-2 gap-2 border-b border-warm-gray-700 dark:border-warm-gray-800 py-2">
                             <span>{person.name}</span>
                             <span>{person.profession}</span>
