@@ -1,5 +1,6 @@
 import database from "$lib/data/films.json";
 import {error} from "@sveltejs/kit";
+import {data} from "autoprefixer";
 
 type filmId = keyof typeof database;
 type person = {gender: string, profession: string, born: string, died:string};
@@ -17,7 +18,8 @@ export function GET({ url }: { url:URL }) {
     const year = url.searchParams.get("year");
     const random = url.searchParams.get("random");
     const location = url.searchParams.get("location");
-    const titleOnly = url.searchParams.get("title-only");
+    const titleOnly = url.searchParams.get("title-only") ?? false;
+    const genders = JSON.parse(url.searchParams.get("genders") ?? "[\"male\",\"female\",\"unknown\"]");
 
     let json: typeof database | film | string[] = {};
 
@@ -375,13 +377,29 @@ export function GET({ url }: { url:URL }) {
 
     function getAllFilmsAllGendersAllPersonsSpecificYear() {
         checkIfYearInDatabase();
+        const mapGender = (gen: string) => {
+            return gen == "W" ? "female" : (gen == "M" ? "male" : "unknown");
+        }
         if(random != undefined) {
             json = Object.keys(database)
                 .filter(id => (database[id as filmId]["year"] as string[]).includes(year ?? ""))
                 .filter(id => location != undefined ? (database[id as filmId]["location"] as string[]).includes(location) : true)
                 .sort(() => 0.5 - Math.random())
-                .slice(0, Number(random))
-                .map(id => titleOnly == "true" ? database[id as filmId]["title"]: database[id as filmId])
+                .map(id => (titleOnly == false && genders.length > 0) ? {
+                    title: database[id as filmId]["title"],
+                    year: database[id as filmId]["year"],
+                    location: database[id as filmId]["location"],
+                    people: Object.values(database[id as filmId]["people"])
+                        .filter(person => genders.includes(mapGender((person as string).split(";")[1])))
+                        .map(person => {return {
+                            name: (person as string).split(";")[0],
+                            gender: mapGender((person as string).split(";")[1]),
+                            profession: (person as string).split(";")[2]
+                        }})
+
+                } : database[id as filmId]["title"])
+                .filter(film => titleOnly == false ? film["people"].length > 0 : true)
+                .slice(0, Number(random));
         } else {
             const films: Record<string, { title: string, people: any, location: string[] }> = {}
             for (const filmId in database) {
