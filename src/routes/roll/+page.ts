@@ -75,7 +75,7 @@ export function load({fetch}) {
     const getFilmsForYear = (year: number, country: string,  consumer: Consumer<JSON>): void => {
         const location = country == "alle" ? "" : "&location=" + country;
         console.log(location)
-        return fetch("/api/films?year=" + year + "&random=5" + location)
+        return fetch("/api/films?title-only=true&random=5&year=" + year + location)
             .then((response: Response) => response.json()).then(consumer);
     }
 

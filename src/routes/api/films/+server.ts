@@ -17,6 +17,7 @@ export function GET({ url }: { url:URL }) {
     const year = url.searchParams.get("year");
     const random = url.searchParams.get("random");
     const location = url.searchParams.get("location");
+    const titleOnly = url.searchParams.get("title-only");
 
     let json: typeof database | film | string[] = {};
 
@@ -380,7 +381,7 @@ export function GET({ url }: { url:URL }) {
                 .filter(id => location != undefined ? (database[id as filmId]["location"] as string[]).includes(location) : true)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, Number(random))
-                .map(id => database[id as filmId]["title"])
+                .map(id => titleOnly == "true" ? database[id as filmId]["title"]: database[id as filmId])
         } else {
             const films: Record<string, { title: string, people: any, location: string[] }> = {}
             for (const filmId in database) {
