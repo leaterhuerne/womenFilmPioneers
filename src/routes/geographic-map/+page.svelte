@@ -279,17 +279,19 @@
     <!-- Map with ColorPicker and YearNumbers -->
     <div class="relative w-full md:col-span-2">
         <!-- Map -->
-        <HeatMap
-                className="relative p-2"
-                bind:europe="{europe}"
-                countryHeatValues={heatMapColors}
-                colorFrom={heatMapBoundColors[0].rgb}
-                colorTo={heatMapBoundColors[1].rgb}
-                upperBound={mapUpperBound}
-                lowerBound=0
-                state={colorInput}
-                listeners={svgListeners}
-        />
+        <div class="grid place-items-center">
+            <HeatMap
+                    className="relative p-2 2xl:w-[600px] 3xl:w-[800px]"
+                    bind:europe="{europe}"
+                    countryHeatValues={heatMapColors}
+                    colorFrom={heatMapBoundColors[0].rgb}
+                    colorTo={heatMapBoundColors[1].rgb}
+                    upperBound={mapUpperBound}
+                    lowerBound=0
+                    state={colorInput}
+                    listeners={svgListeners}
+            />
+        </div>
         <!-- ColorPicker and Button -->
         <div
                 class="mt-2 absolute left-0 top-0 flex {colorPickerVisibility}  rounded-r-md duration-500"
@@ -366,7 +368,7 @@
         </div>
     </div>
     <!-- Detailed Information to Women -->
-    <div class="border-t-2 md:border-l border-firebrick-500 dark:border-firebrick-1000
+    <div class="border-t-2 md:border-l md:border-t-0 border-firebrick-500 dark:border-firebrick-1000
                 p-2 h-full">
         <SidePanel data={data}
                    year={year}
