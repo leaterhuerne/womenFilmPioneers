@@ -23,7 +23,7 @@ export function load({fetch}) {
      * @return Promise containing a JSON.
      */
     const getData = (professionList?: boolean, locationList?: boolean, year?: string | number,
-                            gender?: gender, location?: string, profession?: string,): Promise<JSON> => {
+                     gender?: gender, location?: string, profession?: string,): Promise<JSON> => {
         const queryValues = {
             "profession-list": professionList,
             "location-list": locationList,
@@ -72,8 +72,11 @@ export function load({fetch}) {
         return fetch("/api/professions?year=" + year).then((res: Response) => res.json()).then(consumer);
     }
 
-    const getFilmsForYear = (year: number, consumer: Consumer<JSON>): void => {
-        return fetch("/api/films?year=" + year).then((response: Response) => response.json()).then(consumer);
+    const getFilmsForYear = (year: number, country: string,  consumer: Consumer<JSON>): void => {
+        const location = country == "alle" ? "" : "&location=" + country;
+        console.log(location)
+        return fetch("/api/films?year=" + year + "&random=5" + location)
+            .then((response: Response) => response.json()).then(consumer);
     }
 
     return {

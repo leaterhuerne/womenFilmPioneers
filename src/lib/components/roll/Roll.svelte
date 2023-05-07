@@ -250,7 +250,17 @@
     <!-- Roll information -->
     <div class="flex items-center gap-2 text-sm pl-2">
         <InformationOutline darkColor="#D2CAB3" />
-        <p><T de="100% auf der Rolle entsprechen {max} Personen." en="100% on roll equals {max} people." /></p>
+        <p>
+            <T
+                de="Die auf der Rolle abgebildeten Ergebnisse basieren auf den durch das"
+                en="The results shown on the roll are based on the data collected by the"
+            />
+            <a class="italic hover:text-firebrick-500" href="https://www.dff.film/">DFF</a>
+            <T
+                de="erfassten Daten zu insgesamt {max} Personen im Zeitraum von 1895 bis 1950."
+                en="total {max} people in the period 1895-1950."
+            />
+        </p>
     </div>
 </div>
 

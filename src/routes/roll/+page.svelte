@@ -10,6 +10,8 @@
     import Reload from "$lib/icons/components/Reload.svelte";
     import Refresh from "$lib/icons/components/Refresh.svelte";
     import SidePanel from "$lib/components/roll/SidePanel.svelte";
+    import Cog from "$lib/icons/components/Cog.svelte";
+    import InformationOutline from "$lib/icons/components/InformationOutline.svelte";
 
     // =================================================================================================================
     //                                              Type definitions
@@ -265,17 +267,19 @@
     }
     //Set colours on the roll
     coloursOnRoll = [{title: "", rgb: randomRgb()}, {title: "", rgb: randomRgb()}];
+    let width;
 </script>
 
+<svelte:window bind:innerWidth={width} />
 <div
         class="
             relative
-            flex flex-col lg:flex-row
+            flex flex-col lg:flex-row 3xl:flex-col 2xl:gap-4
             grow
         "
 >
     <!-- Roll and Customizations -->
-    <div class="flex flex-col lg:w-2/3">
+    <div class="flex flex-col lg:w-2/3 3xl:w-full">
         <!-- Roll -->
         {#key content}
             <Roll
@@ -289,7 +293,7 @@
             />
         {/key}
         <!-- Customization of the roll -->
-        <div class="flex flex-col justify-between grow p-2 border-t border-firebrick-500 dark:border-firebrick-1000">
+        <div class="flex flex-col justify-start grow p-2 border-t border-firebrick-500 dark:border-firebrick-1000">
             <div>
                 <h1 class="text-center text-xl font-semibold">
                     <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
@@ -304,20 +308,27 @@
             </div>
             <p class="text-sm italic">
                 <T
-                    de="Hinweis: Werden alle Berufe und Länder ausgewählt, so werden hier die alle Personen gezählt, die
-                        laut Datenbank in diesem Zeitraum tätig waren. Hier tritt eine Abweichung von den Daten zu
-                        speziellen Berufen bei den Filmen auf (Data Bias): In manchen Jahren sind Personen tätig gewesen,
-                        obwohl sie in diesem Jahr laut Datenbank an keinem Film beteiligt waren."
-                    en="Notice: If all professions and countries are selected, all persons are counted, which were -
-                        according to the database - working in this year. Here we see a deviation from the data for
-                        single professions and countries (so called data bias): According to the database, in some years
-                        people were working in the film industry without being associated to a film."
+                    de="In der zentralen Datenbank des DFF sind sowohl film- als auch personenbezogene Daten erfasst,
+                    welche für die Erstellung von Visualisierungen zusammengeführt wurden. Die personenbezogenen Daten
+                    enthalten Tätigkeitszeiträume der einzelnen Personen, während die filmwerksbezogenen Daten die
+                    jeweiligen Berufe aufzeigen, welche die einzelnen Personen je nach Filmproduktion ausgeübt haben.
+                    Dabei kann es jedoch vorkommen, dass in manchen Jahren berufstätige Personen angezeigt werden,
+                    obwohl die spezifische Tätigkeit nicht in den filmwerksbezogenen Daten erfasst wurde, was zu einer
+                    Datenabweichung (Data Bias) führt."
+                    en="Both film and personal data are recorded in the central database of the DFF.
+                    which were brought together to create visualizations. The personal data
+                    contain periods of activity of the individual persons, while the film work-related data
+                    show the respective professions that the individual people have practiced depending on the film production.
+                    However, it can happen that in some years working people are reported,
+                    although the specific activity was not recorded in the film work-related data, resulting in a
+                    data bias."
                 />
             </p>
         </div>
     </div>
     <!-- Option Slider -->
-    <div
+    {#if width < 1538}
+        <div
             class="
                 absolute
                 w-full max-w-[30rem]
@@ -367,30 +378,118 @@
                     className=""
                     bind:colors={coloursOnRoll}
             />
-            <div class="p-2">
-
+            <div class="p-2 text-sm">
+                <p>
+                    <T
+                        de="Die Walze kann durch Scrollen und durch die Pfeiltasten nach oben bzw. unten rotiert werden."
+                        en="The roll kann be rotated by scrolling oder using the arrow keys up and down."
+                    />
+                </p>
+                <p>
+                    <T
+                            de="Die Auswahl der angezeigten Geschlechter erfolgt oben durch klicken, alle Kombinationen sind möglich."
+                            en="The shown genders kann be adjusted by clicking above, all combinations are possible."
+                    />
+                </p>
+                <p>
+                    <T
+                            de="Die Farben der Balken sind durch Verschieben der Slider frei einstellbar, die Anfangsfarbe ist zufällig."
+                            en="The bar colours can be adjusted by moving the sliders, the default colours are random."
+                    />
+                </p>
             </div>
         </div>
         <button
                 class="
                     duration-500
-                    w-[5%] h-10
+                    w-[5%] h-full
                     bg-firebrick-500 dark:bg-firebrick-1000
-                    grid place-items-center
+                    grid place-items-center grid-cols-1 gap-2
                     {buttonRotation}
                     rounded-r-xl
+                    py-2
                 "
                 on:mouseenter={() => optionsVisible = "translate-x-0"}
         >
-            <CheveronRight color="#D2CAB3" />
+            <Cog darkColor="#D2CAB3" />
+            <InformationOutline darkColor="#D2CAB3" />
         </button>
     </div>
-    <!-- Information -->
-    <SidePanel
-            data={data}
-            leftGender={{de: genderMap[leftGender].de, en: genderMap[leftGender].en, value: frontLabelOnRoll.left}}
-            rightGender={{de: genderMap[rightGender].de, en: genderMap[rightGender].en, value: frontLabelOnRoll.right}}
-            year={frontLabelOnRoll.year}
-            country={country}
-    />
+    {/if}
+    <!-- Information and 2xl Options-->
+    <div class="lg:w-1/3 3xl:w-full flex justify-between">
+        <SidePanel
+                data={data}
+                leftGender={{de: genderMap[leftGender].de, en: genderMap[leftGender].en, value: frontLabelOnRoll.left}}
+                rightGender={{de: genderMap[rightGender].de, en: genderMap[rightGender].en, value: frontLabelOnRoll.right}}
+                year={frontLabelOnRoll.year}
+                country={country}
+        />
+        {#if width >= 1538}
+            <div
+                    class="
+                w-full max-w-[30rem]
+                flex
+                h-min
+                rounded
+                border-2
+                dark:border-warm-gray-700
+                shadow-lg dark:shadow-none
+                mr-2
+            "
+            >
+                <div class="bg-paper-100 dark:bg-warm-gray-900 p-2">
+                    <div class="relative flex justify-between px-2">
+                        <button class="flex grow w-1/2" on:click={() => handleGenderChangeButton("left")}>
+                    <span class="absolute left-2 ">
+                        <CheveronLeft size=2 darkColor="#D2CAB3" />
+                    </span>
+                            <span class="font-semibold w-full text-end">
+                        <T
+                                de={leftGender === "male" ? "Männlich" : (leftGender === "female" ? "Weiblich" : "Divers/Unbekannt")}
+                                en={leftGender === "male" ? "Male" : (leftGender === "female" ? "Female" : "Queer/Unknown")}
+                        />
+                    </span>
+                        </button>
+                        <p class="font-semibold text-xl mx-2">|</p>
+                        <button class="flex grow w-1/2" on:click={() => handleGenderChangeButton("right")}>
+                    <span class="font-semibold w-full text-start">
+                        <T
+                                de={rightGender === "male" ? "Männlich" : (rightGender === "female" ? "Weiblich" : "Divers/Unbekannt")}
+                                en={rightGender === "male" ? "Male" : (rightGender === "female" ? "Female" : "Queer/Unknown")}
+                        />
+                    </span>
+                            <span class="absolute right-2">
+                        <CheveronRight size=2 darkColor="#D2CAB3" />
+                    </span>
+                        </button>
+                    </div>
+                    <ColorPicker
+                            className=""
+                            bind:colors={coloursOnRoll}
+                    />
+                    <div class="p-2 text-sm">
+                        <p>
+                            <T
+                                    de="Die Walze kann durch Scrollen und durch die Pfeiltasten nach oben bzw. unten rotiert werden."
+                                    en="The roll kann be rotated by scrolling oder using the arrow keys up and down."
+                            />
+                        </p>
+                        <p>
+                            <T
+                                    de="Die Auswahl der angezeigten Geschlechter erfolgt oben durch klicken, alle Kombinationen sind möglich."
+                                    en="The shown genders kann be adjusted by clicking above, all combinations are possible."
+                            />
+                        </p>
+                        <p>
+                            <T
+                                    de="Die Farben der Balken sind durch Verschieben der Slider frei einstellbar, die Anfangsfarbe ist zufällig."
+                                    en="The bar colours can be adjusted by moving the sliders, the default colours are random."
+                            />
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {/if}
+    </div>
 </div>
