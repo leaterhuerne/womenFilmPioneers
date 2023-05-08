@@ -116,11 +116,13 @@
 </script>
 
 <div class="{className}">
+    <!-- Headline -->
     <h1 class="mb-4 text-3xl font-semibold text-center">
         <T de="Die Filmindustrie in {countryLanguages.de} im Jahr {year}"
            en="The film industry of {countryLanguages.en} in {year}"
         />
     </h1>
+    <!-- Gender distribution -->
     <h2 class="mb-2 text-xl font-semibold">
         <T de="Geschlechterverteilung" en="Gender Distribution" />
     </h2>
@@ -131,6 +133,16 @@
             />: {displayGendersDistribution[gender]}
         </p>
     {/each}
+    <p class="pt-4 text-sm italic">
+        <T de="Der folgende Film ist ein zufälliger Film aus ausgewähltem Jahr und Region.
+                Die angezeigten Personen sind an dem Film beteiligt und stimmen mit den gewählten Geschlechtern überein.
+                Für weitere zufällige Filme kann der Button hinter der Überschrift angeklickt werden."
+           en="The following movie is a random movie from the selected year and region.
+                The displayed people are involved in the film and match the chosen genders.
+                For more random films, the button behind the heading can be clicked."
+        />
+    </p>
+    <!-- Random film and persons -->
     <div class="mt-4 flex place-items-center">
         <h2 class="text-xl font-semibold">
             <T de="Filme und Personen" en="Films and People" />

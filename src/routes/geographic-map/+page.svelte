@@ -275,7 +275,6 @@
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
-{windowWidth}
 <div class="grid grid-cols-1 grow md:grid-cols-3">
     <!-- Map with ColorPicker and YearNumbers -->
     <div class="relative w-full md:col-span-2">
