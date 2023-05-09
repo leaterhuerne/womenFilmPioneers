@@ -91,6 +91,9 @@ const CheveronDown = create_ssr_component(($$result, $$props, $$bindings, slots)
   )}</div>`;
 });
 class CircularArrayIterator {
+  circle;
+  current;
+  indexOfCurrent;
   constructor(circle) {
     this.circle = circle;
     this.indexOfCurrent = 0;
@@ -130,6 +133,9 @@ class CircularArrayIterator {
   }
 }
 class CircularArrayList {
+  size;
+  data;
+  head;
   constructor(...items) {
     this.data = [];
     this.size = this.data.length;
@@ -357,17 +363,18 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   let { refreshProfessions = () => data.getProfessionForYear(year, country, [map(leftGender.en), map(rightGender.en)], (json) => professions = Object.values(json)) } = $$props;
   let { refreshFilms = () => data.getFilmsForYear(year, country, [map(leftGender.en), map(rightGender.en)], (json) => {
     films = Object.values(json);
+    console.log(films);
   }) } = $$props;
-  let lastYearChange = Date.now();
-  let changedYear = false;
+  let lastReactiveChange = Date.now();
+  let changedReactiveVariable = false;
   refreshProfessions();
   refreshFilms();
   setInterval(
     () => {
-      if (changedYear && Date.now() - lastYearChange > 100) {
+      if (changedReactiveVariable && Date.now() - lastReactiveChange > 100) {
         refreshProfessions();
         refreshFilms();
-        changedYear = false;
+        changedReactiveVariable = false;
       }
     },
     10
@@ -395,15 +402,10 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       leftGender = leftGender;
       rightGender = rightGender;
       country = country;
-      refreshFilms();
-      refreshProfessions();
-    }
-  }
-  {
-    {
       year = year;
-      lastYearChange = Date.now();
-      changedYear = true;
+      console.log("Reactive scope.");
+      lastReactiveChange = Date.now();
+      changedReactiveVariable = true;
     }
   }
   return `
@@ -707,4 +709,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-eca14ef9.js.map
+//# sourceMappingURL=_page.svelte-fb7cba97.js.map

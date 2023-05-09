@@ -33,7 +33,6 @@ function load({ fetch }) {
   const getProfessionForYear = (year, country, genders, consumer) => {
     const location = country == "alle" ? "" : "&location=" + country;
     const url = "/api/professions?random=5&year=" + year + location + "&genders=" + JSON.stringify(genders);
-    console.log(url);
     return fetch(url).then((res) => res.json()).then(consumer);
   };
   const getFilmsForYear = (year, country, genders, consumer) => {
@@ -59,11 +58,11 @@ var _page_ts = /*#__PURE__*/Object.freeze({
 });
 
 const index = 5;
-const component = async () => (await import('./_page.svelte-eca14ef9.js')).default;
+const component = async () => (await import('./_page.svelte-fb7cba97.js')).default;
 const universal_id = "src/routes/roll/+page.ts";
-const imports = ["_app/immutable/entry/roll-page.svelte.15827753.js","_app/immutable/chunks/index.9c0150a3.js","_app/immutable/chunks/Refresh.1009957e.js","_app/immutable/chunks/Icon.c1327b70.js","_app/immutable/chunks/T.d26ede2c.js","_app/immutable/chunks/language.76248b11.js","_app/immutable/chunks/index.1ac1a48e.js","_app/immutable/chunks/InformationOutline.29a2d698.js","_app/immutable/entry/roll-page.ts.cc6b73e8.js","_app/immutable/chunks/domain.e27cd574.js","_app/immutable/chunks/index.1ac1a48e.js","_app/immutable/chunks/index.9c0150a3.js","_app/immutable/chunks/_page.d0096dfd.js"];
+const imports = ["_app/immutable/entry/roll-page.svelte.0aadedb7.js","_app/immutable/chunks/index.9c0150a3.js","_app/immutable/chunks/Refresh.1009957e.js","_app/immutable/chunks/Icon.c1327b70.js","_app/immutable/chunks/T.d26ede2c.js","_app/immutable/chunks/language.76248b11.js","_app/immutable/chunks/index.1ac1a48e.js","_app/immutable/chunks/InformationOutline.29a2d698.js","_app/immutable/entry/roll-page.ts.da54b962.js","_app/immutable/chunks/domain.e27cd574.js","_app/immutable/chunks/index.1ac1a48e.js","_app/immutable/chunks/index.9c0150a3.js","_app/immutable/chunks/_page.de418a02.js"];
 const stylesheets = ["_app/immutable/assets/Refresh.8439df54.css","_app/immutable/assets/Icon.fa4bc524.css"];
 const fonts = [];
 
 export { component, fonts, imports, index, stylesheets, _page_ts as universal, universal_id };
-//# sourceMappingURL=5-9cff5251.js.map
+//# sourceMappingURL=5-6c416e64.js.map
