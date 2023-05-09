@@ -3,6 +3,7 @@ import {domainString} from "$lib/stores/domain";
 type genderKey = "female" | "male" | "unknown";
 
 /** @type {import('../../../.svelte-kit/types/src/routes').PageLoad} */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export function load({ fetch }) {
 
