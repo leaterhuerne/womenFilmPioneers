@@ -43,10 +43,12 @@
             changedYear = false;
         }
     }, 10);
+    let windowWidth;
 
 
 </script>
 
+<svelte:window bind:innerWidth={windowWidth} />
 <div
         class="
                 grow
@@ -76,7 +78,13 @@
     <div>
         <div class="flex gap-4 place-items-center">
             <h2 class="text-lg font-semibold"><T de="Berufe" en="Professions" /></h2>
-            <button on:click={refreshProfessions}><Refresh darkColor="#D2CAB3" /></button>
+            <button on:click={refreshProfessions}>
+                {#if windowWidth < 768}
+                    <Refresh size=1.5 darkColor="#D2CAB3"/>
+                {:else}
+                    <Refresh darkColor="#D2CAB3"/>
+                {/if}
+            </button>
         </div>
         <ul class="list-disc ml-4">
             {#each professions as profession}
@@ -87,7 +95,13 @@
     <div>
         <div class="flex gap-4">
             <h2 class="text-lg font-semibold"><T de="Filme aus diesem Jahr" en="Films from this year" /></h2>
-            <button on:click={refreshFilms}><Refresh darkColor="#D2CAB3" /></button>
+            <button on:click={refreshFilms}>
+                {#if windowWidth < 768}
+                    <Refresh size=1.5 darkColor="#D2CAB3"/>
+                {:else}
+                    <Refresh darkColor="#D2CAB3"/>
+                {/if}
+            </button>
         </div>
         <ul class="list-disc ml-4">
             {#each films as film}

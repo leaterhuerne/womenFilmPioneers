@@ -113,8 +113,11 @@
         getPersonFilmData();
     }
 
+    let windowWidth;
+
 </script>
 
+<svelte:window bind:innerWidth={windowWidth} />
 <div class="{className}">
     <!-- Headline -->
     <h1 class="mb-4 text-3xl font-semibold text-center">
@@ -150,7 +153,12 @@
         <button class="pl-2"
                 on:click={getPersonFilmData}
         >
-            <Refresh darkColor="#D2CAB3"/>
+            {#if windowWidth < 768}
+                <Refresh size=1.5 darkColor="#D2CAB3"/>
+            {:else}
+                <Refresh darkColor="#D2CAB3"/>
+            {/if}
+
         </button>
     </div>
     {#each Object.keys(filmData) as film}

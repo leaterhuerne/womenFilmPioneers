@@ -1642,7 +1642,8 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       getPersonFilmData();
     }
   }
-  return `<div${add_attribute("class", className, 0)}>
+  return `
+<div${add_attribute("class", className, 0)}>
     <h1 class="mb-4 text-3xl font-semibold text-center">${validate_component(T, "T").$$render(
     $$result,
     {
@@ -1693,7 +1694,7 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     {},
     {}
   )}</h2>
-        <button class="pl-2">${validate_component(Refresh, "Refresh").$$render($$result, { darkColor: "#D2CAB3" }, {}, {})}</button></div>
+        <button class="pl-2">${`${validate_component(Refresh, "Refresh").$$render($$result, { darkColor: "#D2CAB3" }, {}, {})}`}</button></div>
     ${each(Object.keys(filmData), (film) => {
     return `<div class=""><h3 class="mt-2 text-md font-semibold text-firebrick-700 dark:text-firebrick-500">${escape(filmData[film].title)}</h3>
             <ul class="">${each(filmData[film]["people"], (person, personIndex) => {
@@ -2046,4 +2047,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-276c62a4.js.map
+//# sourceMappingURL=_page.svelte-1ff46349.js.map

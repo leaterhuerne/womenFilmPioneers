@@ -130,6 +130,9 @@ class CircularArrayIterator {
   }
 }
 class CircularArrayList {
+  size;
+  data;
+  head;
   constructor(...items) {
     this.data = [];
     this.size = this.data.length;
@@ -400,7 +403,8 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       changedYear = true;
     }
   }
-  return `<div class="grow border-t lg:border-t-0 lg:border-l border-firebrick-500 dark:border-firebrick-1000 p-2 flex flex-col gap-2 "><h1 class="text-3xl font-semibold text-center">${validate_component(T, "T").$$render(
+  return `
+<div class="grow border-t lg:border-t-0 lg:border-l border-firebrick-500 dark:border-firebrick-1000 p-2 flex flex-col gap-2 "><h1 class="text-3xl font-semibold text-center">${validate_component(T, "T").$$render(
     $$result,
     {
       de: "Die Filmindustrie im Jahr",
@@ -430,7 +434,7 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     {}
   )}</p>
     <div><div class="flex gap-4 place-items-center"><h2 class="text-lg font-semibold">${validate_component(T, "T").$$render($$result, { de: "Berufe", en: "Professions" }, {}, {})}</h2>
-            <button>${validate_component(Refresh, "Refresh").$$render($$result, { darkColor: "#D2CAB3" }, {}, {})}</button></div>
+            <button>${`${validate_component(Refresh, "Refresh").$$render($$result, { darkColor: "#D2CAB3" }, {}, {})}`}</button></div>
         <ul class="list-disc ml-4">${each(professions, (profession) => {
     return `<li>${escape(profession)}</li>`;
   })}</ul></div>
@@ -443,7 +447,7 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     {},
     {}
   )}</h2>
-            <button>${validate_component(Refresh, "Refresh").$$render($$result, { darkColor: "#D2CAB3" }, {}, {})}</button></div>
+            <button>${`${validate_component(Refresh, "Refresh").$$render($$result, { darkColor: "#D2CAB3" }, {}, {})}`}</button></div>
         <ul class="list-disc ml-4">${each(films, (film) => {
     return `<li>${escape(film)}</li>`;
   })}</ul></div></div>`;
@@ -700,4 +704,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-c8812dd7.js.map
+//# sourceMappingURL=_page.svelte-a55a603f.js.map
