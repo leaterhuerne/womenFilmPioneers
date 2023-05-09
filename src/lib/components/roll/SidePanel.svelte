@@ -21,33 +21,32 @@
     export let refreshFilms: () => void = () =>
         data.getFilmsForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => {
             films = Object.values(json);
+            console.log(films);
         });
 
-    let lastYearChange = Date.now();
-    let changedYear = false;
+    let lastReactiveChange = Date.now();
+    let changedReactiveVariable = false;
 
     //Initialize component
     refreshProfessions();
     refreshFilms();
 
+    //React to data change
     $: {
         leftGender = leftGender;
         rightGender = rightGender;
         country = country;
-        refreshFilms();
-        refreshProfessions();
-    }
-    $: {
         year = year;
-        lastYearChange = Date.now();
-        changedYear = true;
+        console.log("Reactive scope.")
+        lastReactiveChange = Date.now();
+        changedReactiveVariable = true;  //ensure the interval action is only executed when state of a reactive variable changed
     }
 
     setInterval(() => {
-        if(changedYear && Date.now() - lastYearChange > 100) {
+        if(changedReactiveVariable && Date.now() - lastReactiveChange > 100) {
             refreshProfessions();
             refreshFilms();
-            changedYear = false;
+            changedReactiveVariable = false;
         }
     }, 10);
 
