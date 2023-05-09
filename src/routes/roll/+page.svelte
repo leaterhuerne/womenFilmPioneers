@@ -296,7 +296,7 @@
         <div class="flex flex-col justify-start grow p-2 border-t border-firebrick-500 dark:border-firebrick-1000">
             <div>
                 <h1 class="text-center text-xl font-semibold">
-                    <T de="Anpassung der Daten auf der Rolle" en="Customization of data on the roll"/>
+                    <T de="Anpassung der Daten auf der Walze" en="Customization of data on the roll"/>
                 </h1>
                 <RollOptions
                         className="w-full py-2"
