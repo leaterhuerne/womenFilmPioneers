@@ -2,7 +2,7 @@
     import T from "$lib/components/T.svelte";
     import CheveronLeft from "$lib/icons/components/CheveronLeft.svelte";
     import CheveronRight from "$lib/icons/components/CheveronRight.svelte";
-    import AddOutline from "$lib/icons/components/AddOutline.svelte";
+    import Cog from "$lib/icons/components/Cog.svelte";
 
     // data from load function in +page.ts, data of endpoint genders-by-year-profession-location
     export let data: {getData, getProfessionList, getLocationList} = {};
@@ -180,7 +180,7 @@
                     "
                 on:click={showProfessions}
         >
-            <AddOutline darkColor="#D2CAB3" />
+            <Cog darkColor="#D2CAB3" />
         </button>
 
         <!-- next profession button -->
