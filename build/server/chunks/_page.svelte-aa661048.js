@@ -1463,7 +1463,7 @@ const HeatMapSettings = create_ssr_component(($$result, $$props, $$bindings, slo
     male: false,
     unknown: false
   } } = $$props;
-  let { absoluteMap = true } = $$props;
+  let { absoluteMap = "allYears" } = $$props;
   let { profession = profession ?? "" } = $$props;
   let { className = "" } = $$props;
   let professionList = [];
@@ -1759,7 +1759,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     onMouseEnter: (country) => mouseEnterAction(country),
     onMouseLeave: () => mouseLeaveAction()
   };
-  let germanyCounted = true;
+  let germanyCounted = "allYears";
   let heatMapBoundColors = [
     {
       title: "",
@@ -1849,9 +1849,9 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     }
   }
   function calculateMaximum() {
-    if (germanyCounted) {
+    if (germanyCounted === "allYears") {
       data.getDataProfession(calculateMaximumOfAllYears, chosenProfession);
-    } else {
+    } else if (germanyCounted === "perYear") {
       data.getDataProfession(calculateMaximumPerYear, chosenProfession);
     }
   }
@@ -2047,4 +2047,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-1ff46349.js.map
+//# sourceMappingURL=_page.svelte-aa661048.js.map
