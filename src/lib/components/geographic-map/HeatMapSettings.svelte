@@ -94,11 +94,14 @@
      * Activates the 'relative' button and deactivates the 'absolute' button or vice versa.
      */
     function toggleAbsoluteRelativeButtons(): void {
-        currentButtonStyles.absolute =
-            currentButtonStyles.absolute === activatedButtonStyle ? initialButtonStyle : activatedButtonStyle;
-        currentButtonStyles.relative =
-            currentButtonStyles.relative === activatedButtonStyle ? initialButtonStyle : activatedButtonStyle;
         absoluteMap = !absoluteMap;
+        if (absoluteMap) {
+            currentButtonStyles.absolute = activatedButtonStyle;
+            currentButtonStyles.relative = initialButtonStyle;
+        } else {
+            currentButtonStyles.absolute = initialButtonStyle;
+            currentButtonStyles.relative = activatedButtonStyle;
+        }
     }
 
     /**
