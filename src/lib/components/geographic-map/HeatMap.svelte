@@ -40,9 +40,7 @@
             upperBound = temp;
         }
         if (value <= lowerBound || upperBound === 0) {
-            //return "linear-gradient(0deg, rgba(255,0,0, 0.9) 10%, rgba(0,255,0,0.9) 50%, rgba(0,0,255,0.9) 90%)";
             return "url(#grad1)";
-            //return "rgb(" + colorFrom.red + ", " + colorFrom.green + ", " + colorFrom.blue + ")";
         } else if (value > upperBound) {
             return "rgb(" + colorTo.red + ", " + colorTo.green + ", " + colorTo.blue + ")";
         } else {
@@ -67,7 +65,6 @@
     // if the colorFrom and colorTo change, then the europe SVG is rendered new
     $: {
         upperBound = upperBound;
-        console.log("upper bound: " + upperBound);
         state = state;
         countryHeatValues = countryHeatValues;
         colorHeatMap();

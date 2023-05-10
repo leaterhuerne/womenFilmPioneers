@@ -10,7 +10,7 @@
 
     const ALL_YEARS = false;
     const PER_YEAR = true;
-    export let absoluteMap: boolean = ALL_YEARS;
+    export let maxPerYear: boolean = ALL_YEARS;
     export let profession: string | undefined = profession ?? "";
     export let className: string = "";
 
@@ -97,15 +97,14 @@
      * Activates the 'relative' button and deactivates the 'absolute' button or vice versa.
      */
     function toggleAbsoluteRelativeButtons(): void {
-        if (absoluteMap === PER_YEAR) {
+        if (maxPerYear === PER_YEAR) {
             currentButtonStyles.absolute = activatedButtonStyle;
             currentButtonStyles.relative = initialButtonStyle;
         } else {
             currentButtonStyles.absolute = initialButtonStyle;
             currentButtonStyles.relative = activatedButtonStyle;
         }
-        absoluteMap = !absoluteMap;
-        console.log("toggle: " + (absoluteMap ? "per year" : "all years"));
+        maxPerYear = !maxPerYear;
     }
 
     /**
@@ -125,38 +124,38 @@
         <!-- Buttons for 'absolute' or 'relative' Map -->
         <div class="col-span-9 grid grid-cols-2 gap-2 w-full border-blue-500">
             <button class="w-full {currentButtonStyles.absolute}"
-                    on:click={toggleAbsoluteRelativeButtons}
+                on:click={toggleAbsoluteRelativeButtons}
             >
                 <T en="Maximum all years" de="Maximum alle Jahre" />
             </button>
             <button class="w-full {currentButtonStyles.relative}"
-                    on:click={toggleAbsoluteRelativeButtons}
+                on:click={toggleAbsoluteRelativeButtons}
             >
                 <T en="Maximum per year" de="Maximum pro Jahr" />
             </button>
         </div>
         <!-- Gender Button: female -->
         <button class="col-span-3 w-full {currentButtonStyles.female}"
-                on:click={() => activateGenderButton("female")}
+            on:click={() => activateGenderButton("female")}
         >
             <T en="Female" de="Weiblich" />
         </button>
         <!-- Gender Button: male -->
         <button class="col-span-3 w-full {currentButtonStyles.male}"
-                on:click={() => activateGenderButton("male")}
+            on:click={() => activateGenderButton("male")}
         >
             <T en="Male" de="Männlich" />
         </button>
         <!-- Gender Button: unknown -->
         <button class="col-span-3 w-full {currentButtonStyles.unknown}"
-                on:click={() => activateGenderButton("unknown")}
+            on:click={() => activateGenderButton("unknown")}
         >
             <T en="Queer/Unknown" de="Divers/Unbekannt" />
         </button>
         <!-- PROFESSIONS -->
         <!-- previous profession button -->
         <button class="{chevronButtonStyle}"
-                on:click={setPreviousProfession}
+            on:click={setPreviousProfession}
         >
             <CheveronLeft size=1.2 />
         </button>
@@ -170,7 +169,6 @@
                 col-span-5 w-full rounded
                 text-md text-center
                 bg-amber-400 dark:bg-firebrick-800
-
             "
         >
             {#if profession === ""}
@@ -182,9 +180,9 @@
         <!-- Information Button -->
         <button
                 class="
-                        rounded-[50%]
-                        duration-500 {informationButtonStyle}
-                    "
+                    rounded-[50%]
+                    duration-500 {informationButtonStyle}
+                "
                 on:click={showProfessions}
         >
             <Cog darkColor="#D2CAB3" />
@@ -192,14 +190,14 @@
 
         <!-- next profession button -->
         <button class="{chevronButtonStyle}"
-                on:click={setNextProfession}
+            on:click={setNextProfession}
         >
             <CheveronRight size=1.2 />
         </button>
 
         <!-- Profession list -->
         <div
-                class="
+            class="
                 col-span-full
                 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl-grid-cols-5
                 p-2
