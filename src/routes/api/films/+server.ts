@@ -401,6 +401,7 @@ export function GET({ url }: { url:URL }) {
                 .filter(film => film["people"].length > 0)
                 .map(film => titleOnly != false ? film["title"] : film)
                 .slice(0, Number(random));
+
         } else {
             const films: Record<string, { title: string, people: any, location: string[] }> = {}
             for (const filmId in database) {
