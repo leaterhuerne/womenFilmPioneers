@@ -68,7 +68,7 @@
         onMouseLeave: () => mouseLeaveAction()
     };
     // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
-    let germanyCounted: boolean;
+    let germanyCounted: boolean = false;
 
      /*Random Colors for the HeatMap:
         // create Random values between lower bound and upper bound for coloring the HeatMap
@@ -219,7 +219,6 @@
             data.getDataProfession(calculateMaximumPerYear, chosenProfession);
         }
         console.log("calculateMaximum: " + (germanyCounted ? "per year" : "all years"));
-        mapUpperBound = mapUpperBound;
     }
 
     /**

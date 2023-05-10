@@ -1759,7 +1759,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     onMouseEnter: (country) => mouseEnterAction(country),
     onMouseLeave: () => mouseLeaveAction()
   };
-  let germanyCounted;
+  let germanyCounted = false;
   let heatMapBoundColors = [
     {
       title: "",
@@ -1855,7 +1855,6 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       data.getDataProfession(calculateMaximumPerYear, chosenProfession);
     }
     console.log("calculateMaximum: " + (germanyCounted ? "per year" : "all years"));
-    mapUpperBound = mapUpperBound;
   }
   function calculateMaximumPerYear(json) {
     mapUpperBound = 0;
@@ -2049,4 +2048,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-210f6062.js.map
+//# sourceMappingURL=_page.svelte-2a340fc6.js.map
