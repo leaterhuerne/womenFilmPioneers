@@ -996,6 +996,12 @@ const HeatMap = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$settled = true;
     {
       {
+        upperBound = upperBound;
+        console.log("upper bound: " + upperBound);
+      }
+    }
+    {
+      {
         state = state;
         countryHeatValues = countryHeatValues;
         colorHeatMap();
@@ -2048,4 +2054,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-2a340fc6.js.map
+//# sourceMappingURL=_page.svelte-32cf7c28.js.map
