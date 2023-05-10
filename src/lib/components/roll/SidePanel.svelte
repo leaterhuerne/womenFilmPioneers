@@ -11,46 +11,41 @@
 
     export let professions: string[] = new Array(5).fill("");
     export let films: string[] = new Array(5).fill("");
-
-    const map = (gender: string) => {
-        return gender == "Female" ? "female" : (gender == "Male" ? "male" : "unknown");
-    }
     export let refreshProfessions: () => void = () =>
-        data.getProfessionForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => professions = Object.values(json));
+        data.getProfessionForYear(year, json => professions = Object.keys(json).sort(() => 0.5 - Math.random()).slice(0, 5));
 
     export let refreshFilms: () => void = () =>
-        data.getFilmsForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => {
+        data.getFilmsForYear(year, country,  json => {
             films = Object.values(json);
-            console.log(films);
         });
 
-    let lastReactiveChange = Date.now();
-    let changedReactiveVariable = false;
+    let lastYearChange = Date.now();
+    let changedYear = false;
 
     //Initialize component
     refreshProfessions();
     refreshFilms();
 
-    //React to data change
     $: {
-        leftGender = leftGender;
-        rightGender = rightGender;
         country = country;
+        refreshFilms();
+    }
+    $: {
         year = year;
-        console.log("Reactive scope.")
-        lastReactiveChange = Date.now();
-        changedReactiveVariable = true;  //ensure the interval action is only executed when state of a reactive variable changed
+        lastYearChange = Date.now();
+        changedYear = true;
     }
 
     setInterval(() => {
-        if(changedReactiveVariable && Date.now() - lastReactiveChange > 100) {
+        if(changedYear && Date.now() - lastYearChange > 100) {
             refreshProfessions();
             refreshFilms();
-            changedReactiveVariable = false;
+            changedYear = false;
         }
     }, 10);
-
     let windowWidth;
+
+
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />

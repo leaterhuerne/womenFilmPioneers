@@ -7,6 +7,7 @@
     export let colorFrom: rgb = {red: 0, green: 0, blue: 139};  // start color that specifies the minimum heat color
     export let colorTo: rgb = {red: 238, green: 30, blue: 29};  // end color that specifies the maximum heat color
     export let upperBound: number = 100;            // The upper bound for interpolating between start and end color
+
     export let lowerBound: number = 0;              // The lower bound for interpolating between start and end color
     export let listeners: {                         // passing on listener from SVGEurope.svelte
         onClick: (country) => void,
@@ -39,9 +40,7 @@
             upperBound = temp;
         }
         if (value <= lowerBound || upperBound === 0) {
-            //return "linear-gradient(0deg, rgba(255,0,0, 0.9) 10%, rgba(0,255,0,0.9) 50%, rgba(0,0,255,0.9) 90%)";
             return "url(#grad1)";
-            //return "rgb(" + colorFrom.red + ", " + colorFrom.green + ", " + colorFrom.blue + ")";
         } else if (value > upperBound) {
             return "rgb(" + colorTo.red + ", " + colorTo.green + ", " + colorTo.blue + ")";
         } else {
@@ -65,6 +64,7 @@
 
     // if the colorFrom and colorTo change, then the europe SVG is rendered new
     $: {
+        upperBound = upperBound;
         state = state;
         countryHeatValues = countryHeatValues;
         colorHeatMap();

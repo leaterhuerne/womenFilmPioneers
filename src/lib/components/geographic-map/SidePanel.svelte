@@ -24,7 +24,6 @@
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
     let countryLanguages: language = EUROPE_NAMES;          // object of the de and en-name of the current country
-    //let filmData: {film: {name: string, people: {name: string, profession: string}[]}} = {film: {name: "", people: [{name: "", profession: ""}]}};
 
     /**
      * Extracts the currently needed data from the genderDistribution object.
@@ -72,31 +71,7 @@
                         people: e["people"] as {name: string, gender:string, profession: string}[]
                     };
                     filmData.push(film);
-                    console.log(filmData)
                 })
-
-
-
-            /*for(const filmId in json) {
-                for(const personId in json[filmId]["people"]) {
-                    //if((country == "" || json[filmId]["location"].includes(country))
-                        //&& genders.includes(json[filmId]["people"][personId]["gender"])
-                        //&& (profession == "" || profession == json[filmId]["people"][personId]["profession"])) {
-                        const person = {
-                            name: json[filmId]["people"][personId]["name"],
-                            profession: json[filmId]["people"][personId]["profession"]
-                        };
-                        if (!Object.keys(filmData).includes(filmId)) {
-                            filmData[filmId] = {
-                                name: json[filmId]["title"],
-                                people: [person]
-                            };
-                        } else {
-                            filmData[filmId]["people"].push(person);
-                        }
-                    //}
-                }
-            }*/
         },
         year,
         country,
@@ -139,13 +114,13 @@
     <p class="pt-4 text-sm italic">
         <T de="Der folgende Film ist ein zufälliger Film aus ausgewähltem Jahr und Region.
                 Die angezeigten Personen sind an dem Film beteiligt und stimmen mit den gewählten Geschlechtern überein.
-                Für weitere zufällige Filme kann der Button hinter der Überschrift angeklickt werden."
+                Für weitere zufällige Filme kann der Button rechts neben der Überschrift angeklickt werden."
            en="The following movie is a random movie from the selected year and region.
                 The displayed people are involved in the film and match the chosen genders.
-                For more random films, the button behind the heading can be clicked."
+                For more random films, the button on the right side the heading can be clicked."
         />
     </p>
-    <!-- Random film and persons -->
+    <!-- Random film and persons: Headline -->
     <div class="mt-4 flex place-items-center">
         <h2 class="text-xl font-semibold">
             <T de="Filme und Personen" en="Films and People" />
@@ -158,14 +133,15 @@
             {:else}
                 <Refresh darkColor="#D2CAB3"/>
             {/if}
-
         </button>
     </div>
     {#each Object.keys(filmData) as film}
         <div class="">
+            <!-- Random film and persons: Film -->
             <h3 class="mt-2 text-md font-semibold text-firebrick-700 dark:text-firebrick-500">
                 {filmData[film].title}
             </h3>
+            <!-- Random film and persons: Persons -->
             <ul class="">
                 {#each filmData[film]["people"] as person, personIndex}
                     {#if personIndex < filmData[film]["people"].length - 1}

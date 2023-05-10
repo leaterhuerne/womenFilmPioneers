@@ -68,15 +68,14 @@ export function load({fetch}) {
     const getProfessionLocation = (profession: string, location: string, consumer: Consumer<JSON>): void => {
         getData(ALL, ALL, ALL, ALL, location, profession).then(consumer);
     }
-    const getProfessionForYear = (year: number, country: string, genders: string[], consumer: Consumer<JSON>): void => {
-        const location = country == "alle" ? "" : "&location=" + country;
-        const url = "/api/professions?random=5&year=" + year + location  + "&genders=" + JSON.stringify(genders);
-        return fetch(url).then((res: Response) => res.json()).then(consumer);
+    const getProfessionForYear = (year: number, consumer: Consumer<JSON>): void => {
+        return fetch("/api/professions?year=" + year).then((res: Response) => res.json()).then(consumer);
     }
 
-    const getFilmsForYear = (year: number, country: string, genders: string[],  consumer: Consumer<JSON>): void => {
+    const getFilmsForYear = (year: number, country: string,  consumer: Consumer<JSON>): void => {
         const location = country == "alle" ? "" : "&location=" + country;
-        return fetch("/api/films?title-only=true&random=5&year=" + year + location + "&genders=" + JSON.stringify(genders))
+        console.log(location)
+        return fetch("/api/films?title-only=true&random=5&year=" + year + location)
             .then((response: Response) => response.json()).then(consumer);
     }
 

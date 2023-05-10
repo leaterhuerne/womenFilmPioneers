@@ -385,7 +385,7 @@ export function GET({ url }: { url:URL }) {
                 .filter(id => (database[id as filmId]["year"] as string[]).includes(year ?? ""))
                 .filter(id => location != undefined ? (database[id as filmId]["location"] as string[]).includes(location) : true)
                 .sort(() => 0.5 - Math.random())
-                .map(id => {return {
+                .map(id => (titleOnly == false && genders.length > 0) ? {
                     title: database[id as filmId]["title"],
                     year: database[id as filmId]["year"],
                     location: database[id as filmId]["location"],
@@ -397,9 +397,8 @@ export function GET({ url }: { url:URL }) {
                             profession: (person as string).split(";")[2]
                         }})
 
-                }})
-                .filter(film => film["people"].length > 0)
-                .map(film => titleOnly != false ? film["title"] : film)
+                } : database[id as filmId]["title"])
+                .filter(film => titleOnly == false ? film["people"].length > 0 : true)
                 .slice(0, Number(random));
         } else {
             const films: Record<string, { title: string, people: any, location: string[] }> = {}

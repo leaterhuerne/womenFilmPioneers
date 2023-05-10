@@ -24,6 +24,28 @@
     let countryGenderDistribution = {                                // distribution of all genders per year in each country
         DE: {female: "", male: "", unknown: ""}
     };
+    // upper bound of the map is the maximum of persons of all years (false) or of the current year (true)
+    let maxPerYear: boolean = false;
+    let colorInput = false;         // for recognizing a change of the color input
+    // initial color of the HeatMap
+    let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
+        {
+            title: "",
+            rgb: {
+                red: 0,
+                green: 0,
+                blue: 139
+            }
+        },
+        {
+            title: "",
+            rgb: {
+                red: 238,
+                green: 30,
+                blue: 29
+            }
+        },
+    ]
 
     // listener functionality of the HeatMap
     let europe: Europe = new Europe();
@@ -57,7 +79,6 @@
         }
     }
 
-
     let svgListeners: {                                                 // listener for action on country
         onClick: (country) => void,
         onMouseEnter: (country) => void,
@@ -67,37 +88,6 @@
         onMouseEnter: country => mouseEnterAction(country),
         onMouseLeave: () => mouseLeaveAction()
     };
-    // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
-    let germanyCounted: string = "allYears";
-
-     /*Random Colors for the HeatMap:
-        // create Random values between lower bound and upper bound for coloring the HeatMap
-        let countryWithColors = new Europe();
-        let europeCountryNames = Object.entries(countryWithColors);
-        for (const country of europeCountryNames) {
-        let randomColor: {name: string; value: number} = {name: country.at(0), value: Math.random() * 100};
-        heatMapColors.push(randomColor);
-    }*/
-
-    // initial color of the HeatMap
-    let heatMapBoundColors = [              // Array with 2 entries for the colors with the minimum and maximum heat
-        {
-            title: "",
-            rgb: {
-                red: 0,
-                green: 0,
-                blue: 139
-            }
-        },
-        {
-            title: "",
-            rgb: {
-                red: 238,
-                green: 30,
-                blue: 29
-            }
-        },
-    ]
 
     // Sets the names for the Color Picker in the correct language
     const colorPickerNamesDE = ["Wenig Aktivität", "Viel Aktivität"];   // german names
@@ -111,9 +101,6 @@
             heatMapBoundColors[i].title = currentLanguage[i];
         }
     }
-
-    let colorInput = false;         // for recognizing a change of the color input
-
 
     /**
      * The method returns the real gender status of the gender buttons. If no gender is chosen
@@ -156,7 +143,6 @@
         }
         heatMapColors = countryPeopleAmount;
     }
-
 
     /**
      * Calculates the gender distribution of the current year
@@ -212,14 +198,6 @@
         }
     }
 
-    function calculateMaximum() {
-        if (germanyCounted === "allYears") {
-            data.getDataProfession(calculateMaximumOfAllYears, chosenProfession);
-        } else if (germanyCounted === "perYear") {
-            data.getDataProfession(calculateMaximumPerYear, chosenProfession);
-        }
-    }
-
     /**
      * Calculates the maximum amount of persons in the current year
      * @param json database
@@ -238,15 +216,31 @@
         mapUpperBound = mapUpperBound === 0 ? 1 : mapUpperBound;
     }
 
+    /**
+     * Calculates the maximum amount of persons by using the function
+     * calculateMaximumOfAllYears or calculateMaximumPerYear. Which function is to be used is defined by
+     * the maxPerYear variable.
+     */
+    function calculateMaximum() {
+        if (!maxPerYear) {
+            data.getDataProfession(calculateMaximumOfAllYears, chosenProfession);
+        } else if (maxPerYear) {
+            data.getDataProfession(calculateMaximumPerYear, chosenProfession);
+        }
+    }
+
     // if genders, profession or maximum-setting changes then maximum must be recalculated
     $: {
         // trigger re-rendering
         chosenGenders = chosenGenders;
         chosenProfession = chosenProfession;
-        germanyCounted = germanyCounted;
+        maxPerYear = maxPerYear;
         calculateMaximum();
     }
 
+    /**
+     * Updates the values for each country in the Heatmap and updates the gender distribution.
+     */
     function updateMap() {
         // no specific profession
         if (chosenProfession === ALLE) {
@@ -281,47 +275,48 @@
         <!-- Map -->
         <div class="grid place-items-center">
             <HeatMap
-                    className="relative p-2 max-w-[600px]  3xl:w-[800px]"
-                    bind:europe="{europe}"
-                    countryHeatValues={heatMapColors}
-                    colorFrom={heatMapBoundColors[0].rgb}
-                    colorTo={heatMapBoundColors[1].rgb}
-                    upperBound={mapUpperBound}
-                    lowerBound=0
-                    state={colorInput}
-                    listeners={svgListeners}
+                className="relative p-2 max-w-[600px]  3xl:w-[800px]"
+                bind:europe="{europe}"
+                countryHeatValues={heatMapColors}
+                colorFrom={heatMapBoundColors[0].rgb}
+                colorTo={heatMapBoundColors[1].rgb}
+                upperBound={mapUpperBound}
+                lowerBound=0
+                state={colorInput}
+                listeners={svgListeners}
             />
         </div>
         <!-- ColorPicker and Button -->
         <div
-                class="mt-2 absolute left-0 top-0 flex {colorPickerVisibility}  rounded-r-md duration-500"
-                on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%] 2xl:translate-x-0"}
+            class="mt-2 absolute left-0 top-0 flex {colorPickerVisibility}  rounded-r-md duration-500"
+            on:mouseleave={() => colorPickerVisibility = "-translate-x-[84%] 2xl:translate-x-0"}
         >
             <ColorPicker
-                    className="bg-paper-100 dark:bg-warm-gray-800 opacity-90"
-                    bind:colors={heatMapBoundColors}
-                    onInput={() => colorInput = !colorInput}
+                className="bg-paper-100 dark:bg-warm-gray-800 opacity-90"
+                bind:colors={heatMapBoundColors}
+                onInput={() => colorInput = !colorInput}
             />
             <button
-                    class="
-                        grid place-items-center
-                        rounded-r-md
-                        w-[20%]
-                        h-10 md:h-20 2xl:hidden"
-                    on:mouseenter={() => colorPickerVisibility = ""}
-                    style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%,
-                                                             rgba(0,255,0,0.9) 50%,
-                                                             rgba(0,0,255,0.9) 90%);
-                    "
+                class="
+                    grid place-items-center
+                    rounded-r-md
+                    w-[20%]
+                    h-10 md:h-20 2xl:hidden"
+                on:mouseenter={() => colorPickerVisibility = ""}
+                style="background: linear-gradient(0deg, rgba(255,0,0, 0.9) 10%,
+                                                         rgba(0,255,0,0.9) 50%,
+                                                         rgba(0,0,255,0.9) 90%);
+                "
             >
                 <CheveronRight size={windowWidth < 768 ? 2 : 4} darkColor="black"/>
             </button>
         </div>
         <!-- SCREEN: Year numbers on top right side in the map -->
         {#if windowWidth >= MD}
-            <div class="mt-2 mr-2
-                        absolute right-0 top-0
-                        sm:scale-100
+            <div
+                class="mt-2 mr-2
+                    absolute right-0 top-0
+                    sm:scale-100
                 "
             >
                 <YearNumbers bind:year={year} responsive="md"/>
@@ -336,18 +331,18 @@
         <!-- Settings for HeatMap -->
         <div class="m-2">
             <HeatMapSettings
-                    data={data}
-                    bind:genders={chosenGenders}
-                    bind:profession={chosenProfession}
-                    bind:absoluteMap={germanyCounted}
+                data={data}
+                bind:genders={chosenGenders}
+                bind:profession={chosenProfession}
+                bind:maxPerYear={maxPerYear}
             />
         </div>
         <!-- Information to amount of persons per country -->
         <div class="my-4 text-sm p-2">
             <p>
-                <T de="Ein 'maximal eingefärbtes Land' repräsentiert {mapUpperBound} Personen, die an in der Datenbank
+                <T de="Ein maximal eingefärbtes Land repräsentiert {mapUpperBound} Personen, die an in der Datenbank
                         des DFF erfassten Filmen in dem ausgewählten Jahr beteiligt waren."
-                   en="A 'maximum colored country' represents {mapUpperBound} people involved in films recorded in
+                   en="A maximum colored country represents {mapUpperBound} people involved in films recorded in
                         the DFF's database in the selected year."
                 />
             </p>
@@ -365,9 +360,7 @@
                         'Maximum pro Jahr' zählt analog die Personen, die im aktuell ausgewählten Jahr tätig waren."
                    en="Note Maximum: 'Maximum all years' means that all of these people are counted in the year in
                         which the most people were active. The heat map is colored based on this number.
-                        'Maximum per year' counts the people who were active in the currently selected year.
-
-"
+                        'Maximum per year' counts the people who were active in the currently selected year."
                 />
             </p>
         </div>

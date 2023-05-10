@@ -5,34 +5,30 @@ type gender = "female" | "male" | "unknown";
 
 
 export function GET({ url, fetch} : {url:URL, fetch: any}) {
-    let content: any = {};
+    const content: any = {};
     const year = url.searchParams.get("year") ?? "";
     const gender = url.searchParams.get("gender") ?? "";
     const location = url.searchParams.get("location") ?? "";
     const professionList = url.searchParams.get("list");
-    const genders = JSON.parse(url.searchParams.get("genders") ?? "[\"female\",\"male\",\"unknown\"]")
-    const random = url.searchParams.get("random") ?? ""
 
     if(professionList === "true") {
         return fetch("/api/genders-by-year-profession-location?profession-list=true");
     } else {
-        const professions = new Set();
-        if(year != "") {
-            const professions = new Set<string>;
-            for(const gender of genders) {
-                for(const loc in data[year as year][gender as gender]["locations"]) {
-                    if(location == "" || loc == location) {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        for (const profession in data[year as year][gender as gender]["locations"][loc]["professions"]) {
-                            professions.add(profession)
+        // all genders and locations, specific year
+        if(year != "" && gender == "" && location == "") {
+            for(const gender in data[year as year]) {
+                for(const profession in data[year as year][gender as gender].professions) {
+                    if(!(profession in content)) {
+                        content[profession] = {
+                            female: 0,
+                            male: 0,
+                            unknown: 0
                         }
                     }
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    content[profession][gender] = data[year as year][gender as gender].professions[profession];
                 }
-            }
-            content = Array.from(professions);
-            if(random != "") {
-                content = content.sort(() => 0.5 - Math.random()).slice(0, Number(random));
             }
         }
     }
