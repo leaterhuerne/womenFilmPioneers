@@ -1759,7 +1759,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     onMouseEnter: (country) => mouseEnterAction(country),
     onMouseLeave: () => mouseLeaveAction()
   };
-  let germanyCounted = "allYears";
+  let germanyCounted;
   let heatMapBoundColors = [
     {
       title: "",
@@ -2047,4 +2047,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-aa661048.js.map
+//# sourceMappingURL=_page.svelte-8d657544.js.map

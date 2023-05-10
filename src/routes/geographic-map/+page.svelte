@@ -68,7 +68,7 @@
         onMouseLeave: () => mouseLeaveAction()
     };
     // upper bound of the map is the maximum of persons of all years (true) or of the current year (false)
-    let germanyCounted: string = "allYears";
+    let germanyCounted: string;
 
      /*Random Colors for the HeatMap:
         // create Random values between lower bound and upper bound for coloring the HeatMap
