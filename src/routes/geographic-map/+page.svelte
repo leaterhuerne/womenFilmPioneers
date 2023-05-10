@@ -219,6 +219,7 @@
             data.getDataProfession(calculateMaximumPerYear, chosenProfession);
         }
         console.log("calculateMaximum: " + (germanyCounted ? "per year" : "all years"));
+        mapUpperBound = mapUpperBound;
     }
 
     /**
