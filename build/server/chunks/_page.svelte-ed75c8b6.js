@@ -1456,6 +1456,7 @@ const Cog = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     {}
   )}</div>`;
 });
+const ALL_YEARS = false;
 const HeatMapSettings = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { data = {} } = $$props;
   let { genders = {
@@ -1463,7 +1464,7 @@ const HeatMapSettings = create_ssr_component(($$result, $$props, $$bindings, slo
     male: false,
     unknown: false
   } } = $$props;
-  let { absoluteMap = "allYears" } = $$props;
+  let { absoluteMap = ALL_YEARS } = $$props;
   let { profession = profession ?? "" } = $$props;
   let { className = "" } = $$props;
   let professionList = [];
@@ -1612,7 +1613,6 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
         Object.values(json).map((e) => {
           const film = { title: e["title"], people: e["people"] };
           filmData.push(film);
-          console.log(filmData);
         });
       },
       year,
@@ -1849,11 +1849,12 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     }
   }
   function calculateMaximum() {
-    if (germanyCounted === "allYears") {
+    if (!germanyCounted) {
       data.getDataProfession(calculateMaximumOfAllYears, chosenProfession);
-    } else if (germanyCounted === "perYear") {
+    } else if (germanyCounted) {
       data.getDataProfession(calculateMaximumPerYear, chosenProfession);
     }
+    console.log("calculateMaximum: " + (germanyCounted ? "per year" : "all years"));
   }
   function calculateMaximumPerYear(json) {
     mapUpperBound = 0;
@@ -2047,4 +2048,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-8d657544.js.map
+//# sourceMappingURL=_page.svelte-ed75c8b6.js.map

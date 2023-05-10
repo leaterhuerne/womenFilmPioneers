@@ -7,7 +7,10 @@
     // data from load function in +page.ts, data of endpoint genders-by-year-profession-location
     export let data: {getData, getProfessionList, getLocationList} = {};
     export let genders: {female: boolean, male: boolean, unknown: boolean} = {female: false, male: false, unknown: false};
-    export let absoluteMap: string = "allYears";
+
+    const ALL_YEARS = false;
+    const PER_YEAR = true;
+    export let absoluteMap: boolean = ALL_YEARS;
     export let profession: string | undefined = profession ?? "";
     export let className: string = "";
 
@@ -94,15 +97,15 @@
      * Activates the 'relative' button and deactivates the 'absolute' button or vice versa.
      */
     function toggleAbsoluteRelativeButtons(): void {
-        if (absoluteMap === "perYear") {
-            absoluteMap = "allYears";
+        if (absoluteMap === PER_YEAR) {
             currentButtonStyles.absolute = activatedButtonStyle;
             currentButtonStyles.relative = initialButtonStyle;
-        } else if (absoluteMap === "allYears") {
-            absoluteMap = "perYear";
+        } else {
             currentButtonStyles.absolute = initialButtonStyle;
             currentButtonStyles.relative = activatedButtonStyle;
         }
+        absoluteMap = !absoluteMap;
+        console.log("toggle: " + (absoluteMap ? "per year" : "all years"));
     }
 
     /**

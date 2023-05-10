@@ -72,7 +72,6 @@
                         people: e["people"] as {name: string, gender:string, profession: string}[]
                     };
                     filmData.push(film);
-                    console.log(filmData)
                 })
 
 
