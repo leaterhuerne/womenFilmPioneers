@@ -22,6 +22,7 @@
     let lastYearChange = Date.now();
     let changedYear = false;
 
+
     //Initialize component
     refreshProfessions();
     refreshFilms();
