@@ -11,11 +11,15 @@
 
     export let professions: string[] = new Array(5).fill("");
     export let films: string[] = new Array(5).fill("");
+
+    const map = (gender: string) => {
+        return gender == "Female" ? "female" : (gender == "Male" ? "male" : "unknown");
+    }
     export let refreshProfessions: () => void = () =>
-        data.getProfessionForYear(year, json => professions = Object.keys(json).sort(() => 0.5 - Math.random()).slice(0, 5));
+        data.getProfessionForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => {professions = Object.values(json); console.log(json)});
 
     export let refreshFilms: () => void = () =>
-        data.getFilmsForYear(year, country,  json => {
+        data.getFilmsForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => {
             films = Object.values(json);
         });
 
@@ -28,8 +32,11 @@
     refreshFilms();
 
     $: {
+        leftGender = leftGender;
+        rightGender = rightGender;
         country = country;
         refreshFilms();
+        refreshProfessions();
     }
     $: {
         year = year;
@@ -44,9 +51,8 @@
             changedYear = false;
         }
     }, 10);
+
     let windowWidth;
-
-
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
