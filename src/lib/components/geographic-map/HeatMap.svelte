@@ -8,10 +8,6 @@
     export let colorTo: rgb = {red: 238, green: 30, blue: 29};  // end color that specifies the maximum heat color
     export let upperBound: number = 100;            // The upper bound for interpolating between start and end color
 
-    $: {
-        upperBound = upperBound;
-        console.log("upper bound: " + upperBound);
-    }
     export let lowerBound: number = 0;              // The lower bound for interpolating between start and end color
     export let listeners: {                         // passing on listener from SVGEurope.svelte
         onClick: (country) => void,
@@ -70,6 +66,8 @@
 
     // if the colorFrom and colorTo change, then the europe SVG is rendered new
     $: {
+        upperBound = upperBound;
+        console.log("upper bound: " + upperBound);
         state = state;
         countryHeatValues = countryHeatValues;
         colorHeatMap();
