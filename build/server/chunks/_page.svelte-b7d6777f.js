@@ -45,7 +45,7 @@ const SVGEurope = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       de: "Deutschland",
       en: "Germany"
     },
-    UK: {
+    GB: {
       key: "UK",
       id: "unitedKingdom",
       color: "#00008b",

@@ -5,7 +5,7 @@ export class Europe {
      * Default color is dark blue saved in value.
      */
     DE = {key: "DE", id: "germany", color: "#00008b", stroke: "none", de: "Deutschland", en: "Germany"};
-    UK = {key: "UK", id: "unitedKingdom", color: "#00008b", stroke: "none", de: "Großbritannien", en: "United Kingdom"};
+    GB = {key: "GB", id: "unitedKingdom", color: "#00008b", stroke: "none", de: "Großbritannien", en: "United Kingdom"};
     FR = {key: "FR", id: "france", color: "#00008b", stroke: "none", de: "Frankreich", en: "France"};
     IT = {key: "IT", id: "italy", color: "#00008b", stroke: "none", de: "Italien", en: "Italy"};
     ES = {key: "ES", id: "spain", color: "#00008b", stroke: "none", de: "Spanien", en: "Spain"};
