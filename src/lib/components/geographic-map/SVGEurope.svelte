@@ -5,7 +5,7 @@
     export let countries = {
         // default color for each country is blue
         DE: {key: "DE", id: "germany", color: "#00008b", stroke: "none", de: "Deutschland", en: "Germany"},
-        UK: {key: "UK", id: "unitedKingdom", color: "#00008b", stroke: "none", de: "Großbritannien", en: "United Kingdom"},
+        GB: {key: "GB", id: "unitedKingdom", color: "#00008b", stroke: "none", de: "Großbritannien", en: "United Kingdom"},
         FR: {key: "FR", id: "france", color: "#00008b", stroke: "none", de: "Frankreich", en: "France"},
         IT: {key: "IT", id: "italy", color: "#00008b", stroke: "none", de: "Italien", en: "Italy"},
         ES: {key: "ES", id: "spain", color: "#00008b", stroke: "none", de: "Spanien", en: "Spain"},
@@ -343,7 +343,7 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 -50 -13 -32 -12 -11 14 38 47 67 46 119 113 173 224 54 111 76 193 54 206 -51
 32 -272 17 -373 -26 -110 -46 -115 -44 -70 34 14 24 28 61 30 81 2 31 16 48
 96 123 89 84 92 88 75 105 -15 16 -41 18 -186 21 l-169 3 -20 -53z"
-              countryData={countries.UK}
+              countryData={countries.GB}
               listeners={listeners}
               className={svgPathStyling}/>
         <PathInteractive
@@ -431,7 +431,7 @@ c-4 -35 -3 -56 5 -60 20 -13 11 -63 -24 -137 -19 -41 -35 -83 -35 -94 0 -23
 -65 67 -86 74 -76 26 39 87 104 97 104 7 0 18 -14 25 -31 16 -39 75 -79 117
 -79 19 0 43 10 61 25 53 44 78 145 36 145 -17 0 -30 29 -39 84 -4 26 -18 51
 -40 73 -34 34 -60 40 -103 23z"
-              countryData={countries.UK}
+              countryData={countries.GB}
               listeners={listeners}
               className={svgPathStyling}/>
         <PathInteractive
