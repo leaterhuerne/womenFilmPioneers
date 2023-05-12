@@ -1597,14 +1597,8 @@ const SidePanel = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   }
   let filmData = [
     {
-      "title": "title",
-      people: [
-        {
-          name: "name",
-          gender: "gender",
-          profession: "profession"
-        }
-      ]
+      "title": "",
+      people: [{ name: "", gender: "", profession: "" }]
     }
   ];
   function getPersonFilmData() {
@@ -2051,4 +2045,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-6247a4ab.js.map
+//# sourceMappingURL=_page.svelte-62f3972f.js.map

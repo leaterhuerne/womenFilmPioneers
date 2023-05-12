@@ -60,7 +60,7 @@
         }
     }
     let filmData: {"title": string, people: {name: string, gender:string, profession: string}[]}[]
-        = [{"title": "title", people: [{name: "name", gender: "gender", profession: "profession"}]}];
+        = [{"title": "", people: [{name: "", gender: "", profession: ""}]}];
     function getPersonFilmData() {
         data.getFilmsPerYear((json) => {
             filmData = []; //clear object
