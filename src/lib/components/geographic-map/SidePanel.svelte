@@ -13,13 +13,13 @@
     };
 
     export let data;
-    export let year: number = 1926;
+    export let year = 1926;
     export let country: string = EUROPA;
     export let genderDistribution = {                       // gender distribution data for each country
         DE: {female: "", male: "", unknown: ""}
     };
-    export let profession: string = "";
-    export let className: string = "";
+    export let profession = "";
+    export let className = "";
 
     let genders: string[] = ["female", "male", "unknown"];  // array of the clicked genders
     let displayGendersDistribution = {};                    // gender distribution data for the current country
@@ -75,7 +75,8 @@
         },
         year,
         country,
-        genders
+        genders,
+        profession
         );
     }
 
@@ -112,11 +113,11 @@
         </p>
     {/each}
     <p class="pt-4 text-sm italic">
-        <T de="Der folgende Film ist ein zufälliger Film aus ausgewähltem Jahr und Region.
-                Die angezeigten Personen sind an dem Film beteiligt und stimmen mit den gewählten Geschlechtern überein.
+        <T de="Der folgende Film ist ein zufälliger Film aus dem ausgewähltem Jahr und Region.
+                Die angezeigten Personen sind an dem Film beteiligt und stimmen mit den gewählten Geschlechtern und Beruf überein.
                 Für weitere zufällige Filme kann der Button rechts neben der Überschrift angeklickt werden."
            en="The following movie is a random movie from the selected year and region.
-                The displayed people are involved in the film and match the chosen genders.
+                The displayed people are involved in the film and match the chosen genders and profession.
                 For more random films, the button on the right side the heading can be clicked."
         />
     </p>
