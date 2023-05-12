@@ -20,6 +20,7 @@ export function GET({ url }: { url:URL }) {
     const location = url.searchParams.get("location");
     const titleOnly = url.searchParams.get("title-only") ?? false;
     const genders = JSON.parse(url.searchParams.get("genders") ?? "[\"male\",\"female\",\"unknown\"]");
+    const profession = url.searchParams.get("profession") ?? "";
 
     let json: typeof database | film | string[] = {};
 
@@ -391,6 +392,7 @@ export function GET({ url }: { url:URL }) {
                     location: database[id as filmId]["location"],
                     people: Object.values(database[id as filmId]["people"])
                         .filter(person => genders.includes(mapGender((person as string).split(";")[1])))
+                        .filter(person => profession == "" || (person as string).split(";")[2] == profession)
                         .map(person => {return {
                             name: (person as string).split(";")[0],
                             gender: mapGender((person as string).split(";")[1]),

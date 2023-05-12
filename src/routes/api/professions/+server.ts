@@ -11,7 +11,7 @@ export function GET({ url, fetch} : {url:URL, fetch: any}) {
     const location = url.searchParams.get("location") ?? "";
     const professionList = url.searchParams.get("list");
     const genders = JSON.parse(url.searchParams.get("genders") ?? "[\"female\",\"male\",\"unknown\"]")
-    const random = url.searchParams.get("random") ?? ""
+    const random = url.searchParams.get("random") ?? "";
 
     if(professionList === "true") {
         return fetch("/api/genders-by-year-profession-location?profession-list=true");
