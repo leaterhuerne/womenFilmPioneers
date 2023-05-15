@@ -284,8 +284,8 @@
             />
             <a class="italic hover:text-firebrick-500" href="https://www.dff.film/">DFF</a>
             <T
-                de="erfassten Daten zu insgesamt {max} Personen im Zeitraum von 1895 bis 1950."
-                en="total {max} people in the period 1895-1950."
+                de="erfassten Daten im Zeitraum von 1895 bis 1950. Ein voller Balken (100%) steht für {max} Personen."
+                en="in the period 1895-1950. A full bar (100%) represents {max} people."
             />
         </p>
     </div>
