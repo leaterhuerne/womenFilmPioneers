@@ -53,11 +53,11 @@ var _page_ts = /*#__PURE__*/Object.freeze({
 });
 
 const index = 4;
-const component = async () => (await import('./_page.svelte-f4dff897.js')).default;
+const component = async () => (await import('./_page.svelte-62f3972f.js')).default;
 const universal_id = "src/routes/geographic-map/+page.ts";
 const imports = ["_app/immutable/entry/geographic-map-page.svelte.16e53fdb.js","_app/immutable/chunks/index.d52b6858.js","_app/immutable/chunks/language.20ff4dcc.js","_app/immutable/chunks/index.7daa39cf.js","_app/immutable/chunks/Refresh.950b0714.js","_app/immutable/chunks/Icon.35f7eb2e.js","_app/immutable/chunks/T.b50d42b1.js","_app/immutable/entry/geographic-map-page.ts.915ba029.js","_app/immutable/chunks/domain.279fc74e.js","_app/immutable/chunks/index.7daa39cf.js","_app/immutable/chunks/index.d52b6858.js","_app/immutable/chunks/_page.c84f11d0.js"];
 const stylesheets = ["_app/immutable/assets/Refresh.8439df54.css","_app/immutable/assets/Icon.fa4bc524.css"];
 const fonts = [];
 
 export { component, fonts, imports, index, stylesheets, _page_ts as universal, universal_id };
-//# sourceMappingURL=4-fe8f5f79.js.map
+//# sourceMappingURL=4-3e295e52.js.map

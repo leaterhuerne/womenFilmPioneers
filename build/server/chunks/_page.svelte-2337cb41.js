@@ -91,9 +91,6 @@ const CheveronDown = create_ssr_component(($$result, $$props, $$bindings, slots)
   )}</div>`;
 });
 class CircularArrayIterator {
-  circle;
-  current;
-  indexOfCurrent;
   constructor(circle) {
     this.circle = circle;
     this.indexOfCurrent = 0;
@@ -133,9 +130,6 @@ class CircularArrayIterator {
   }
 }
 class CircularArrayList {
-  size;
-  data;
-  head;
   constructor(...items) {
     this.data = [];
     this.size = this.data.length;
@@ -342,8 +336,8 @@ const Roll = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             ${validate_component(T, "T").$$render(
     $$result,
     {
-      de: "erfassten Daten zu insgesamt " + max + " Personen im Zeitraum von 1895 bis 1950.",
-      en: "total " + max + " people in the period 1895-1950."
+      de: "erfassten Daten im Zeitraum von 1895 bis 1950. Ein voller Balken (100%) steht für " + max + " Personen.",
+      en: "in the period 1895-1950. A full bar (100%) represents " + max + " people."
     },
     {},
     {}
@@ -713,4 +707,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-39b52296.js.map
+//# sourceMappingURL=_page.svelte-2337cb41.js.map
