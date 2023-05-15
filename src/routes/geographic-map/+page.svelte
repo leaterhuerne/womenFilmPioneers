@@ -90,8 +90,8 @@
     };
 
     // Sets the names for the Color Picker in the correct language
-    const colorPickerNamesDE = ["Wenig Aktivität", "Viel Aktivität"];   // german names
-    const colorPickerNamesEN = ["Little activity", "Much activity"];    // english names
+    const colorPickerNamesDE = ["Wenige Daten", "Viele Daten"];   // german names
+    const colorPickerNamesEN = ["Few data", "A lot of data"];    // english names
     let currentLanguage: string[];                                      // names in the current language
     // Color picker: write words in the correct language
     $: {
@@ -325,7 +325,7 @@
         <!-- MOBILE: Year number on bottom of the map -->
         {#if windowWidth < MD}
             <div class="m-2">
-                <YearNumbers bind:year={year} className="bg-amber-400 dark:bg-firebrick-800" />
+                <YearNumbers bind:year={year} className="bg-amber-300 dark:bg-firebrick-900" />
             </div>
         {/if}
         <!-- Settings for HeatMap -->
