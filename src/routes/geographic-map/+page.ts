@@ -3,6 +3,7 @@ import {domainString} from "$lib/stores/domain";
 type genderKey = "female" | "male" | "unknown";
 
 /** @type {import('../../../.svelte-kit/types/src/routes').PageLoad} */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export function load({ fetch }) {
 
@@ -41,10 +42,11 @@ export function load({ fetch }) {
         consumer: (json: JSON) => void,
         year: number | string,
         location = "",
-        genders = ["male", "female", "unknown"]
+        genders = ["male", "female", "unknown"],
+        profession = ""
     ) {
-        let loc: string = location == "" ? "" : "&location=" + location;
-        fetch("/api/films?random=1&year=" + year + "&genders=" + JSON.stringify(genders) + loc)
+        const loc = location == "" ? "" : "&location=" + location;
+        fetch("/api/films?random=1&year=" + year + "&genders=" + JSON.stringify(genders) + loc + "&profession=" + profession)
             .then((response: Response) => response.json())
             .then((json: JSON) => {consumer(json)});
     }

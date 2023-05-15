@@ -16,7 +16,7 @@
         return gender == "Female" ? "female" : (gender == "Male" ? "male" : "unknown");
     }
     export let refreshProfessions: () => void = () =>
-        data.getProfessionForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => {professions = Object.values(json); console.log(json)});
+        data.getProfessionForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => professions = Object.values(json));
 
     export let refreshFilms: () => void = () =>
         data.getFilmsForYear(year, country, [map(leftGender.en), map(rightGender.en)], json => {

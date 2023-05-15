@@ -139,10 +139,29 @@
      */
     const handleWheel = (mousewheel: WheelEvent) => {
         if(mousewheel.deltaY > 0) {
-            rotate(UP);
-        } else {
             rotate(DOWN);
+        } else {
+            rotate(UP);
         }
+    }
+
+    let lastMoved = Date.now();
+    let lastMouseY = 0;
+
+    const touchStart = (touch: TouchEvent) => {
+        lastMouseY = touch.touches.item(0).clientY;
+    }
+    const handleTouch = (touch: TouchEvent) => {
+        console.log("handleTouch: " + touch.touches.item(0).clientY);
+        if(Date.now() - lastMoved > 75) {
+            if (lastMouseY < touch.touches.item(0).clientY + 2) {
+                rotate(UP);
+            } else if (lastMouseY > touch.touches.item(0).clientY - 2) {
+                rotate(DOWN);
+            }
+            lastMoved = Date.now();
+        }
+
     }
 
     /**
@@ -161,6 +180,9 @@
     currentLabel = labels.current;
     populateRoll();
     frontLabel = items.current;
+
+
+
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} on:keydown={rollByKey}/>
@@ -181,10 +203,15 @@
         </p>
     </div>
     <!-- Roll -->
-    <div class="relative p-2 grid grid-cols-1 min-h-[24rem]">
-        <div class="absolute lg:relative h-64 w-full flex justify-center" on:wheel|preventDefault={handleWheel}>
+    <div class="relative p-2 grid grid-cols-1 min-h-[24rem] select-none">
+        <div class="absolute lg:relative h-64 w-full flex justify-center"
+             on:wheel|preventDefault={handleWheel}
+             on:touchstart|preventDefault|stopPropagation={touchStart}
+             on:touchmove|preventDefault|stopPropagation={handleTouch}
+        >
             <!-- Container -->
-            <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-40 perspective-1000">
+            <div class="relative h-[50px] w-2/3 max-w-2xl translate-y-40 perspective-1000"
+            >
                 <!-- Roll -->
                 <div class="h-full w-full absolute preserve-3d duration-500" style="{rotation}">
                     <!-- Items on the roll -->
@@ -257,8 +284,8 @@
             />
             <a class="italic hover:text-firebrick-500" href="https://www.dff.film/">DFF</a>
             <T
-                de="erfassten Daten zu insgesamt {max} Personen im Zeitraum von 1895 bis 1950."
-                en="total {max} people in the period 1895-1950."
+                de="erfassten Daten im Zeitraum von 1895 bis 1950. Ein voller Balken (100%) steht für {max} Personen."
+                en="in the period 1895-1950. A full bar (100%) represents {max} people."
             />
         </p>
     </div>

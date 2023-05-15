@@ -72,7 +72,6 @@ export function load({fetch}) {
     const getProfessionForYear = (year: number, country: string, genders: string[], consumer: Consumer<JSON>): void => {
         const location = country == "alle" ? "" : "&location=" + country;
         const url = "/api/professions?random=5&year=" + year + location  + "&genders=" + JSON.stringify(genders);
-        console.log(url);
         return fetch(url).then((res: Response) => res.json()).then(consumer);
     }
 
