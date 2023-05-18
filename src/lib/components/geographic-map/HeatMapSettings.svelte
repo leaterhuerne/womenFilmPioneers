@@ -122,7 +122,7 @@
     <!-- Grid layout: 1.Row: Gender Buttons, 2.Row: Professions 3.Row: Profession list (hidden) -->
     <div class="grid grid-cols-9 place-items-center gap-2">
         <!-- Buttons for 'absolute' or 'relative' Map -->
-        <div class="col-span-9 grid grid-cols-2 gap-2 w-full border-blue-500">
+        <div class="hidden col-span-9 grid grid-cols-2 gap-2 w-full border-blue-500">
             <button class="w-full {currentButtonStyles.absolute}"
                 on:click={toggleAbsoluteRelativeButtons}
             >

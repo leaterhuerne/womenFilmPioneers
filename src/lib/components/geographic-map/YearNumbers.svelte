@@ -43,7 +43,7 @@
      * year number is incremented by 1 if year number is still between min- and maxYear.
      */
     function incrementYear(): void {
-        // check that year is between min- and maxYear. Otherwise one of the bounds.
+        // check that year is between min- and maxYear. Otherwise, one of the bounds.
         year = Math.min(Math.max(parseInt(year) + 1, minYear), maxYear).toString();
     }
 
@@ -51,7 +51,7 @@
      * year number is decremented by 1 if year number is still between min- and maxYear.
      */
     function decrementYear(): void {
-        // check that year is between min- and maxYear. Otherwise one of the bounds.
+        // check that year is between min- and maxYear. Otherwise, one of the bounds.
         year = Math.max(Math.min(parseInt(year) - 1, maxYear), minYear).toString();
     }
 
@@ -142,14 +142,13 @@
         >
             <div class="flex">
                 <!-- Year number -->
-                <input
-                        type="text" bind:value={year} maxlength="4" size="4"
-                        class="bg-inherit
-                            font-bold text-center text-xl
-                            border-none
-                            outline-none"
-                        on:input={() => checkInput()}
-                />
+                <div class="bg-inherit w-20
+                            grid place-items-center
+                            font-bold text-center text-xl"
+                >
+                    {year}
+                </div>
+
                 <!-- Up and Down Buttons -->
                 <div class="grid grid-col-1 gap-y-0.5">
                     <button on:click={incrementYear}>

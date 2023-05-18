@@ -354,7 +354,7 @@
                         selected year. This does not mean that no films were made in the country during this period."
                 />
             </p>
-            <p class="italic">
+            <p class="hidden italic">
                 <T de="Hinweis Maximum: 'Maximum alle Jahre' bedeutet, im Jahr, in dem am meisten Personen tätig waren,
                         werden alle diese Personen gezählt. Von dieser Zahl ausgehend wird die Heatmap eingefärbt.
                         'Maximum pro Jahr' zählt analog die Personen, die im aktuell ausgewählten Jahr tätig waren."
