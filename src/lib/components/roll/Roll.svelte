@@ -279,8 +279,8 @@
         <InformationOutline darkColor="#D2CAB3" />
         <p>
             <T
-                de="Die auf der Rolle abgebildeten Ergebnisse basieren auf den durch das"
-                en="The results shown on the roll are based on the data collected by the"
+                de="Die auf der Zeitwalze abgebildeten Ergebnisse basieren auf den durch das"
+                en="The results shown on the time roll are based on the data collected by the"
             />
             <a class="italic hover:text-firebrick-500" href="https://www.dff.film/">DFF</a>
             <T
