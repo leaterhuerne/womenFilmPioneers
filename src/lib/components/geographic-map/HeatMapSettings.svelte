@@ -59,13 +59,13 @@
     let informationButtonStyle: string = "";     // rotation styling of button that expands a list of all professions
     let professionVisibility: string = "hidden"; // styling for a hidden or visible list of professions
     let chevronButtonStyle: string = "rounded-[50%]" +
-        " bg-amber-400 dark:bg-firebrick-800" +
-        " hover:bg-firebrick-500 hover:dark:bg-firebrick-800 dark:hover:border border-firebrick-700";
+        " bg-amber-300 dark:bg-firebrick-900" +
+        " hover:bg-amber-400 hover:dark:bg-firebrick-800 dark:hover:border border-firebrick-700";
 
     // initial styling of all gender buttons
     let initialButtonStyle: string = "text-sm sm:text-md font-bold" +
-        " border border-amber-500 dark:border-none rounded" +
-        " bg-amber-400 dark:bg-firebrick-800" +
+        " border border-amber-400 dark:border-none rounded" +
+        " bg-amber-300 dark:bg-firebrick-900" +
         " h-8";
 
     // style of an activated button
@@ -122,7 +122,7 @@
     <!-- Grid layout: 1.Row: Gender Buttons, 2.Row: Professions 3.Row: Profession list (hidden) -->
     <div class="grid grid-cols-9 place-items-center gap-2">
         <!-- Buttons for 'absolute' or 'relative' Map -->
-        <div class="col-span-9 grid grid-cols-2 gap-2 w-full border-blue-500">
+        <div class="hidden col-span-9 grid grid-cols-2 gap-2 w-full border-blue-500">
             <button class="w-full {currentButtonStyles.absolute}"
                 on:click={toggleAbsoluteRelativeButtons}
             >
@@ -168,7 +168,7 @@
             class="
                 col-span-5 w-full rounded
                 text-md text-center
-                bg-amber-400 dark:bg-firebrick-800
+                bg-amber-300 dark:bg-firebrick-900
             "
         >
             {#if profession === ""}

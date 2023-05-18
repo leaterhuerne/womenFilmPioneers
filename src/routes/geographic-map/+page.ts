@@ -46,7 +46,7 @@ export function load({ fetch }) {
         profession = ""
     ) {
         const loc = location == "" ? "" : "&location=" + location;
-        fetch("/api/films?random=1&year=" + year + "&genders=" + JSON.stringify(genders) + loc + "&profession=" + profession)
+        fetch("/api/films?random=2&year=" + year + "&genders=" + JSON.stringify(genders) + loc + "&profession=" + profession)
             .then((response: Response) => response.json())
             .then((json: JSON) => {consumer(json)});
     }

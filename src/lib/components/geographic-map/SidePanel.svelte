@@ -59,19 +59,34 @@
             countryLanguages = {de: europe[country].de, en: europe[country].en};
         }
     }
+
     let filmData: {"title": string, people: {name: string, gender:string, profession: string}[]}[]
         = [{"title": "", people: [{name: "", gender: "", profession: ""}]}];
+
     function getPersonFilmData() {
+        // save old film to compare old and new film title later
+        let oldShowFilm = filmData[0] ?? {"title": "", people: [{name: "", gender: "", profession: ""}]};
         data.getFilmsPerYear((json) => {
-            filmData = []; //clear object
+            let fetchFilmData = []; //clear object
             Object.values(json)
                 .map(e => {
                     const film = {
                         title: e["title"] as string,
                         people: e["people"] as {name: string, gender:string, profession: string}[]
                     };
-                    filmData.push(film);
-                })
+                    fetchFilmData.push(film);
+                });
+            // make sure that a new movie is displayed with each click
+            if (fetchFilmData.length > 1) {
+                if (oldShowFilm.title == fetchFilmData[0].title) {
+                    fetchFilmData = [fetchFilmData[1]];
+                } else {
+                    fetchFilmData = [fetchFilmData[0]];
+                }
+
+            }
+            filmData = fetchFilmData;
+            console.log(filmData)
         },
         year,
         country,
